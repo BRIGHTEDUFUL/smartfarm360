@@ -1,4 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import './Navbar.css';
@@ -8,14 +9,20 @@ const Navbar = () => {
   const { items } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
+    setMobileMenuOpen(false);
   };
 
   const isActive = (path: string) => {
     return location.pathname === path ? 'active' : '';
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -28,11 +35,19 @@ const Navbar = () => {
           <span>Smart Farming <span className="dot">360</span></span>
         </Link>
 
-        <div className="nav-links">
-          <Link to="/" className={isActive('/')}>Home</Link>
-          <Link to="/shop" className={isActive('/shop')}>Shop</Link>
-          <Link to="/about" className={isActive('/about')}>About</Link>
-          <Link to="/contact" className={isActive('/contact')}>Contact</Link>
+        <button 
+          className="mobile-menu-toggle" 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+        </button>
+
+        <div className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+          <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
+          <Link to="/shop" className={isActive('/shop')} onClick={closeMobileMenu}>Shop</Link>
+          <Link to="/about" className={isActive('/about')} onClick={closeMobileMenu}>About</Link>
+          <Link to="/contact" className={isActive('/contact')} onClick={closeMobileMenu}>Contact</Link>
         </div>
 
         <div className="nav-search">
@@ -40,7 +55,7 @@ const Navbar = () => {
           <input type="text" placeholder="Search fresh products..." />
         </div>
 
-        <div className="nav-actions">
+        <div className={`nav-actions ${mobileMenuOpen ? 'mobile-open' : ''}`}>
           {user ? (
             <>
               <div className="nav-user-chip">
@@ -50,21 +65,21 @@ const Navbar = () => {
               </div>
 
               {user.role === 'Farmer' && (
-                <Link to="/farmer" className="nav-btn nav-btn-outline">
+                <Link to="/farmer" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
                   <i className="fas fa-tachometer-alt"></i>
                   Dashboard
                 </Link>
               )}
 
               {user.role === 'Admin' && (
-                <Link to="/admin" className="nav-btn nav-btn-outline">
+                <Link to="/admin" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
                   <i className="fas fa-shield-alt"></i>
                   Admin
                 </Link>
               )}
 
               {user.role === 'Consumer' && (
-                <Link to="/orders" className="nav-btn nav-btn-outline">
+                <Link to="/orders" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
                   <i className="fas fa-box"></i>
                   Orders
                 </Link>
@@ -75,7 +90,7 @@ const Navbar = () => {
                 Logout
               </button>
 
-              <Link to="/cart" className="cart-btn">
+              <Link to="/cart" className="cart-btn" onClick={closeMobileMenu}>
                 <i className="fas fa-shopping-cart"></i>
                 {items.length > 0 && (
                   <span className="cart-count show">{items.length}</span>
@@ -84,10 +99,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="nav-btn nav-btn-outline">
+              <Link to="/login" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
                 Login
               </Link>
-              <Link to="/register" className="nav-btn nav-btn-primary">
+              <Link to="/register" className="nav-btn nav-btn-primary" onClick={closeMobileMenu}>
                 Sign Up
               </Link>
             </>

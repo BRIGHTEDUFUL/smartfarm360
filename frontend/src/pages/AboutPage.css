@@ -525,15 +525,30 @@
   .story-image {
     order: -1;
   }
+
+  .stats-grid,
+  .values-grid,
+  .team-grid,
+  .impact-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
+  .about-hero {
+    min-height: 50vh;
+  }
+
+  .about-hero-content {
+    padding: 60px 24px;
+  }
+
   .about-hero h1 {
     font-size: 36px;
   }
 
   .about-hero p {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .section-header h2 {
@@ -544,11 +559,74 @@
     font-size: 32px;
   }
 
+  .story-text p {
+    font-size: 16px;
+  }
+
+  .story-image img {
+    height: 350px;
+  }
+
   .cta-content h2 {
     font-size: 32px;
   }
 
+  .cta-content p {
+    font-size: 18px;
+  }
+
   .stat-value {
     font-size: 36px;
+  }
+
+  .stats-section,
+  .story-section,
+  .values-section,
+  .team-section,
+  .impact-section,
+  .about-cta {
+    padding: 60px 0;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero h1 {
+    font-size: 28px;
+  }
+
+  .about-hero p {
+    font-size: 16px;
+  }
+
+  .section-header h2 {
+    font-size: 28px;
+  }
+
+  .story-text h2 {
+    font-size: 26px;
+  }
+
+  .cta-content h2 {
+    font-size: 26px;
+  }
+
+  .stat-card,
+  .value-card,
+  .team-card,
+  .impact-card {
+    padding: 32px 24px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
