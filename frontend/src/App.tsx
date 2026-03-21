@@ -20,87 +20,93 @@ import AboutPage from './pages/AboutPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <CartProvider>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/shop" element={<ShopPage />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+    <ErrorBoundary>
+      <Router>
+        <AuthProvider>
+          <CartProvider>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/shop" element={<ShopPage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
 
-            {/* Protected routes */}
-            <Route
-              path="/cart"
-              element={
-                <ProtectedRoute>
-                  <CartPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute>
-                  <CheckoutPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected routes */}
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <CartPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <CheckoutPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <ProtectedRoute>
+                    <OrdersPage />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Farmer routes */}
-            <Route
-              path="/farmer/*"
-              element={
-                <ProtectedRoute roles={['Farmer']}>
-                  <FarmerDashboard />
-                </ProtectedRoute>
-              }
+              {/* Farmer routes */}
+              <Route
+                path="/farmer/*"
+                element={
+                  <ProtectedRoute roles={['Farmer']}>
+                    <FarmerDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin routes */}
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedRoute roles={['Admin']}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
             />
-
-            {/* Admin routes */}
-            <Route
-              path="/admin/*"
-              element={
-                <ProtectedRoute roles={['Admin']}>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-
-          <ToastContainer
-            position="bottom-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </CartProvider>
-      </AuthProvider>
-    </Router>
+            
+            <ScrollToTop />
+          </CartProvider>
+        </AuthProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
