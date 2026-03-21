@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { useAuth } from '../contexts/AuthContext';
 import { ordersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import './OrdersPage.css';
@@ -10,6 +9,7 @@ interface Order {
   total_amount: number;
   status: string;
   created_at: string;
+  delivery_address?: string;
   items: OrderItem[];
 }
 
@@ -20,7 +20,6 @@ interface OrderItem {
 }
 
 const OrdersPage = () => {
-  const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 

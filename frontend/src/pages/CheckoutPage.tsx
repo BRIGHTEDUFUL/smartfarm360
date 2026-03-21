@@ -13,7 +13,7 @@ const CheckoutPage = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    customer_name: `${user?.first_name || ''} ${user?.last_name || ''}`,
+    customer_name: `${user?.first_name || ''} ${user?.last_name || ''}`.trim(),
     customer_email: user?.email || '',
     customer_phone: user?.phone || '',
     delivery_address: '',
@@ -204,7 +204,7 @@ const CheckoutPage = () => {
                 
                 <div className="summary-items">
                   {items.map((item) => (
-                    <div key={item.id} className="summary-item">
+                    <div key={item.product_id} className="summary-item">
                       <div className="item-info">
                         <h4>{item.name}</h4>
                         <p>Quantity: {item.quantity}</p>
