@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+*/dist/
+*/build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*/.env
+*/.env.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+backend/smart_farming.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+*/logs/
+
+# Coverage
+coverage/
+*.lcov
+.nyc_output
+*/coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Test
+.kiro/
+
+# Build artifacts
+*.tsbuildinfo

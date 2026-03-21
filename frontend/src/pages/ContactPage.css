@@ -1,0 +1,346 @@
+/* ═══════════════════════════════════════════════════════════
+   CONTACT PAGE - STYLING
+   ═══════════════════════════════════════════════════════════ */
+
+.contact-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F9FAFB 0%, #E8F5E9 100%);
+  padding: 40px 0 80px;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Success Banner */
+.success-banner {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.3);
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #fff;
+}
+
+.success-content i {
+  font-size: 48px;
+  color: #FFD54F;
+}
+
+.success-content h3 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.success-content p {
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+/* Header */
+.contact-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.header-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.3);
+}
+
+.header-icon i {
+  font-size: 36px;
+  color: #fff;
+}
+
+.contact-header h1 {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contact-header p {
+  font-size: 18px;
+  color: var(--gray);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Content Layout */
+.contact-content {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+}
+
+/* Contact Form */
+.contact-form-section {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.form-group label i {
+  color: var(--primary);
+  font-size: 16px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn i {
+  font-size: 18px;
+}
+
+/* Contact Info */
+.contact-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.info-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.info-icon i {
+  font-size: 24px;
+  color: var(--primary);
+}
+
+.info-card h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.info-card p {
+  font-size: 14px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* Social Section */
+.social-section {
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.social-section h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.social-link {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link.facebook {
+  background: #1877F2;
+}
+
+.social-link.twitter {
+  background: #1DA1F2;
+}
+
+.social-link.instagram {
+  background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF);
+}
+
+.social-link.linkedin {
+  background: #0A66C2;
+}
+
+.social-link:hover {
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .social-section {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-header h1 {
+    font-size: 36px;
+  }
+
+  .contact-form-section {
+    padding: 24px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info-section {
+    grid-template-columns: 1fr;
+  }
+
+  .success-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
