@@ -16,6 +16,7 @@ import OrdersPage from './pages/OrdersPage';
 import FarmerDashboard from './pages/FarmerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ContactPage from './pages/ContactPage';
+import AboutPage from './pages/AboutPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -32,6 +33,7 @@ function App() {
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
 
             {/* Protected routes */}

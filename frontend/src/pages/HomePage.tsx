@@ -5,18 +5,45 @@ import './HomePage.css';
 
 const HomePage = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [currentRegion, setCurrentRegion] = useState(0);
+
+  // Ghana's 16 Regional Capitals with Farm Highlights
+  const ghanaRegions = [
+    { capital: 'Accra', region: 'Greater Accra', highlight: 'Urban Farming & Fresh Vegetables', icon: '🥬' },
+    { capital: 'Kumasi', region: 'Ashanti', highlight: 'Cocoa & Plantain Hub', icon: '🍫' },
+    { capital: 'Tamale', region: 'Northern', highlight: 'Rice & Groundnut Capital', icon: '🌾' },
+    { capital: 'Cape Coast', region: 'Central', highlight: 'Coconut & Cassava Farms', icon: '🥥' },
+    { capital: 'Sekondi-Takoradi', region: 'Western', highlight: 'Palm Oil & Rubber Plantations', icon: '🌴' },
+    { capital: 'Koforidua', region: 'Eastern', highlight: 'Pineapple & Citrus Paradise', icon: '🍍' },
+    { capital: 'Ho', region: 'Volta', highlight: 'Organic Vegetables & Spices', icon: '🌶️' },
+    { capital: 'Sunyani', region: 'Bono', highlight: 'Cashew & Maize Farms', icon: '🌽' },
+    { capital: 'Bolgatanga', region: 'Upper East', highlight: 'Millet & Sorghum Fields', icon: '🌾' },
+    { capital: 'Wa', region: 'Upper West', highlight: 'Shea Butter & Groundnuts', icon: '🥜' },
+    { capital: 'Goaso', region: 'Ahafo', highlight: 'Cocoa & Coffee Estates', icon: '☕' },
+    { capital: 'Dambai', region: 'Oti', highlight: 'Yam & Soybean Cultivation', icon: '🍠' },
+    { capital: 'Nalerigu', region: 'North East', highlight: 'Livestock & Grain Farming', icon: '🐄' },
+    { capital: 'Damongo', region: 'Savannah', highlight: 'Cashew & Shea Production', icon: '🌰' },
+    { capital: 'Sefwi Wiawso', region: 'Western North', highlight: 'Cocoa & Timber Resources', icon: '🌳' },
+    { capital: 'Bechem', region: 'Bono East', highlight: 'Tomato & Pepper Farms', icon: '🍅' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
-      // Use requestAnimationFrame for smooth performance
       requestAnimationFrame(() => {
         setScrollY(window.scrollY);
       });
     };
     
-    // Use passive listener for better scroll performance
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Rotate through regions every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRegion((prev) => (prev + 1) % ghanaRegions.length);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const features = [
@@ -96,11 +123,33 @@ const HomePage = () => {
             <h1 className="hero-title">
               Fresh from <span className="gradient-text">Ghana's</span>
               <br />
-              <span className="gradient-text">Best Farms</span>
+              <span className="gradient-text">16 Regions</span>
             </h1>
+            
+            {/* Animated Regional Highlights */}
+            <div className="regional-showcase">
+              <div className="region-card" key={currentRegion}>
+                <div className="region-icon">{ghanaRegions[currentRegion].icon}</div>
+                <div className="region-info">
+                  <h3>{ghanaRegions[currentRegion].capital}</h3>
+                  <p className="region-name">{ghanaRegions[currentRegion].region} Region</p>
+                  <p className="region-highlight">{ghanaRegions[currentRegion].highlight}</p>
+                </div>
+              </div>
+              <div className="region-indicators">
+                {ghanaRegions.map((_, index) => (
+                  <span 
+                    key={index} 
+                    className={`indicator ${index === currentRegion ? 'active' : ''}`}
+                    onClick={() => setCurrentRegion(index)}
+                  ></span>
+                ))}
+              </div>
+            </div>
+
             <p className="hero-description">
-              Connect directly with local farmers and get the freshest produce, poultry, and more 
-              delivered to your doorstep. Support local agriculture while enjoying premium quality products.
+              Connect directly with farmers across all 16 regions of Ghana. Get the freshest produce, 
+              poultry, and more delivered to your doorstep. Support local agriculture nationwide!
             </p>
             <div className="hero-buttons">
               <Link to="/shop" className="btn btn-primary">
@@ -114,16 +163,16 @@ const HomePage = () => {
             </div>
             <div className="hero-stats">
               <div className="stat">
+                <strong>16</strong>
+                <span>Regions</span>
+              </div>
+              <div className="stat">
                 <strong>1,250+</strong>
                 <span>Farmers</span>
               </div>
               <div className="stat">
                 <strong>5,000+</strong>
                 <span>Products</span>
-              </div>
-              <div className="stat">
-                <strong>10,000+</strong>
-                <span>Happy Customers</span>
               </div>
             </div>
           </div>
@@ -314,9 +363,9 @@ const HomePage = () => {
               <h4>Quick Links</h4>
               <ul>
                 <li><Link to="/shop">Shop</Link></li>
+                <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/contact">Contact Us</Link></li>
                 <li><Link to="/register">Become a Farmer</Link></li>
-                <li><Link to="/contact">Support</Link></li>
               </ul>
             </div>
             <div className="footer-col">

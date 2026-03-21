@@ -6,8 +6,8 @@ export class OrderService {
   static async createOrder(userId: number, data: {
     payment_method: string;
     delivery_method: string;
-    delivery_address_id?: number;
-    pickup_location?: string;
+    delivery_address?: string;
+    notes?: string;
   }) {
     // Get cart items
     const cart = await CartService.getCart(userId);
@@ -20,11 +20,11 @@ export class OrderService {
       }
     }
 
-    // Create order
+    // Create order with "Pending Payment" status
     await query(
-      `INSERT INTO orders (user_id, total_amount, payment_method, delivery_method, delivery_address_id, pickup_location)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [userId, cart.total, data.payment_method, data.delivery_method, data.delivery_address_id, data.pickup_location]
+      `INSERT INTO orders (user_id, total_amount, payment_method, delivery_method, delivery_address, notes, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [userId, cart.total, data.payment_method, data.delivery_method, data.delivery_address, data.notes, 'Pending Payment']
     );
 
     const orderResult = await query(
@@ -98,8 +98,8 @@ export class OrderService {
     const order = await this.getOrderById(orderId);
     if (!order) throw new Error('Order not found');
 
-    if (order.status !== 'Pending') {
-      throw new Error('Only pending orders can be cancelled');
+    if (order.status !== 'Pending Payment') {
+      throw new Error('Only pending payment orders can be cancelled');
     }
 
     // Restore inventory

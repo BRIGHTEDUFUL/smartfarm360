@@ -31,8 +31,8 @@ const Navbar = () => {
         <div className="nav-links">
           <Link to="/" className={isActive('/')}>Home</Link>
           <Link to="/shop" className={isActive('/shop')}>Shop</Link>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <Link to="/about" className={isActive('/about')}>About</Link>
+          <Link to="/contact" className={isActive('/contact')}>Contact</Link>
         </div>
 
         <div className="nav-search">

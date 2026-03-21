@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.routes';
 import productRoutes from './routes/product.routes';
 import cartRoutes from './routes/cart.routes';
 import orderRoutes from './routes/order.routes';
+import userRoutes from './routes/user.routes';
+import auditRoutes from './routes/audit.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -25,6 +27,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/audit-logs', auditRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {

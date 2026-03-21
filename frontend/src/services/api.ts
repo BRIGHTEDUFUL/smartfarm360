@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -92,4 +92,17 @@ export const ordersAPI = {
   getById: (id: number) => api.get(`/orders/${id}`),
   updateStatus: (id: number, status: string) => api.put(`/orders/${id}/status`, { status }),
   cancel: (id: number) => api.put(`/orders/${id}/cancel`),
+};
+
+// Users API
+export const usersAPI = {
+  getAll: (params?: any) => api.get('/users', { params }),
+  create: (data: any) => api.post('/users', data),
+  update: (id: number, data: any) => api.put(`/users/${id}`, data),
+  delete: (id: number) => api.delete(`/users/${id}`),
+};
+
+// Audit Logs API
+export const auditAPI = {
+  getAll: (params?: any) => api.get('/audit-logs', { params }),
 };

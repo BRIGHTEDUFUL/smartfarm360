@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { productsAPI } from '../services/api';
+import { productsAPI, ordersAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import './FarmerDashboard.css';
@@ -19,10 +19,14 @@ interface Product {
 
 const FarmerDashboard = () => {
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState<'products' | 'orders'>('products');
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+  const [showOrderModal, setShowOrderModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -41,6 +45,12 @@ const FarmerDashboard = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (activeTab === 'orders' && user?.role === 'Farmer') {
+      loadMyOrders();
+    }
+  }, [activeTab]);
+
   const loadMyProducts = async () => {
     setLoading(true);
     try {
@@ -55,6 +65,34 @@ const FarmerDashboard = () => {
     } catch (error) {
       console.error('Failed to load products:', error);
       toast.error('Failed to load your products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMyOrders = async () => {
+    setLoading(true);
+    try {
+      const response = await ordersAPI.getAll();
+      const ordersData = response.data.data || [];
+      
+      // Fetch order details with items for each order
+      const ordersWithDetails = await Promise.all(
+        ordersData.map(async (order: any) => {
+          try {
+            const detailsResponse = await ordersAPI.getById(order.id);
+            return detailsResponse.data.data;
+          } catch (error) {
+            console.error(`Failed to load details for order ${order.id}:`, error);
+            return order;
+          }
+        })
+      );
+      
+      setOrders(ordersWithDetails);
+    } catch (error: any) {
+      toast.error('Failed to load orders');
+      console.error('Failed to load orders:', error);
     } finally {
       setLoading(false);
     }
@@ -123,6 +161,30 @@ const FarmerDashboard = () => {
     });
   };
 
+  const handleUpdateOrderStatus = async (orderId: number, status: string) => {
+    try {
+      await ordersAPI.updateStatus(orderId, status);
+      toast.success(`Order status updated to ${status}`);
+      loadMyOrders();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error?.message || 'Failed to update order status');
+    }
+  };
+
+  const handleViewOrderDetails = (order: any) => {
+    setSelectedOrder(order);
+    setShowOrderModal(true);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric' 
+    });
+  };
+
   const stats = {
     total: products.length,
     active: products.filter(p => p.status === 'Active').length,
@@ -150,14 +212,20 @@ const FarmerDashboard = () => {
       <div className="farmer-dashboard">
         <div className="farmer-container">
           <div className="farmer-header">
-            <div>
-              <h1>Farmer Dashboard</h1>
-              <p>Welcome back, {user.first_name}! Manage your products here.</p>
+            <div className="header-text">
+              <h1>🌾 Farmer Dashboard</h1>
+              <p>Welcome back, <strong>{user.first_name}</strong>! Manage your products and grow your business.</p>
             </div>
-            <button onClick={() => { resetForm(); setEditingProduct(null); setShowAddModal(true); }} className="btn-add-product">
-              <i className="fas fa-plus"></i>
-              Add New Product
-            </button>
+            <div className="header-actions">
+              <button onClick={loadMyProducts} className="btn-refresh">
+                <i className="fas fa-sync-alt"></i>
+                Refresh
+              </button>
+              <button onClick={() => { resetForm(); setEditingProduct(null); setShowAddModal(true); }} className="btn-add-product">
+                <i className="fas fa-plus"></i>
+                Add New Product
+              </button>
+            </div>
           </div>
 
           {/* Stats */}
@@ -200,7 +268,26 @@ const FarmerDashboard = () => {
             </div>
           </div>
 
-          {/* Products List */}
+          {/* Tabs */}
+          <div className="farmer-tabs">
+            <button
+              className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+              onClick={() => setActiveTab('products')}
+            >
+              <i className="fas fa-box"></i>
+              My Products
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
+              onClick={() => setActiveTab('orders')}
+            >
+              <i className="fas fa-shopping-cart"></i>
+              Orders
+            </button>
+          </div>
+
+          {/* Products Section */}
+          {activeTab === 'products' && (
           <div className="products-section">
             <h2>My Products</h2>
             
@@ -259,6 +346,88 @@ const FarmerDashboard = () => {
               </div>
             )}
           </div>
+          )}
+
+          {/* Orders Section */}
+          {activeTab === 'orders' && (
+          <div className="orders-section">
+            <h2>My Orders</h2>
+            
+            {loading ? (
+              <div className="loading-state">
+                <div className="loading-spinner"></div>
+                <p>Loading orders...</p>
+              </div>
+            ) : orders.length === 0 ? (
+              <div className="empty-state">
+                <i className="fas fa-shopping-cart"></i>
+                <h3>No orders yet</h3>
+                <p>Orders containing your products will appear here</p>
+              </div>
+            ) : (
+              <div className="orders-table-wrap">
+                <table className="farmer-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Total Amount</th>
+                      <th>Payment Method</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order) => (
+                      <tr key={order.id}>
+                        <td>#{order.id}</td>
+                        <td>User #{order.user_id}</td>
+                        <td>GH₵ {order.total_amount.toFixed(2)}</td>
+                        <td>{order.payment_method}</td>
+                        <td>
+                          <span className={`status-badge status-${order.status.toLowerCase().replace(' ', '-')}`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td>{formatDate(order.created_at)}</td>
+                        <td>
+                          <div className="action-buttons">
+                            <button
+                              onClick={() => handleViewOrderDetails(order)}
+                              className="btn-edit"
+                              title="View Details"
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                            {order.status === 'Pending Payment' && (
+                              <button
+                                onClick={() => handleUpdateOrderStatus(order.id, 'Processing')}
+                                className="btn-approve"
+                                title="Confirm Payment"
+                              >
+                                <i className="fas fa-check"></i>
+                              </button>
+                            )}
+                            {order.status === 'Processing' && (
+                              <button
+                                onClick={() => handleUpdateOrderStatus(order.id, 'Completed')}
+                                className="btn-approve"
+                                title="Mark as Completed"
+                              >
+                                <i className="fas fa-check-double"></i>
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+          )}
         </div>
       </div>
 
@@ -359,6 +528,124 @@ const FarmerDashboard = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Order Details Modal */}
+      {showOrderModal && selectedOrder && (
+        <div className="modal-overlay" onClick={() => setShowOrderModal(false)}>
+          <div className="modal-content order-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Order Details #{selectedOrder.id}</h2>
+              <button onClick={() => setShowOrderModal(false)} className="modal-close">
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="order-details-content">
+              <div className="detail-section">
+                <h3>Order Information</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <span className="label">Order ID:</span>
+                    <span className="value">#{selectedOrder.id}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Status:</span>
+                    <span className={`status-badge status-${selectedOrder.status.toLowerCase().replace(' ', '-')}`}>
+                      {selectedOrder.status}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Date:</span>
+                    <span className="value">{formatDate(selectedOrder.created_at)}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Payment Method:</span>
+                    <span className="value">{selectedOrder.payment_method}</span>
+                  </div>
+                </div>
+              </div>
+
+              {selectedOrder.delivery_address && (
+                <div className="detail-section">
+                  <h3>Delivery Information</h3>
+                  <div className="detail-item">
+                    <span className="label">Address:</span>
+                    <span className="value">{selectedOrder.delivery_address}</span>
+                  </div>
+                </div>
+              )}
+
+              {selectedOrder.notes && (
+                <div className="detail-section">
+                  <h3>Customer Notes</h3>
+                  <p className="notes-text">{selectedOrder.notes}</p>
+                </div>
+              )}
+
+              <div className="detail-section">
+                <h3>Order Items</h3>
+                {selectedOrder.items && selectedOrder.items.length > 0 ? (
+                  <table className="items-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedOrder.items.map((item: any, idx: number) => (
+                        <tr key={idx}>
+                          <td>{item.name || 'Product'}</td>
+                          <td>{item.quantity}</td>
+                          <td>GH₵ {item.price_at_purchase.toFixed(2)}</td>
+                          <td>GH₵ {(item.price_at_purchase * item.quantity).toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan={3}><strong>Total Amount:</strong></td>
+                        <td><strong>GH₵ {selectedOrder.total_amount.toFixed(2)}</strong></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                ) : (
+                  <p>No items found</p>
+                )}
+              </div>
+
+              <div className="modal-actions">
+                {selectedOrder.status === 'Pending Payment' && (
+                  <button
+                    onClick={() => {
+                      handleUpdateOrderStatus(selectedOrder.id, 'Processing');
+                      setShowOrderModal(false);
+                    }}
+                    className="btn-submit"
+                  >
+                    <i className="fas fa-check"></i>
+                    Confirm Payment
+                  </button>
+                )}
+                {selectedOrder.status === 'Processing' && (
+                  <button
+                    onClick={() => {
+                      handleUpdateOrderStatus(selectedOrder.id, 'Completed');
+                      setShowOrderModal(false);
+                    }}
+                    className="btn-submit"
+                  >
+                    <i className="fas fa-check-double"></i>
+                    Mark as Completed
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

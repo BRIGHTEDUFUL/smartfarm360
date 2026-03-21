@@ -1,4 +1,6 @@
 import { initDatabase, saveDatabase } from './database';
+import fs from 'fs';
+import path from 'path';
 
 // SQLite schema - converted from PostgreSQL migrations
 const schema = `
@@ -114,12 +116,14 @@ CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   total_amount REAL NOT NULL CHECK (total_amount >= 0),
-  status TEXT DEFAULT 'Pending' CHECK (status IN ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled')),
-  payment_method TEXT NOT NULL CHECK (payment_method IN ('MobileMoney', 'Card', 'CashOnDelivery')),
+  status TEXT DEFAULT 'Pending Payment' CHECK (status IN ('Pending Payment', 'Processing', 'Completed', 'Cancelled', 'Pending', 'Shipped', 'Delivered')),
+  payment_method TEXT NOT NULL,
   payment_status TEXT DEFAULT 'Pending' CHECK (payment_status IN ('Pending', 'Paid', 'Failed', 'Refunded')),
-  delivery_method TEXT NOT NULL CHECK (delivery_method IN ('HomeDelivery', 'Pickup')),
+  delivery_method TEXT NOT NULL,
   delivery_address_id INTEGER REFERENCES delivery_addresses(id),
+  delivery_address TEXT,
   pickup_location TEXT,
+  notes TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -272,6 +276,46 @@ CREATE TABLE IF NOT EXISTS inventory_history (
 CREATE INDEX IF NOT EXISTS idx_inventory_history_product_id ON inventory_history(product_id);
 `;
 
+// Run additional migrations from migration files
+async function runAdditionalMigrations() {
+  const db = await initDatabase();
+  const migrationsDir = path.join(__dirname, '../../migrations');
+  
+  // Check if migrations directory exists
+  if (!fs.existsSync(migrationsDir)) {
+    console.log('No additional migrations directory found');
+    return;
+  }
+  
+  // Get all .sql files in migrations directory
+  const migrationFiles = fs.readdirSync(migrationsDir)
+    .filter(file => file.endsWith('.sql'))
+    .sort(); // Sort to ensure order
+  
+  if (migrationFiles.length === 0) {
+    console.log('No additional migration files found');
+    return;
+  }
+  
+  console.log(`\nRunning ${migrationFiles.length} additional migrations...`);
+  
+  for (const file of migrationFiles) {
+    try {
+      const filePath = path.join(migrationsDir, file);
+      const sql = fs.readFileSync(filePath, 'utf8');
+      
+      // Execute migration
+      db.run(sql);
+      console.log(`✓ ${file} executed successfully`);
+    } catch (error) {
+      console.error(`✗ ${file} failed:`, error);
+      throw error;
+    }
+  }
+  
+  saveDatabase();
+}
+
 // Run migrations
 export async function runMigrations() {
   console.log('Running SQLite migrations...');
@@ -279,9 +323,12 @@ export async function runMigrations() {
   try {
     const db = await initDatabase();
     
-    // Execute schema
+    // Execute base schema
     db.run(schema);
-    console.log('✓ All tables created successfully');
+    console.log('✓ All base tables created successfully');
+    
+    // Run additional migrations
+    await runAdditionalMigrations();
     
     // Verify tables
     const stmt = db.prepare(`
@@ -296,7 +343,7 @@ export async function runMigrations() {
     }
     stmt.free();
     
-    console.log(`✓ ${tables.length} tables verified:`);
+    console.log(`\n✓ ${tables.length} tables verified:`);
     tables.forEach((table: any) => console.log(`  - ${table.name}`));
     
     // Save database
