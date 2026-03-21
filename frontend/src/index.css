@@ -148,3 +148,55 @@ button, a, input, select, textarea {
     scroll-behavior: auto !important;
   }
 }
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+  /* Improve touch targets - minimum 44x44px */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+  }
+
+  /* Better mobile spacing */
+  body {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Better mobile input styling */
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+  :root {
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+}
