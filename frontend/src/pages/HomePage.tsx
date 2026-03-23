@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import './HomePage.css';
 
 const HomePage = () => {
-  const [scrollY, setScrollY] = useState(0);
   const [currentRegion, setCurrentRegion] = useState(0);
 
   // Ghana's 16 Regional Capitals with Farm Highlights
@@ -26,17 +25,6 @@ const HomePage = () => {
     { capital: 'Sefwi Wiawso', region: 'Western North', highlight: 'Cocoa & Timber Resources', icon: '🌳' },
     { capital: 'Bechem', region: 'Bono East', highlight: 'Tomato & Pepper Farms', icon: '🍅' },
   ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      requestAnimationFrame(() => {
-        setScrollY(window.scrollY);
-      });
-    };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Rotate through regions every 3 seconds
   useEffect(() => {
@@ -107,7 +95,7 @@ const HomePage = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="hero-section" style={{ transform: `translateY(${scrollY * 0.3}px)` }}>
+      <section className="hero-section">
         <div className="hero-bg">
           <div className="hero-orb hero-orb-1"></div>
           <div className="hero-orb hero-orb-2"></div>
