@@ -38,8 +38,16 @@ const CheckoutPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('=== CHECKOUT FORM SUBMISSION ===');
+    console.log('Form Data:', formData);
+    console.log('Cart Items:', items.length);
+    console.log('Cart Total:', total);
+    
     // Prevent duplicate submissions
-    if (loading) return;
+    if (loading) {
+      console.log('Already processing, ignoring duplicate submission');
+      return;
+    }
     
     setLoading(true);
 
@@ -81,6 +89,8 @@ const CheckoutPage = () => {
         return;
       }
 
+      console.log('Form validation passed');
+
       // Create order in database with "Pending Payment" status
       const orderData = {
         payment_method: formData.payment_method,
@@ -89,12 +99,22 @@ const CheckoutPage = () => {
         notes: formData.notes
       };
 
+      console.log('Sending order to API:', orderData);
       const response = await ordersAPI.create(orderData);
+      console.log('API Response:', response);
+      
+      if (!response.data.success) {
+        throw new Error(response.data.error?.message || 'Failed to create order');
+      }
+      
       const order = response.data.data;
+      console.log('Order created successfully:', order);
 
       // Send order details to Formspree for admin notification
       try {
+        console.log('Sending email notification...');
         await sendOrderToFormspree(order);
+        console.log('Email notification sent successfully');
       } catch (emailError) {
         console.error('Email notification failed:', emailError);
         // Don't fail the order if email fails
@@ -102,19 +122,28 @@ const CheckoutPage = () => {
       }
 
       // Clear cart
+      console.log('Clearing cart...');
       clearCart();
 
       // Show success message
       toast.success('Order placed successfully! Admin will contact you for payment confirmation.');
 
       // Redirect to orders page
+      console.log('Redirecting to orders page...');
       navigate('/orders');
     } catch (error: any) {
-      console.error('Checkout error:', error);
+      console.error('=== CHECKOUT ERROR ===');
+      console.error('Error object:', error);
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
+      console.error('Error message:', error.message);
       
       // Handle specific error cases
-      const errorMessage = error.response?.data?.error?.message;
+      const errorMessage = error.response?.data?.error?.message || error.response?.data?.message;
       const errorCode = error.response?.data?.error?.code;
+
+      console.log('Error Code:', errorCode);
+      console.log('Error Message:', errorMessage);
 
       if (errorCode === 'EMPTY_CART') {
         toast.error('Your cart is empty. Please add items before placing an order.');
@@ -125,11 +154,17 @@ const CheckoutPage = () => {
         toast.error(errorMessage || 'Please fill in all required fields');
       } else if (errorCode === 'DATABASE_ERROR') {
         toast.error('System error. Please contact support.');
+      } else if (error.message === 'Network Error') {
+        toast.error('Cannot connect to server. Please check if the backend is running.');
       } else {
-        toast.error(errorMessage || 'Failed to place order. Please try again.');
+        // Show the actual error message from backend
+        const displayMessage = errorMessage || error.message || 'Failed to place order. Please try again.';
+        toast.error(displayMessage);
+        console.error('Full error for debugging:', JSON.stringify(error, null, 2));
       }
     } finally {
       setLoading(false);
+      console.log('=== CHECKOUT PROCESS COMPLETE ===');
     }
   };
 

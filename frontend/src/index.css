@@ -1,23 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  --primary: #2E7D32;
-  --primary-dark: #1B5E20;
-  --primary-light: #E8F5E9;
-  --secondary: #FF9800;
-  --secondary-dark: #E65100;
-  --dark: #111827;
-  --gray: #6B7280;
-  --light-gray: #F9FAFB;
+  /* Vibrant Primary Colors - Rich Emerald Green */
+  --primary: #10B981;
+  --primary-dark: #059669;
+  --primary-light: #D1FAE5;
+  --primary-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --primary-glow: 0 0 30px rgba(16, 185, 129, 0.3);
+  
+  /* Vivid Secondary Colors - Bright Orange/Amber */
+  --secondary: #F59E0B;
+  --secondary-dark: #D97706;
+  --secondary-light: #FEF3C7;
+  --secondary-gradient: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  
+  /* Accent Colors - Rich Purple & Pink */
+  --accent-purple: #8B5CF6;
+  --accent-pink: #EC4899;
+  --accent-blue: #3B82F6;
+  --accent-red: #EF4444;
+  --accent-teal: #14B8A6;
+  
+  /* Gradient Combinations */
+  --gradient-primary: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
+  --gradient-secondary: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+  --gradient-purple: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 50%, #7C3AED 100%);
+  --gradient-pink: linear-gradient(135deg, #F9A8D4 0%, #EC4899 50%, #DB2777 100%);
+  --gradient-blue: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%);
+  --gradient-sunset: linear-gradient(135deg, #F59E0B 0%, #EC4899 50%, #8B5CF6 100%);
+  --gradient-ocean: linear-gradient(135deg, #14B8A6 0%, #3B82F6 50%, #8B5CF6 100%);
+  --gradient-forest: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
+  
+  /* Rich Background Colors */
+  --dark: #0F172A;
+  --gray: #64748B;
+  --light-gray: #F8FAFC;
   --white: #FFFFFF;
-  --border: #E0E0E0;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
-  --shadow-xl: 0 32px 64px rgba(0, 0, 0, 0.18);
-  --radius: 10px;
-  --radius-lg: 16px;
-  --transition: all 0.25s ease;
+  --border: #E2E8F0;
+  
+  /* Vibrant Shadows with Color */
+  --shadow-sm: 0 2px 8px rgba(16, 185, 129, 0.08);
+  --shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+  --shadow-lg: 0 12px 40px rgba(16, 185, 129, 0.18);
+  --shadow-xl: 0 32px 64px rgba(16, 185, 129, 0.25);
+  --shadow-colored: 0 8px 32px rgba(16, 185, 129, 0.3);
+  --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.4);
+  
+  /* Enhanced Radius */
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  
+  /* Smooth Transitions */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Font */
   --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
@@ -33,7 +71,8 @@ html {
 }
 
 body {
-  background: #F9FAFB;
+  background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 50%, #F0FDF4 100%);
+  background-attachment: fixed;
   color: var(--dark);
   line-height: 1.6;
   overflow-x: hidden;

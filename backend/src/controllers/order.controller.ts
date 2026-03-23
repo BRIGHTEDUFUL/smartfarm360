@@ -51,8 +51,11 @@ export class OrderController {
     } catch (error: any) {
       console.error('Create order error:', error);
       
+      // Get error message safely
+      const errorMessage = error?.message || String(error);
+      
       // Handle specific error cases
-      if (error.message.includes('Cart is empty')) {
+      if (errorMessage.includes('Cart is empty')) {
         res.status(400).json({
           success: false,
           error: { 
@@ -63,18 +66,18 @@ export class OrderController {
         return;
       }
 
-      if (error.message.includes('Insufficient stock')) {
+      if (errorMessage.includes('Insufficient stock')) {
         res.status(400).json({
           success: false,
           error: { 
             code: 'INSUFFICIENT_STOCK', 
-            message: error.message 
+            message: errorMessage 
           },
         });
         return;
       }
 
-      if (error.message.includes('CHECK constraint failed')) {
+      if (errorMessage.includes('CHECK constraint failed')) {
         res.status(500).json({
           success: false,
           error: { 
@@ -89,7 +92,7 @@ export class OrderController {
         success: false,
         error: { 
           code: 'BAD_REQUEST', 
-          message: error.message || 'Failed to create order. Please try again.' 
+          message: errorMessage || 'Failed to create order. Please try again.' 
         },
       });
     }

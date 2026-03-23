@@ -32,10 +32,25 @@ const OrdersPage = () => {
     try {
       const response = await ordersAPI.getAll();
       const ordersData = response.data.data || [];
-      setOrders(ordersData);
-    } catch (error) {
+      
+      // Fetch full order details with items for each order
+      const ordersWithDetails = await Promise.all(
+        ordersData.map(async (order: any) => {
+          try {
+            const detailsResponse = await ordersAPI.getById(order.id);
+            return detailsResponse.data.data;
+          } catch (error) {
+            console.error(`Failed to load details for order ${order.id}:`, error);
+            return order; // Return basic order if details fail
+          }
+        })
+      );
+      
+      setOrders(ordersWithDetails);
+    } catch (error: any) {
       console.error('Failed to fetch orders:', error);
-      toast.error('Failed to load orders');
+      const errorMessage = error.response?.data?.error?.message || 'Failed to load orders';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -51,8 +66,10 @@ const OrdersPage = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+    const normalizedStatus = status.toLowerCase().replace(/\s+/g, '-');
+    switch (normalizedStatus) {
       case 'pending':
+      case 'pending-payment':
         return '#FF9800';
       case 'processing':
         return '#2196F3';
@@ -60,6 +77,10 @@ const OrdersPage = () => {
         return '#4CAF50';
       case 'cancelled':
         return '#F44336';
+      case 'shipped':
+        return '#9C27B0';
+      case 'delivered':
+        return '#4CAF50';
       default:
         return '#757575';
     }
@@ -76,6 +97,10 @@ const OrdersPage = () => {
               <h1>My Orders</h1>
               <p>Track and manage your orders</p>
             </div>
+            <button onClick={fetchOrders} className="btn-refresh" disabled={loading}>
+              <i className="fas fa-sync-alt"></i>
+              Refresh
+            </button>
           </div>
 
           {loading ? (

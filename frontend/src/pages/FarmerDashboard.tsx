@@ -48,6 +48,13 @@ const FarmerDashboard = () => {
   useEffect(() => {
     if (activeTab === 'orders' && user?.role === 'Farmer') {
       loadMyOrders();
+      
+      // Auto-refresh orders every 30 seconds
+      const interval = setInterval(() => {
+        loadMyOrders();
+      }, 30000);
+      
+      return () => clearInterval(interval);
     }
   }, [activeTab]);
 
@@ -163,11 +170,24 @@ const FarmerDashboard = () => {
 
   const handleUpdateOrderStatus = async (orderId: number, status: string) => {
     try {
-      await ordersAPI.updateStatus(orderId, status);
-      toast.success(`Order status updated to ${status}`);
-      loadMyOrders();
+      const response = await ordersAPI.updateStatus(orderId, status);
+      
+      if (response.data.success) {
+        toast.success(response.data.message || `Order status updated to ${status}`);
+        
+        // Refresh orders to get updated data
+        await loadMyOrders();
+        
+        // If modal is open, update the selected order
+        if (selectedOrder && selectedOrder.id === orderId) {
+          const updatedOrderResponse = await ordersAPI.getById(orderId);
+          setSelectedOrder(updatedOrderResponse.data.data);
+        }
+      }
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to update order status');
+      const errorMessage = error.response?.data?.error?.message || 'Failed to update order status';
+      toast.error(errorMessage);
+      console.error('Update order status error:', error);
     }
   };
 

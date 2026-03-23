@@ -8,6 +8,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -18,21 +19,6 @@ const LoginPage = () => {
 
     try {
       await login(email, password);
-      toast.success('Login successful!');
-      navigate('/shop');
-    } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const quickLogin = async (testEmail: string, testPassword: string) => {
-    setEmail(testEmail);
-    setPassword(testPassword);
-    setLoading(true);
-    try {
-      await login(testEmail, testPassword);
       toast.success('Login successful!');
       navigate('/shop');
     } catch (error: any) {
@@ -89,6 +75,12 @@ const LoginPage = () => {
             <div className="floating-product fp-3">
               <img src="/images/carrot.jpg" alt="Carrots" />
             </div>
+            <div className="floating-product fp-4">
+              <img src="/images/avocado.jpg" alt="Avocado" />
+            </div>
+            <div className="floating-product fp-5">
+              <img src="/images/pepper.jpg" alt="Pepper" />
+            </div>
           </div>
         </div>
 
@@ -140,6 +132,16 @@ const LoginPage = () => {
                 </div>
               </div>
 
+              <div className="remember-me">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <label htmlFor="rememberMe">Remember me</label>
+              </div>
+
               <button type="submit" className="auth-btn" disabled={loading}>
                 {loading ? (
                   <>
@@ -154,37 +156,6 @@ const LoginPage = () => {
                 )}
               </button>
             </form>
-
-            <div className="auth-divider">
-              <span>or quick login as</span>
-            </div>
-
-            <div className="quick-login-buttons">
-              <button
-                className="quick-login-btn consumer"
-                onClick={() => quickLogin('consumer@test.com', 'consumer123')}
-                disabled={loading}
-              >
-                <i className="fas fa-shopping-bag"></i>
-                Consumer
-              </button>
-              <button
-                className="quick-login-btn farmer"
-                onClick={() => quickLogin('farmer1@test.com', 'farmer123')}
-                disabled={loading}
-              >
-                <i className="fas fa-tractor"></i>
-                Farmer
-              </button>
-              <button
-                className="quick-login-btn admin"
-                onClick={() => quickLogin('admin@smartfarming.com', 'admin123')}
-                disabled={loading}
-              >
-                <i className="fas fa-user-shield"></i>
-                Admin
-              </button>
-            </div>
 
             <div className="auth-footer">
               <p>

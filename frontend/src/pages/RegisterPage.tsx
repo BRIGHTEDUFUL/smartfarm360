@@ -18,6 +18,23 @@ const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  const getPasswordStrength = (password: string) => {
+    if (!password) return { strength: 0, text: '' };
+    
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+    if (strength <= 2) return { strength: 1, text: 'Weak' };
+    if (strength <= 3) return { strength: 2, text: 'Medium' };
+    return { strength: 3, text: 'Strong' };
+  };
+
+  const passwordStrength = getPasswordStrength(formData.password);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -83,6 +100,12 @@ const RegisterPage = () => {
             </div>
             <div className="floating-product fp-3">
               <img src="/images/milk.jpg" alt="Milk" />
+            </div>
+            <div className="floating-product fp-4">
+              <img src="/images/watermelon.jpg" alt="Watermelon" />
+            </div>
+            <div className="floating-product fp-5">
+              <img src="/images/honey.jpg" alt="Honey" />
             </div>
           </div>
         </div>
@@ -214,6 +237,18 @@ const RegisterPage = () => {
                     <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                   </button>
                 </div>
+                {formData.password && (
+                  <div className="password-strength">
+                    <div className="strength-bars">
+                      <div className={`strength-bar ${passwordStrength.strength >= 1 ? `active ${passwordStrength.text.toLowerCase()}` : ''}`}></div>
+                      <div className={`strength-bar ${passwordStrength.strength >= 2 ? `active ${passwordStrength.text.toLowerCase()}` : ''}`}></div>
+                      <div className={`strength-bar ${passwordStrength.strength >= 3 ? `active ${passwordStrength.text.toLowerCase()}` : ''}`}></div>
+                    </div>
+                    <span className={`strength-text ${passwordStrength.text.toLowerCase()}`}>
+                      {passwordStrength.text} password
+                    </span>
+                  </div>
+                )}
                 <small className="password-hint">Minimum 8 characters</small>
               </div>
 

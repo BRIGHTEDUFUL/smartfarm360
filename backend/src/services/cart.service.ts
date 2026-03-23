@@ -3,7 +3,7 @@ import { query } from '../config/database';
 export class CartService {
   static async getCart(userId: number) {
     const result = await query(
-      `SELECT c.*, p.name, p.price, p.stock_quantity, p.status, p.unit
+      `SELECT c.*, p.name, p.price, p.stock_quantity, p.status, p.unit, p.farmer_id
        FROM cart_items c
        JOIN products p ON c.product_id = p.id
        WHERE c.user_id = ?`,

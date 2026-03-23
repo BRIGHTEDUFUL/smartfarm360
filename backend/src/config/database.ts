@@ -12,13 +12,33 @@ let SQL: any;
 
 // Initialize SQL.js
 export async function initDatabase() {
+  // If database is already initialized, return it
+  if (db) {
+    console.log('Database already initialized, reusing existing instance');
+    return db;
+  }
+  
   SQL = await initSqlJs();
+  
+  console.log('initDatabase called, dbPath:', dbPath);
+  console.log('File exists:', fs.existsSync(dbPath));
   
   // Load existing database or create new one
   if (fs.existsSync(dbPath)) {
     const buffer = fs.readFileSync(dbPath);
+    console.log('Loaded database file, size:', buffer.length, 'bytes');
     db = new SQL.Database(buffer);
+    
+    // Check if tables exist
+    const stmt = db.prepare("SELECT name FROM sqlite_master WHERE type='table'");
+    const tables: any[] = [];
+    while (stmt.step()) {
+      tables.push(stmt.getAsObject());
+    }
+    stmt.free();
+    console.log('Tables in database:', tables.map(t => t.name).join(', '));
   } else {
+    console.log('Creating new database');
     db = new SQL.Database();
   }
   
