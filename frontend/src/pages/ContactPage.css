@@ -1,6 +1,23 @@
 /* ═══════════════════════════════════════════════════════════
-   CONTACT PAGE - STYLING
+   CONTACT PAGE - STYLING v2.1 TEXT VISIBILITY FIX
    ═══════════════════════════════════════════════════════════ */
+
+/* Global text visibility fix */
+.contact-page h1,
+.contact-page h2,
+.contact-page h3,
+.contact-page h4,
+.contact-page label,
+.contact-page strong {
+  color: #1a1a1a !important;
+  opacity: 1 !important;
+}
+
+.contact-page p,
+.contact-page span {
+  color: #2d3748 !important;
+  opacity: 1 !important;
+}
 
 .contact-page {
   min-height: 100vh;
@@ -16,7 +33,7 @@
 
 /* Success Banner */
 .success-banner {
-  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 32px;
@@ -67,13 +84,13 @@
 .header-icon {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.3);
 }
 
 .header-icon i {
@@ -86,7 +103,7 @@
   font-weight: 900;
   color: var(--dark);
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -179,7 +196,7 @@
   justify-content: center;
   gap: 12px;
   padding: 16px 32px;
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -187,12 +204,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
 .submit-btn:active {
@@ -254,7 +271,7 @@
 
 /* Social Section */
 .social-section {
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   border-radius: 16px;
   padding: 24px;
   text-align: center;

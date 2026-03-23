@@ -6,7 +6,6 @@ import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import './ShopPage.css';
-import './ShopPage.enhanced.css';
 
 interface Product {
   id: number;
@@ -18,6 +17,7 @@ interface Product {
   stock_quantity: number;
   status: string;
   farmer_id: number;
+  image_url?: string;
 }
 
 const categories = [
@@ -368,11 +368,16 @@ const ShopPage = () => {
             <div className="products-grid" ref={productsGridRef}>
               {products.map((product) => {
                 const badge = getBadge(product.category);
+                // Use uploaded image if available, otherwise fallback to mapped image
+                const productImage = product.image_url 
+                  ? `${import.meta.env.VITE_API_URL || '/api'}${product.image_url}`
+                  : getImagePath(product.name);
+                
                 return (
                   <div key={product.id} className="product-card">
                     <div className="card-image-wrap">
                       <img
-                        src={getImagePath(product.name)}
+                        src={productImage}
                         alt={product.name}
                         onError={(e) => {
                           e.currentTarget.src = '/images/vegitales.jpg';

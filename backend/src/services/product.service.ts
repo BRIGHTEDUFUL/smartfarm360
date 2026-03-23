@@ -11,6 +11,7 @@ export interface Product {
   stock_quantity: number;
   status: 'Pending' | 'Active' | 'Rejected' | 'Inactive' | 'OutOfStock';
   rejection_reason?: string;
+  image_url?: string;
   created_at: string;
   updated_at: string;
 }
@@ -24,11 +25,12 @@ export class ProductService {
     price: number;
     unit: string;
     stock_quantity: number;
+    image_url?: string;
   }): Promise<Product> {
     await query(
-      `INSERT INTO products (farmer_id, name, description, category, price, unit, stock_quantity, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [data.farmer_id, data.name, data.description, data.category, data.price, data.unit, data.stock_quantity, 'Pending']
+      `INSERT INTO products (farmer_id, name, description, category, price, unit, stock_quantity, image_url, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [data.farmer_id, data.name, data.description, data.category, data.price, data.unit, data.stock_quantity, data.image_url || null, 'Pending']
     );
 
     const result = await query(

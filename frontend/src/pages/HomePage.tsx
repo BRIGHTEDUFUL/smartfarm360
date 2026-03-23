@@ -3,8 +3,15 @@ import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import './HomePage.css';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 const HomePage = () => {
   const [currentRegion, setCurrentRegion] = useState(0);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   // Ghana's 16 Regional Capitals with Farm Highlights
   const ghanaRegions = [
@@ -33,6 +40,44 @@ const HomePage = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Handle PWA install prompt
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    // Check if already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstallable(false);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) {
+      // Fallback for browsers that don't support install prompt
+      alert('To install the app:\n\nChrome/Edge: Click the install icon in the address bar\niOS Safari: Tap Share → Add to Home Screen\nAndroid: Tap menu → Add to Home Screen');
+      return;
+    }
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      console.log('App installed');
+    }
+
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
 
   const features = [
     {
@@ -368,6 +413,170 @@ const HomePage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Download App Section */}
+      <section className="download-app-section">
+        <div className="download-bg">
+          <div className="download-orb download-orb-1"></div>
+          <div className="download-orb download-orb-2"></div>
+          <div className="download-grid-pattern"></div>
+        </div>
+        
+        <div className="container">
+          <div className="download-content">
+            <div className="download-text">
+              <div className="download-badge">
+                <i className="fas fa-mobile-alt"></i>
+                <span>Available on All Devices</span>
+              </div>
+              
+              <h2 className="download-title">
+                Get the <span className="gradient-text">Smart Farming 360</span> App
+              </h2>
+              
+              <p className="download-description">
+                Download our mobile app for the best experience. Shop offline, get instant 
+                notifications, and enjoy lightning-fast performance on any device!
+              </p>
+
+              <div className="download-features">
+                <div className="download-feature">
+                  <div className="feature-check">✓</div>
+                  <div>
+                    <h4>Works Offline</h4>
+                    <p>Browse products without internet</p>
+                  </div>
+                </div>
+                <div className="download-feature">
+                  <div className="feature-check">✓</div>
+                  <div>
+                    <h4>Instant Notifications</h4>
+                    <p>Get real-time order updates</p>
+                  </div>
+                </div>
+                <div className="download-feature">
+                  <div className="feature-check">✓</div>
+                  <div>
+                    <h4>Lightning Fast</h4>
+                    <p>Optimized for speed</p>
+                  </div>
+                </div>
+                <div className="download-feature">
+                  <div className="feature-check">✓</div>
+                  <div>
+                    <h4>Easy Install</h4>
+                    <p>One-click installation</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="download-buttons">
+                <button className="btn-install-pwa" onClick={handleInstallClick}>
+                  <div className="btn-icon">
+                    <i className="fas fa-download"></i>
+                  </div>
+                  <div className="btn-text">
+                    <span className="btn-label">{isInstallable ? 'Download App' : 'Open App'}</span>
+                    <span className="btn-sublabel">Free • No Sign Up Required</span>
+                  </div>
+                </button>
+                
+                <div className="platform-badges">
+                  <div className="platform-badge">
+                    <i className="fab fa-chrome"></i>
+                    <span>Chrome</span>
+                  </div>
+                  <div className="platform-badge">
+                    <i className="fab fa-edge"></i>
+                    <span>Edge</span>
+                  </div>
+                  <div className="platform-badge">
+                    <i className="fab fa-safari"></i>
+                    <span>Safari</span>
+                  </div>
+                  <div className="platform-badge">
+                    <i className="fab fa-android"></i>
+                    <span>Android</span>
+                  </div>
+                  <div className="platform-badge">
+                    <i className="fab fa-apple"></i>
+                    <span>iOS</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="download-stats">
+                <div className="stat-item">
+                  <div className="stat-icon">⚡</div>
+                  <div>
+                    <strong>90%</strong>
+                    <span>Faster Loading</span>
+                  </div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-icon">🛡️</div>
+                  <div>
+                    <strong>100%</strong>
+                    <span>Secure Payments</span>
+                  </div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-icon">📦</div>
+                  <div>
+                    <strong>24/7</strong>
+                    <span>Order Tracking</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="download-visual">
+              <div className="phone-mockup">
+                <div className="phone-frame">
+                  <div className="phone-notch"></div>
+                  <div className="phone-screen">
+                    <div className="screen-content">
+                      <div className="app-header">
+                        <div className="app-time">9:41</div>
+                        <div className="app-icons">
+                          <i className="fas fa-signal"></i>
+                          <i className="fas fa-wifi"></i>
+                          <i className="fas fa-battery-full"></i>
+                        </div>
+                      </div>
+                      <div className="app-body">
+                        <div className="app-logo">🌾</div>
+                        <h3>Smart Farming 360</h3>
+                        <p>Fresh from Ghana's Farms</p>
+                        <div className="app-products">
+                          <div className="mini-product">🍅</div>
+                          <div className="mini-product">🥬</div>
+                          <div className="mini-product">🍍</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="phone-button"></div>
+                </div>
+                <div className="phone-shadow"></div>
+              </div>
+
+              <div className="floating-badge badge-1">
+                <i className="fas fa-bolt"></i>
+                <span>Fast</span>
+              </div>
+              <div className="floating-badge badge-2">
+                <i className="fas fa-shield-alt"></i>
+                <span>Secure</span>
+              </div>
+              <div className="floating-badge badge-3">
+                <i className="fas fa-wifi"></i>
+                <span>Offline</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

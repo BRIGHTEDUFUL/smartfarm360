@@ -27,6 +27,8 @@ const FarmerDashboard = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -36,8 +38,22 @@ const FarmerDashboard = () => {
     stock_quantity: '',
   });
 
-  const categories = ['Vegetables', 'Fruits', 'Grains', 'Poultry', 'Meat', 'Dairy', 'Spices'];
+  const categories = [
+    { name: 'Vegetables', icon: '🥬' },
+    { name: 'Fruits', icon: '🍎' },
+    { name: 'Grains', icon: '🌾' },
+    { name: 'Poultry', icon: '🐔' },
+    { name: 'Meat', icon: '🥩' },
+    { name: 'Dairy', icon: '🥛' },
+    { name: 'Spices', icon: '🌶️' }
+  ];
   const units = ['kg', 'piece', 'bunch', 'crate', 'bag', 'liter'];
+
+  // Helper function to get category icon
+  const getCategoryIcon = (categoryName: string) => {
+    const category = categories.find(cat => cat.name === categoryName);
+    return category ? category.icon : '📦';
+  };
 
   useEffect(() => {
     if (user?.role === 'Farmer') {
@@ -109,27 +125,109 @@ const FarmerDashboard = () => {
     e.preventDefault();
     
     try {
-      const productData = {
-        ...formData,
-        price: parseFloat(formData.price),
-        stock_quantity: parseInt(formData.stock_quantity),
-      };
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('unit', formData.unit);
+      formDataToSend.append('stock_quantity', formData.stock_quantity);
+      
+      // Add image if selected
+      if (imageFile) {
+        formDataToSend.append('image', imageFile);
+      }
 
       if (editingProduct) {
-        await productsAPI.update(editingProduct.id, productData);
+        await productsAPI.update(editingProduct.id, formDataToSend);
         toast.success('Product updated successfully');
       } else {
-        await productsAPI.create(productData);
+        await productsAPI.create(formDataToSend);
         toast.success('Product created successfully! Awaiting admin approval.');
       }
 
       setShowAddModal(false);
       setEditingProduct(null);
       resetForm();
+      setImageFile(null);
+      setImagePreview(null);
       loadMyProducts();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to save product');
+      console.error('Product save error:', error);
+      
+      // Handle specific error codes
+      const errorCode = error.response?.data?.error?.code;
+      const errorMessage = error.response?.data?.error?.message;
+      
+      if (errorCode === 'FILE_TOO_LARGE') {
+        toast.error('Image size must be less than 5MB. Please choose a smaller image.');
+      } else if (errorCode === 'INVALID_FILE_TYPE') {
+        toast.error('Invalid file type. Only JPEG, PNG, GIF and WebP images are allowed.');
+      } else if (errorMessage) {
+        toast.error(errorMessage);
+      } else {
+        toast.error('Failed to save product. Please try again.');
+      }
     }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Invalid file type. Only JPEG, PNG, GIF and WebP images are allowed.');
+      e.target.value = ''; // Reset input
+      return;
+    }
+    
+    // Validate file size (5MB = 5 * 1024 * 1024 bytes)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      toast.error(`Image size (${sizeMB}MB) exceeds the 5MB limit. Please choose a smaller image.`);
+      e.target.value = ''; // Reset input
+      return;
+    }
+    
+    // Validate minimum dimensions (optional - at least 100x100)
+    const img = new Image();
+    img.onload = () => {
+      if (img.width < 100 || img.height < 100) {
+        toast.error('Image dimensions must be at least 100x100 pixels.');
+        e.target.value = '';
+        setImageFile(null);
+        setImagePreview(null);
+        return;
+      }
+      
+      // All validations passed
+      setImageFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.onerror = () => {
+        toast.error('Failed to read image file.');
+        setImageFile(null);
+        setImagePreview(null);
+      };
+      reader.readAsDataURL(file);
+    };
+    
+    img.onerror = () => {
+      toast.error('Failed to load image. Please choose a valid image file.');
+      e.target.value = '';
+      setImageFile(null);
+      setImagePreview(null);
+    };
+    
+    img.src = URL.createObjectURL(file);
   };
 
   const handleEdit = (product: Product) => {
@@ -166,6 +264,8 @@ const FarmerDashboard = () => {
       unit: 'kg',
       stock_quantity: '',
     });
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const handleUpdateOrderStatus = async (orderId: number, status: string) => {
@@ -330,6 +430,17 @@ const FarmerDashboard = () => {
               <div className="products-grid">
                 {products.map((product) => (
                   <div key={product.id} className="product-item">
+                    {(product as any).image_url && (
+                      <div className="product-image">
+                        <img 
+                          src={`${import.meta.env.VITE_API_URL || '/api'}${(product as any).image_url}`}
+                          alt={product.name}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
                     <div className="product-header">
                       <h3>{product.name}</h3>
                       <span className={`status-badge status-${product.status.toLowerCase()}`}>
@@ -340,7 +451,9 @@ const FarmerDashboard = () => {
                     <div className="product-details">
                       <div className="detail-row">
                         <span className="label">Category:</span>
-                        <span>{product.category}</span>
+                        <span className="category-value">
+                          {getCategoryIcon(product.category)} {product.category}
+                        </span>
                       </div>
                       <div className="detail-row">
                         <span className="label">Price:</span>
@@ -485,6 +598,53 @@ const FarmerDashboard = () => {
                 />
               </div>
 
+              <div className="form-group">
+                <label>Product Image</label>
+                <div className="image-upload-container">
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={handleImageChange}
+                    className="image-input"
+                    id="product-image"
+                  />
+                  <label htmlFor="product-image" className="image-upload-label">
+                    {imagePreview ? (
+                      <div className="image-preview">
+                        <img src={imagePreview} alt="Preview" />
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setImageFile(null);
+                            setImagePreview(null);
+                            // Reset file input
+                            const fileInput = document.getElementById('product-image') as HTMLInputElement;
+                            if (fileInput) fileInput.value = '';
+                          }}
+                          className="remove-image-btn"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                        {imageFile && (
+                          <div className="image-info">
+                            <span className="image-name">{imageFile.name}</span>
+                            <span className="image-size">{(imageFile.size / 1024).toFixed(0)} KB</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="upload-placeholder">
+                        <i className="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload image</p>
+                        <span>JPEG, PNG, GIF or WebP (Max 5MB)</span>
+                        <span className="upload-hint">Recommended: At least 500x500 pixels</span>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </div>
+
               <div className="form-row">
                 <div className="form-group">
                   <label>Category *</label>
@@ -492,9 +652,12 @@ const FarmerDashboard = () => {
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     required
+                    className="category-select"
                   >
                     {categories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
+                      <option key={cat.name} value={cat.name}>
+                        {cat.icon} {cat.name}
+                      </option>
                     ))}
                   </select>
                 </div>

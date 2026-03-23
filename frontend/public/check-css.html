@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Check</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #00ff00;
+    }
+    .result {
+      background: #2a2a2a;
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border-left: 4px solid #00ff00;
+    }
+    .error {
+      border-left-color: #ff0000;
+      color: #ff6b6b;
+    }
+    .success {
+      border-left-color: #00ff00;
+      color: #51cf66;
+    }
+    h1 {
+      color: #00ff00;
+    }
+    code {
+      background: #000;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 CSS Cache Diagnostic</h1>
+  <div id="results"></div>
+  
+  <script>
+    const results = document.getElementById('results');
+    
+    function addResult(message, isSuccess) {
+      const div = document.createElement('div');
+      div.className = `result ${isSuccess ? 'success' : 'error'}`;
+      div.innerHTML = message;
+      results.appendChild(div);
+    }
+    
+    // Check if we can load the main app
+    fetch('/')
+      .then(response => {
+        addResult(`✅ Main app is accessible (Status: ${response.status})`, true);
+      })
+      .catch(error => {
+        addResult(`❌ Cannot reach main app: ${error.message}`, false);
+      });
+    
+    // Check if CSS files exist
+    const cssFiles = [
+      '/src/index.css',
+      '/src/components/Navbar.css'
+    ];
+    
+    cssFiles.forEach(file => {
+      fetch(file)
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          }
+          throw new Error(`Status: ${response.status}`);
+        })
+        .then(text => {
+          // Check for cache buster
+          if (text.includes('CACHE BUSTER v3.0')) {
+            addResult(`✅ ${file} - Has v3.0 cache buster (NEW VERSION)`, true);
+          } else if (text.includes('CACHE BUSTER')) {
+            addResult(`⚠️ ${file} - Has old cache buster (CACHED VERSION)`, false);
+          } else {
+            addResult(`❌ ${file} - No cache buster found (VERY OLD VERSION)`, false);
+          }
+          
+          // Check for pointer-events fix
+          if (text.includes('pointer-events: auto !important')) {
+            addResult(`✅ ${file} - Has pointer-events fix`, true);
+          } else {
+            addResult(`❌ ${file} - Missing pointer-events fix (CACHED)`, false);
+          }
+        })
+        .catch(error => {
+          addResult(`❌ Cannot load ${file}: ${error.message}`, false);
+        });
+    });
+    
+    // Instructions
+    setTimeout(() => {
+      addResult(`
+        <h3>What to do:</h3>
+        <ul>
+          <li>If you see ❌ errors above: <strong>CACHE IS THE PROBLEM</strong></li>
+          <li>Follow EMERGENCY_MOBILE_FIX.md Step 1 (Nuclear Cache Clear)</li>
+          <li>If you see ✅ all green: CSS is loaded correctly, issue is elsewhere</li>
+        </ul>
+      `, true);
+    }, 2000);
+  </script>
+</body>
+</html>

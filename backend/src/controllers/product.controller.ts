@@ -2,13 +2,23 @@ import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { ProductService } from '../services/product.service';
 
+// Define valid categories
+const VALID_CATEGORIES = ['Vegetables', 'Fruits', 'Grains', 'Poultry', 'Meat', 'Dairy', 'Spices'];
+const VALID_UNITS = ['kg', 'piece', 'bunch', 'crate', 'bag', 'liter'];
+
 export class ProductController {
   static createValidation = [
     body('name').trim().notEmpty().withMessage('Product name is required'),
     body('description').trim().notEmpty().withMessage('Description is required'),
-    body('category').trim().notEmpty().withMessage('Category is required'),
+    body('category')
+      .trim()
+      .notEmpty().withMessage('Category is required')
+      .isIn(VALID_CATEGORIES).withMessage(`Category must be one of: ${VALID_CATEGORIES.join(', ')}`),
     body('price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
-    body('unit').trim().notEmpty().withMessage('Unit is required'),
+    body('unit')
+      .trim()
+      .notEmpty().withMessage('Unit is required')
+      .isIn(VALID_UNITS).withMessage(`Unit must be one of: ${VALID_UNITS.join(', ')}`),
     body('stock_quantity').isInt({ min: 0 }).withMessage('Stock quantity must be a non-negative integer'),
   ];
 
@@ -23,9 +33,13 @@ export class ProductController {
         return;
       }
 
+      // Handle image upload
+      const image_url = req.file ? `/uploads/products/${req.file.filename}` : null;
+
       const product = await ProductService.createProduct({
         farmer_id: req.user!.id,
         ...req.body,
+        image_url,
       });
 
       res.status(201).json({ success: true, data: product });
@@ -104,7 +118,13 @@ export class ProductController {
         return;
       }
 
-      const updated = await ProductService.updateProduct(productId, req.body);
+      // Handle image upload
+      const updateData = { ...req.body };
+      if (req.file) {
+        updateData.image_url = `/uploads/products/${req.file.filename}`;
+      }
+
+      const updated = await ProductService.updateProduct(productId, updateData);
       res.json({ success: true, data: updated });
     } catch (error) {
       console.error('Update product error:', error);

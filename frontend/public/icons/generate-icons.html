@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farming 360 - Icon Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0D5415 0%, #1B7E28 50%, #2E9B3F 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            color: #1a1a1a;
+        }
+        
+        h2 {
+            color: #0D5415;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .preview-item {
+            text-align: center;
+        }
+        
+        .preview-item img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+        
+        .preview-item p {
+            font-size: 0.875rem;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #FBBF24, #F59E0B);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(251, 191, 36, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .instructions {
+            background: #FFF8E1;
+            border-left: 4px solid #F59E0B;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            color: #D97706;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 2px solid #4CAF50;
+            display: block;
+        }
+        
+        .status.error {
+            background: #FFEBEE;
+            color: #C62828;
+            border: 2px solid #F44336;
+            display: block;
+        }
+        
+        canvas {
+            display: none;
+        }
+        
+        .download-all {
+            background: linear-gradient(135deg, #0D5415, #1B7E28);
+            color: white;
+        }
+        
+        .download-all:hover {
+            box-shadow: 0 6px 16px rgba(13, 84, 21, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌿 Smart Farming 360</h1>
+        <p class="subtitle">PWA Icon Generator</p>
+        
+        <div class="card">
+            <h2>Main App Icon Preview</h2>
+            <div class="preview-grid">
+                <div class="preview-item">
+                    <img src="icon-base.svg" alt="512x512">
+                    <p>512x512 (Base)</p>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="generateAllIcons()">Generate All PNG Icons</button>
+                <button onclick="downloadAllIcons()" class="download-all">Download All Icons</button>
+            </div>
+            
+            <div id="status" class="status"></div>
+        </div>
+        
+        <div class="card">
+            <h2>Shortcut Icons Preview</h2>
+            <div class="preview-grid">
+                <div class="preview-item">
+                    <img src="shop-icon.svg" alt="Shop">
+                    <p>Shop</p>
+                </div>
+                <div class="preview-item">
+                    <img src="orders-icon.svg" alt="Orders">
+                    <p>Orders</p>
+                </div>
+                <div class="preview-item">
+                    <img src="cart-icon.svg" alt="Cart">
+                    <p>Cart</p>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="generateShortcutIcons()">Generate Shortcut PNGs</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="instructions">
+                <h3>📋 Instructions</h3>
+                <ol>
+                    <li>Click "Generate All PNG Icons" to create all required icon sizes</li>
+                    <li>Click "Download All Icons" to download them as a ZIP file</li>
+                    <li>Extract the downloaded icons to the <code>frontend/public/icons/</code> directory</li>
+                    <li>Replace any existing placeholder icons</li>
+                    <li>Clear browser cache and test the PWA installation</li>
+                    <li>Verify icons appear correctly on home screen (Android/iOS)</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Alternative: Use Online Tools</h2>
+            <p style="margin-bottom: 15px;">If you prefer, you can use these online tools:</p>
+            <div class="button-group">
+                <button onclick="window.open('https://www.pwabuilder.com/imageGenerator', '_blank')">
+                    PWA Builder Image Generator
+                </button>
+                <button onclick="window.open('https://realfavicongenerator.net/', '_blank')">
+                    Real Favicon Generator
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <canvas id="canvas"></canvas>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        const generatedIcons = {};
+        
+        async function generateAllIcons() {
+            const status = document.getElementById('status');
+            status.className = 'status';
+            status.textContent = 'Generating icons...';
+            status.style.display = 'block';
+            
+            try {
+                const svgResponse = await fetch('icon-base.svg');
+                const svgText = await svgResponse.text();
+                
+                for (const size of sizes) {
+                    await generateIcon(svgText, size, `icon-${size}x${size}.png`);
+                }
+                
+                // Generate maskable icons
+                await generateMaskableIcon(svgText, 192, 'icon-192x192-maskable.png');
+                await generateMaskableIcon(svgText, 512, 'icon-512x512-maskable.png');
+                
+                status.className = 'status success';
+                status.textContent = `✅ Successfully generated ${sizes.length + 2} icons! Click "Download All Icons" to save them.`;
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+        
+        async function generateIcon(svgText, size, filename) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+            
+            const img = new Image();
+            const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(svgBlob);
+            
+            return new Promise((resolve, reject) => {
+                img.onload = () => {
+                    ctx.clearRect(0, 0, size, size);
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    canvas.toBlob((blob) => {
+                        generatedIcons[filename] = blob;
+                        URL.revokeObjectURL(url);
+                        resolve();
+                    }, 'image/png');
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+        
+        async function generateMaskableIcon(svgText, size, filename) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Fill background
+            ctx.fillStyle = '#0D5415';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Calculate safe zone (80% of canvas)
+            const safeSize = size * 0.8;
+            const offset = (size - safeSize) / 2;
+            
+            const img = new Image();
+            const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(svgBlob);
+            
+            return new Promise((resolve, reject) => {
+                img.onload = () => {
+                    ctx.drawImage(img, offset, offset, safeSize, safeSize);
+                    
+                    canvas.toBlob((blob) => {
+                        generatedIcons[filename] = blob;
+                        URL.revokeObjectURL(url);
+                        resolve();
+                    }, 'image/png');
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+        
+        async function generateShortcutIcons() {
+            const shortcuts = [
+                { file: 'shop-icon.svg', output: 'shop-96x96.png' },
+                { file: 'orders-icon.svg', output: 'orders-96x96.png' },
+                { file: 'cart-icon.svg', output: 'cart-96x96.png' }
+            ];
+            
+            for (const shortcut of shortcuts) {
+                const svgResponse = await fetch(shortcut.file);
+                const svgText = await svgResponse.text();
+                await generateIcon(svgText, 96, shortcut.output);
+            }
+            
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.textContent = '✅ Shortcut icons generated!';
+        }
+        
+        async function downloadAllIcons() {
+            if (Object.keys(generatedIcons).length === 0) {
+                alert('Please generate icons first!');
+                return;
+            }
+            
+            // Download each icon individually
+            for (const [filename, blob] of Object.entries(generatedIcons)) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Small delay between downloads
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.textContent = `✅ Downloaded ${Object.keys(generatedIcons).length} icons!`;
+        }
+    </script>
+</body>
+</html>

@@ -1,6 +1,23 @@
 /* ═══════════════════════════════════════════════════════════
-   ORDERS PAGE - STYLING
+   ORDERS PAGE - STYLING v2.1 TEXT VISIBILITY FIX
    ═══════════════════════════════════════════════════════════ */
+
+/* Global text visibility fix */
+.orders-page h1,
+.orders-page h2,
+.orders-page h3,
+.orders-page h4,
+.orders-page label,
+.orders-page strong {
+  color: #1a1a1a !important;
+  opacity: 1 !important;
+}
+
+.orders-page p,
+.orders-page span {
+  color: #2d3748 !important;
+  opacity: 1 !important;
+}
 
 .orders-page {
   min-height: 100vh;
@@ -123,13 +140,13 @@
   align-items: center;
   gap: 10px;
   padding: 14px 32px;
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   color: #fff;
   text-decoration: none;
   border-radius: 12px;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .btn-shop:hover {

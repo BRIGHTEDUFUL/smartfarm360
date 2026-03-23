@@ -1,6 +1,7 @@
+/* CACHE BUSTER v2.1 - CATEGORY COUNT FIX APPLIED */
 /* Hero Banner */
 .shop-hero {
-  background: linear-gradient(135deg, #0a3d0a 0%, #1B5E20 40%, #2E7D32 70%, #1a6b2a 100%);
+  background: linear-gradient(135deg, #0D5415 0%, #1B7E28 40%, #2E9B3F 70%, #1B7E28 100%);
   color: #fff;
   padding: 0;
   position: relative;
@@ -36,7 +37,7 @@
 .hero-orb-1 {
   width: 400px;
   height: 400px;
-  background: #4CAF50;
+  background: #10B981;
   top: -100px;
   right: 10%;
   animation-delay: 0s;
@@ -45,7 +46,7 @@
 .hero-orb-2 {
   width: 300px;
   height: 300px;
-  background: #FF9800;
+  background: #F59E0B;
   bottom: -80px;
   right: 30%;
   animation-delay: -3s;
@@ -54,7 +55,7 @@
 .hero-orb-3 {
   width: 250px;
   height: 250px;
-  background: #81C784;
+  background: #34D399;
   top: 50%;
   left: 5%;
   animation-delay: -5s;
@@ -99,7 +100,7 @@
 }
 
 .hero-eyebrow i {
-  color: #A5D6A7;
+  color: #6EE7B7;
 }
 
 .shop-hero-text h1 {
@@ -166,7 +167,7 @@
 }
 
 .trust-badge i {
-  color: #A5D6A7;
+  color: #6EE7B7;
   font-size: 13px;
 }
 
@@ -291,6 +292,7 @@
 
 .hfc-body {
   padding: 10px 12px;
+  background: #FFFFFF;
 }
 
 .hfc-name {
@@ -303,7 +305,7 @@
 .hfc-price {
   font-size: 15px;
   font-weight: 900;
-  color: #2E7D32;
+  color: #059669;
 }
 
 .hfc-rating {
@@ -373,7 +375,7 @@
 
 /* Category Pills */
 .hero-cats-strip {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 12px 0;
   overflow: hidden;
@@ -436,10 +438,11 @@
 .sidebar {
   position: sticky;
   top: 80px;
+  touch-action: pan-y;
 }
 
 .sidebar-card {
-  background: var(--white);
+  background: #FFFFFF;
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-sm);
@@ -452,8 +455,9 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: var(--gray);
+  color: #2d3748 !important;
   margin-bottom: 16px;
+  opacity: 1 !important;
 }
 
 .cat-list {
@@ -473,7 +477,8 @@
   transition: var(--transition);
   font-size: 14px;
   font-weight: 500;
-  color: var(--dark);
+  color: #1a1a1a !important;
+  opacity: 1 !important;
 }
 
 .cat-item:hover {
@@ -505,10 +510,11 @@
 .cat-item .cat-count {
   margin-left: auto;
   font-size: 12px;
-  background: var(--light-gray);
+  background: #F3F4F6;
   padding: 2px 8px;
   border-radius: 10px;
-  color: var(--gray);
+  color: #1a1a1a;
+  font-weight: 600;
 }
 
 .cat-item.active .cat-count {
@@ -559,7 +565,7 @@
 
 /* Product Card */
 .product-card {
-  background: var(--white);
+  background: #FFFFFF;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -630,7 +636,7 @@
   left: 0;
   right: 0;
   height: 80px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
   z-index: 1;
   opacity: 0;
   transition: opacity 0.35s;
@@ -748,6 +754,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  background: #FFFFFF;
 }
 
 .card-category {
@@ -755,7 +762,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: var(--primary);
+  color: #F59E0B;
   margin-bottom: 6px;
   display: flex;
   align-items: center;
@@ -786,7 +793,7 @@
 }
 
 .card-farmer i {
-  color: var(--primary);
+  color: #F59E0B;
   font-size: 11px;
 }
 
@@ -828,6 +835,7 @@
   margin-top: auto;
   padding-top: 12px;
   border-top: 1px solid var(--border);
+  background: #FFFFFF;
 }
 
 .card-price {
@@ -859,7 +867,7 @@
 
 .add-cart-btn {
   padding: 10px 16px;
-  background: linear-gradient(135deg, #43A047, var(--primary-dark));
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -870,12 +878,12 @@
   gap: 6px;
   transition: all 0.25s;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
 }
 
 .add-cart-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.4);
+  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.5);
 }
 
 .add-cart-btn:disabled {
@@ -917,6 +925,7 @@
 @media (max-width: 768px) {
   .shop-hero {
     min-height: 400px;
+    touch-action: pan-y;
   }
 
   .shop-hero-text h1 {
@@ -976,6 +985,24 @@
 
   .sort-select {
     width: 100%;
+  }
+
+  /* Mobile touch improvements */
+  .product-card {
+    touch-action: manipulation;
+  }
+
+  .add-cart-btn,
+  .card-quick-view,
+  .card-wishlist {
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .cat-item {
+    touch-action: manipulation;
+    min-height: 44px;
   }
 }
 

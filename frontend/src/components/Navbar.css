@@ -1,10 +1,12 @@
+/* CACHE BUSTER v3.0 - MOBILE INTERACTION FIX - 2026-03-23 */
+
 .topnav {
-  background: linear-gradient(135deg, #0a3d0a 0%, #1B5E20 50%, #2E7D32 100%);
+  background: linear-gradient(135deg, #0D5415 0%, #1B7E28 50%, #2E9B3F 100%);
   border-bottom: 2px solid rgba(255, 255, 255, 0.15);
   position: sticky;
   top: 0;
   z-index: 900;
-  box-shadow: 0 4px 24px rgba(10, 61, 10, 0.4);
+  box-shadow: 0 4px 24px rgba(13, 84, 21, 0.5);
   backdrop-filter: blur(10px);
 }
 
@@ -216,8 +218,8 @@
 
 /* Enhanced navbar scrolled state */
 .topnav.scrolled {
-  box-shadow: 0 4px 28px rgba(10, 61, 10, 0.5);
-  background: linear-gradient(135deg, #0a3d0a 0%, #1B5E20 100%);
+  box-shadow: 0 4px 28px rgba(13, 84, 21, 0.6);
+  background: linear-gradient(135deg, #0D5415 0%, #1B7E28 100%);
 }
 
 /* Enhanced logo with hover effect */
@@ -397,11 +399,39 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-left: auto;
+  z-index: 1001;
+  position: relative;
+  pointer-events: auto !important;
+  touch-action: manipulation;
 }
 
 .mobile-menu-toggle:hover {
   background: var(--primary);
   color: #fff;
+}
+
+/* Mobile menu overlay backdrop */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 997;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  visibility: hidden;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  pointer-events: all !important;
+  visibility: visible;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -443,6 +473,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF !important;
+  }
+
+  .mobile-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #FFFFFF !important;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
   }
 
   .nav-links {
@@ -450,7 +491,7 @@
     top: 64px;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
+    background: #FFFFFF;
     backdrop-filter: blur(12px);
     flex-direction: column;
     padding: 16px;
@@ -460,63 +501,133 @@
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
+    z-index: -1;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .nav-links.mobile-open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
+    z-index: 999;
   }
 
   .nav-links a {
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 16px;
     border-radius: 8px;
     text-align: left;
+    color: #1a1a1a !important;
+    font-weight: 600;
+    font-size: 15px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    pointer-events: auto !important;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    background: linear-gradient(135deg, #0D5415 0%, #1B7E28 100%);
+    color: #FFFFFF !important;
+    border-color: transparent;
+  }
+
+  .nav-links a::after {
+    display: none;
   }
 
   .nav-actions {
     position: fixed;
-    top: calc(64px + 200px);
+    top: calc(64px + 232px);
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
+    background: #FFFFFF;
     backdrop-filter: blur(12px);
     flex-direction: column;
     padding: 16px;
-    gap: 8px;
+    gap: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 998;
+    z-index: -1;
     margin-left: 0;
+    max-height: calc(100vh - 296px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .nav-actions.mobile-open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
+    z-index: 998;
   }
 
-  .nav-actions .nav-btn,
+  .nav-actions .nav-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    pointer-events: auto !important;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .nav-actions .nav-btn-outline {
+    background: #F9FAFB;
+    border: 2px solid #0D5415;
+    color: #0D5415 !important;
+  }
+
+  .nav-actions .nav-btn-outline:hover {
+    background: linear-gradient(135deg, #0D5415 0%, #1B7E28 100%);
+    color: #FFFFFF !important;
+  }
+
+  .nav-actions .nav-btn-primary {
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: #FFFFFF !important;
+  }
+
   .nav-actions .cart-btn {
     width: 100%;
     justify-content: center;
+    border-radius: 12px;
+    height: 52px;
+    font-size: 16px;
   }
 
   .nav-user-chip {
     width: 100%;
     justify-content: center;
-    padding: 10px 16px;
+    padding: 12px 16px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+  }
+
+  .nav-user-chip span {
+    color: #1a1a1a !important;
+    font-weight: 700;
+  }
+
+  .nav-user-chip .role {
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: #FFFFFF !important;
   }
 
   .cart-btn {
     position: relative;
     width: 100%;
-    border-radius: 8px;
+    border-radius: 12px;
   }
 }
 

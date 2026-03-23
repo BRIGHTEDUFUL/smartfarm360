@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-// Use relative path for API calls (same port as frontend)
+// Use environment variable or relative path for API calls
+// In production (unified build), use relative path
+// In development, use proxy or full URL
 const API_URL = import.meta.env.VITE_API_URL || '/api';
+
+console.log('API URL:', API_URL);
 
 const api = axios.create({
   baseURL: API_URL,
@@ -70,8 +74,28 @@ export const authAPI = {
 export const productsAPI = {
   getAll: (params?: any) => api.get('/products', { params }),
   getById: (id: number) => api.get(`/products/${id}`),
-  create: (data: any) => api.post('/products', data),
-  update: (id: number, data: any) => api.put(`/products/${id}`, data),
+  create: (data: any) => {
+    // Handle FormData for file uploads
+    if (data instanceof FormData) {
+      return api.post('/products', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    }
+    return api.post('/products', data);
+  },
+  update: (id: number, data: any) => {
+    // Handle FormData for file uploads
+    if (data instanceof FormData) {
+      return api.put(`/products/${id}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    }
+    return api.put(`/products/${id}`, data);
+  },
   delete: (id: number) => api.delete(`/products/${id}`),
   approve: (id: number) => api.put(`/products/${id}/approve`),
   reject: (id: number, reason: string) => api.put(`/products/${id}/reject`, { reason }),

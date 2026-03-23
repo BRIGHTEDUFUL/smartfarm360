@@ -1,0 +1,64 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D5415;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1B7E28;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E9B3F;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FBBF24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="80" fill="url(#bgGradient)"/>
+  
+  <!-- Leaf Icon (centered, 60% of canvas) -->
+  <g transform="translate(256, 256)" filter="url(#shadow)">
+    <!-- Leaf shape -->
+    <path d="M 0,-150 Q 80,-120 100,-50 Q 110,20 80,80 Q 50,120 0,140 Q -50,120 -80,80 Q -110,20 -100,-50 Q -80,-120 0,-150 Z" 
+          fill="url(#iconGradient)" 
+          stroke="#FFF" 
+          stroke-width="4"/>
+    <!-- Leaf vein -->
+    <line x1="0" y1="-150" x2="0" y2="140" 
+          stroke="#FFF" 
+          stroke-width="6" 
+          stroke-linecap="round"/>
+    <!-- Side veins -->
+    <path d="M 0,-80 Q 40,-60 60,-20" 
+          stroke="#FFF" 
+          stroke-width="4" 
+          stroke-linecap="round" 
+          fill="none"/>
+    <path d="M 0,-80 Q -40,-60 -60,-20" 
+          stroke="#FFF" 
+          stroke-width="4" 
+          stroke-linecap="round" 
+          fill="none"/>
+    <path d="M 0,0 Q 40,20 60,60" 
+          stroke="#FFF" 
+          stroke-width="4" 
+          stroke-linecap="round" 
+          fill="none"/>
+    <path d="M 0,0 Q -40,20 -60,60" 
+          stroke="#FFF" 
+          stroke-width="4" 
+          stroke-linecap="round" 
+          fill="none"/>
+  </g>
+  
+  <!-- Optional: App name text -->
+  <text x="256" y="460" 
+        font-family="Arial, sans-serif" 
+        font-size="32" 
+        font-weight="bold" 
+        fill="#FFFFFF" 
+        text-anchor="middle">
+    SF360
+  </text>
+</svg>

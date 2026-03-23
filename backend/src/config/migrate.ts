@@ -276,6 +276,24 @@ CREATE TABLE IF NOT EXISTS inventory_history (
 CREATE INDEX IF NOT EXISTS idx_inventory_history_product_id ON inventory_history(product_id);
 `;
 
+// Check if a column exists in a table
+function columnExists(db: any, tableName: string, columnName: string): boolean {
+  try {
+    const stmt = db.prepare(`PRAGMA table_info(${tableName})`);
+    while (stmt.step()) {
+      const row = stmt.getAsObject();
+      if (row.name === columnName) {
+        stmt.free();
+        return true;
+      }
+    }
+    stmt.free();
+    return false;
+  } catch (error) {
+    return false;
+  }
+}
+
 // Run additional migrations from migration files
 async function runAdditionalMigrations() {
   const db = await initDatabase();
@@ -302,7 +320,21 @@ async function runAdditionalMigrations() {
   for (const file of migrationFiles) {
     try {
       const filePath = path.join(migrationsDir, file);
-      const sql = fs.readFileSync(filePath, 'utf8');
+      let sql = fs.readFileSync(filePath, 'utf8');
+      
+      // Special handling for migration 004 - add image_url column if it doesn't exist
+      if (file === '004_add_product_image_url.sql') {
+        if (!columnExists(db, 'products', 'image_url')) {
+          console.log('Adding image_url column to products table...');
+          db.run('ALTER TABLE products ADD COLUMN image_url TEXT');
+        } else {
+          console.log('image_url column already exists, skipping ALTER TABLE');
+        }
+        // Still run the index creation (it's idempotent)
+        db.run('CREATE INDEX IF NOT EXISTS idx_products_image_url ON products(image_url)');
+        console.log(`✓ ${file} executed successfully`);
+        continue;
+      }
       
       // Execute migration
       db.run(sql);

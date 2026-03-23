@@ -9,6 +9,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Set base path for GitHub Pages deployment
+  // Will be '/' for custom domain or '/repo-name/' for GitHub Pages
+  base: process.env.VITE_BASE_PATH || '/',
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
+    },
+  },
+  publicDir: 'public',
   server: {
     port: 3000,
     proxy: {

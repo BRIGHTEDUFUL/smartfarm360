@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Click Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #0D5415;
+      margin-bottom: 20px;
+    }
+    
+    .test-button {
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #0D5415;
+      color: white;
+      touch-action: manipulation;
+      pointer-events: auto !important;
+    }
+    
+    .test-button:active {
+      background: #1B7E28;
+    }
+    
+    .test-link {
+      display: block;
+      padding: 16px;
+      margin: 10px 0;
+      background: #FBBF24;
+      color: #1a1a1a;
+      text-decoration: none;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      touch-action: manipulation;
+      pointer-events: auto !important;
+      cursor: pointer;
+    }
+    
+    .test-link:active {
+      background: #F59E0B;
+    }
+    
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .result.show {
+      display: block;
+    }
+    
+    .result h2 {
+      color: #2E7D32;
+      margin-bottom: 10px;
+    }
+    
+    .scroll-test {
+      height: 150vh;
+      background: linear-gradient(to bottom, #e8f5e9, #fff3e0);
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    
+    .instructions {
+      background: #fff3e0;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .instructions h3 {
+      color: #F57C00;
+      margin-bottom: 10px;
+    }
+    
+    .instructions ol {
+      margin-left: 20px;
+    }
+    
+    .instructions li {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🧪 Mobile Click Test</h1>
+    
+    <div class="instructions">
+      <h3>Instructions:</h3>
+      <ol>
+        <li>Open this page in mobile view (DevTools)</li>
+        <li>Try clicking the button below</li>
+        <li>Try clicking the link below</li>
+        <li>Try scrolling down</li>
+        <li>If ANY of these work, the issue is with your main app's CSS cache</li>
+      </ol>
+    </div>
+    
+    <button class="test-button" onclick="handleButtonClick()">
+      Click This Button
+    </button>
+    
+    <a href="#" class="test-link" onclick="handleLinkClick(event)">
+      Click This Link
+    </a>
+    
+    <div class="result" id="result">
+      <h2>✅ Success!</h2>
+      <p id="result-text"></p>
+    </div>
+    
+    <div class="scroll-test">
+      <h3>Scroll Test Area</h3>
+      <p>If you can see this text by scrolling down, scrolling works!</p>
+      <p style="margin-top: 100px;">Keep scrolling...</p>
+      <p style="margin-top: 100px;">Almost there...</p>
+      <p style="margin-top: 100px;">🎉 You can scroll!</p>
+    </div>
+  </div>
+  
+  <script>
+    let clickCount = 0;
+    
+    function handleButtonClick() {
+      clickCount++;
+      const result = document.getElementById('result');
+      const resultText = document.getElementById('result-text');
+      result.classList.add('show');
+      resultText.textContent = `Button clicked ${clickCount} time(s)! Clicks are working! ✅`;
+      console.log('Button clicked!', clickCount);
+    }
+    
+    function handleLinkClick(event) {
+      event.preventDefault();
+      clickCount++;
+      const result = document.getElementById('result');
+      const resultText = document.getElementById('result-text');
+      result.classList.add('show');
+      resultText.textContent = `Link clicked ${clickCount} time(s)! Clicks are working! ✅`;
+      console.log('Link clicked!', clickCount);
+    }
+    
+    // Log when page loads
+    console.log('Test page loaded successfully');
+    console.log('If you see this, JavaScript is working');
+  </script>
+</body>
+</html>

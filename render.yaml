@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: smart-farming-360
+    env: node
+    region: frankfurt # Closest to Ghana
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRY
+        value: 15m
+      - key: JWT_REFRESH_EXPIRY
+        value: 7d
+    disk:
+      name: data
+      mountPath: /opt/render/project/src/backend
+      sizeGB: 1

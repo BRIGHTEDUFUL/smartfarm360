@@ -1,6 +1,27 @@
 /* ═══════════════════════════════════════════════════════════
-   CHECKOUT PAGE - STYLING
+   CHECKOUT PAGE - STYLING v2.1 TEXT VISIBILITY FIX
    ═══════════════════════════════════════════════════════════ */
+
+/* Global text visibility fix */
+.checkout-page * {
+  color: inherit;
+}
+
+.checkout-page h1,
+.checkout-page h2,
+.checkout-page h3,
+.checkout-page h4,
+.checkout-page label,
+.checkout-page strong {
+  color: #1a1a1a !important;
+  opacity: 1 !important;
+}
+
+.checkout-page p,
+.checkout-page span {
+  color: #2d3748 !important;
+  opacity: 1 !important;
+}
 
 .checkout-page {
   min-height: 100vh;
@@ -22,13 +43,15 @@
 .checkout-header h1 {
   font-size: 48px;
   font-weight: 900;
-  color: var(--dark);
+  color: #1a1a1a !important;
   margin-bottom: 8px;
+  opacity: 1 !important;
 }
 
 .checkout-header p {
   font-size: 18px;
-  color: var(--gray);
+  color: #2d3748 !important;
+  opacity: 1 !important;
 }
 
 /* Layout */
@@ -43,6 +66,7 @@
 .order-summary-section {
   position: sticky;
   top: 100px;
+  touch-action: pan-y;
 }
 
 .summary-card {
@@ -55,9 +79,10 @@
 .summary-card h2 {
   font-size: 24px;
   font-weight: 800;
-  color: var(--dark);
+  color: #1a1a1a !important;
   margin-bottom: 24px;
   padding-bottom: 16px;
+  opacity: 1 !important;
   border-bottom: 2px solid var(--border);
 }
 
@@ -187,9 +212,10 @@
 .form-section h3 {
   font-size: 20px;
   font-weight: 800;
-  color: var(--dark);
+  color: #1a1a1a !important;
   margin-bottom: 20px;
   padding-bottom: 12px;
+  opacity: 1 !important;
   border-bottom: 2px solid var(--border);
 }
 
@@ -343,9 +369,9 @@
 }
 
 .btn-place-order {
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .btn-place-order:hover:not(:disabled) {
@@ -430,6 +456,22 @@
 
   .payment-option {
     padding: 16px;
+    touch-action: manipulation;
+    min-height: 44px;
+  }
+
+  /* Mobile touch improvements */
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    touch-action: manipulation;
+    min-height: 44px;
+  }
+
+  .btn-back,
+  .btn-place-order {
+    touch-action: manipulation;
+    min-height: 48px;
   }
 }
 

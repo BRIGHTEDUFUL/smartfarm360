@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import NotificationSettings from '../components/NotificationSettings';
 import { ordersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import './OrdersPage.css';
@@ -102,6 +103,8 @@ const OrdersPage = () => {
               Refresh
             </button>
           </div>
+
+          <NotificationSettings />
 
           {loading ? (
             <div className="loading-state">
