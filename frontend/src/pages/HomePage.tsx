@@ -223,114 +223,51 @@ const HomePage = () => {
 
       {/* AI-Powered Farming Section */}
       <section className="ai-farming-section">
-        <div className="ai-bg-pattern"></div>
         <div className="container">
-          <div className="ai-header">
-            <div className="ai-badge-main">
-              <div className="ai-pulse-ring"></div>
+          <div className="section-header">
+            <div className="ai-badge">
               <i className="fas fa-brain"></i>
+              <span>AI-Powered Technology</span>
             </div>
-            <h2 className="ai-title">
-              <span className="ai-gradient">AI-Powered</span> Smart Farming
-            </h2>
-            <p className="ai-subtitle">
-              Leveraging Artificial Intelligence to revolutionize agriculture and boost productivity across Ghana
-            </p>
+            <h2>Smart Farming with AI</h2>
+            <p>Using Artificial Intelligence to boost productivity and sustainability</p>
           </div>
 
           <div className="ai-features-grid">
             <div className="ai-feature-card">
-              <div className="ai-feature-icon">
+              <div className="ai-icon">
                 <i className="fas fa-chart-line"></i>
-                <div className="icon-glow"></div>
               </div>
               <h3>Yield Optimization</h3>
-              <p>AI algorithms analyze soil data, weather patterns, and crop health to maximize harvest yields by up to 40%</p>
-              <div className="ai-stat">
-                <span className="stat-number">+40%</span>
-                <span className="stat-label">Increased Yield</span>
-              </div>
+              <p>AI analyzes soil and weather to maximize harvests</p>
+              <span className="ai-badge-stat">+40% Yield</span>
             </div>
 
             <div className="ai-feature-card">
-              <div className="ai-feature-icon">
+              <div className="ai-icon">
                 <i className="fas fa-cloud-sun-rain"></i>
-                <div className="icon-glow"></div>
               </div>
-              <h3>Smart Weather Prediction</h3>
-              <p>Machine learning models provide accurate 14-day forecasts, helping farmers plan planting and harvesting</p>
-              <div className="ai-stat">
-                <span className="stat-number">95%</span>
-                <span className="stat-label">Accuracy Rate</span>
-              </div>
+              <h3>Weather Prediction</h3>
+              <p>Accurate forecasts for better planning</p>
+              <span className="ai-badge-stat">95% Accuracy</span>
             </div>
 
             <div className="ai-feature-card">
-              <div className="ai-feature-icon">
+              <div className="ai-icon">
                 <i className="fas fa-bug"></i>
-                <div className="icon-glow"></div>
               </div>
               <h3>Disease Detection</h3>
-              <p>Computer vision AI identifies crop diseases early, reducing losses and minimizing pesticide use</p>
-              <div className="ai-stat">
-                <span className="stat-number">-60%</span>
-                <span className="stat-label">Crop Loss Reduction</span>
-              </div>
+              <p>Early identification reduces crop losses</p>
+              <span className="ai-badge-stat">-60% Loss</span>
             </div>
 
             <div className="ai-feature-card">
-              <div className="ai-feature-icon">
+              <div className="ai-icon">
                 <i className="fas fa-tint"></i>
-                <div className="icon-glow"></div>
               </div>
               <h3>Water Management</h3>
-              <p>AI-driven irrigation systems optimize water usage, conserving resources while maintaining crop health</p>
-              <div className="ai-stat">
-                <span className="stat-number">-35%</span>
-                <span className="stat-label">Water Savings</span>
-              </div>
-            </div>
-
-            <div className="ai-feature-card">
-              <div className="ai-feature-icon">
-                <i className="fas fa-robot"></i>
-                <div className="icon-glow"></div>
-              </div>
-              <h3>Automated Insights</h3>
-              <p>Real-time AI analytics provide actionable recommendations for fertilization, pest control, and harvesting</p>
-              <div className="ai-stat">
-                <span className="stat-number">24/7</span>
-                <span className="stat-label">Monitoring</span>
-              </div>
-            </div>
-
-            <div className="ai-feature-card">
-              <div className="ai-feature-icon">
-                <i className="fas fa-seedling"></i>
-                <div className="icon-glow"></div>
-              </div>
-              <h3>Crop Recommendations</h3>
-              <p>AI suggests optimal crops based on soil composition, climate data, and market demand predictions</p>
-              <div className="ai-stat">
-                <span className="stat-number">+50%</span>
-                <span className="stat-label">Profit Increase</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="ai-impact-banner">
-            <div className="impact-content">
-              <div className="impact-icon">
-                <i className="fas fa-rocket"></i>
-              </div>
-              <div className="impact-text">
-                <h3>Transforming Ghana's Agriculture</h3>
-                <p>Our AI technology has helped over 1,250 farmers increase productivity, reduce costs, and improve sustainability</p>
-              </div>
-              <Link to="/about" className="btn-ai-learn">
-                Learn More
-                <i className="fas fa-arrow-right"></i>
-              </Link>
+              <p>Smart irrigation conserves resources</p>
+              <span className="ai-badge-stat">-35% Water</span>
             </div>
           </div>
         </div>
