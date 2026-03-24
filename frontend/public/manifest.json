@@ -1,8 +1,8 @@
 {
   "name": "Smart Farming 360 - Ghana's Agricultural Marketplace",
   "short_name": "Smart Farming 360",
-  "description": "Connect farmers and consumers across Ghana's 16 regions. Fresh produce, livestock, and agricultural products delivered to your doorstep. Shop offline, track orders, and support local agriculture.",
-  "start_url": "/?source=pwa",
+  "description": "Connect farmers and consumers across Ghana's 16 regions. Fresh produce, livestock, and agricultural products delivered to your doorstep.",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0D5415",
   "theme_color": "#0D5415",
@@ -10,8 +10,7 @@
   "scope": "/",
   "lang": "en-US",
   "dir": "ltr",
-  "categories": ["shopping", "food", "business", "lifestyle"],
-  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "categories": ["shopping", "food", "business"],
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -79,104 +78,53 @@
       "src": "/screenshots/home-mobile.png",
       "sizes": "540x720",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Homepage - Browse fresh products from Ghana's farms"
-    },
-    {
-      "src": "/screenshots/shop-mobile.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Shop - Filter by category and region"
+      "form_factor": "narrow"
     },
     {
       "src": "/screenshots/home-desktop.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "Desktop Experience - Full-featured marketplace"
+      "form_factor": "wide"
     }
   ],
   "shortcuts": [
     {
       "name": "Shop Products",
       "short_name": "Shop",
-      "description": "Browse fresh produce and products from local farmers",
-      "url": "/shop?source=shortcut",
+      "description": "Browse fresh produce and products",
+      "url": "/shop",
       "icons": [
         {
           "src": "/icons/shop-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
+          "sizes": "96x96"
         }
       ]
     },
     {
       "name": "My Orders",
       "short_name": "Orders",
-      "description": "View your order history and track deliveries",
-      "url": "/orders?source=shortcut",
+      "description": "View your order history",
+      "url": "/orders",
       "icons": [
         {
           "src": "/icons/orders-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
+          "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Shopping Cart",
+      "name": "Cart",
       "short_name": "Cart",
-      "description": "View and manage your shopping cart",
-      "url": "/cart?source=shortcut",
+      "description": "View your shopping cart",
+      "url": "/cart",
       "icons": [
         {
           "src": "/icons/cart-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
+          "sizes": "96x96"
         }
       ]
-    },
-    {
-      "name": "Contact Us",
-      "short_name": "Contact",
-      "description": "Get in touch with our support team",
-      "url": "/contact?source=shortcut",
-      "icons": [
-        {
-          "src": "/icons/icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    }
-  ],
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "image",
-          "accept": ["image/*"]
-        }
-      ]
-    }
-  },
-  "protocol_handlers": [
-    {
-      "protocol": "web+smartfarming",
-      "url": "/product?id=%s"
     }
   ],
   "related_applications": [],
-  "prefer_related_applications": false,
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
-  "edge_side_panel": {
-    "preferred_width": 400
-  }
+  "prefer_related_applications": false
 }
