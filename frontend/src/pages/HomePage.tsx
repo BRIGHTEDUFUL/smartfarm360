@@ -637,7 +637,7 @@ const HomePage = () => {
               <h4>Newsletter</h4>
               <p>Subscribe for updates and special offers</p>
               <form 
-                action="https://formspree.io/f/xgvljoyv" 
+                action="https://formspree.io/f/myknlygk" 
                 method="POST"
                 className="newsletter-form"
               >

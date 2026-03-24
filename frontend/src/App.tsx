@@ -110,6 +110,8 @@ function App() {
             />
             
             <ScrollToTop />
+            <InstallPrompt />
+            <OfflineIndicator />
           </CartProvider>
         </AuthProvider>
       </Router>

@@ -58,3 +58,6 @@ Thumbs.db
 
 # Build artifacts
 *.tsbuildinfo
+
+# Local Netlify folder
+.netlify

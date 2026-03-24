@@ -197,7 +197,7 @@ const CheckoutPage = () => {
         _next: `${window.location.origin}/orders`
       };
 
-      const response = await fetch('https://formspree.io/f/xgvljoyv', {
+      const response = await fetch('https://formspree.io/f/myknlygk', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

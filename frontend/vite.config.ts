@@ -21,6 +21,7 @@ export default defineConfig({
   },
   publicDir: 'public',
   server: {
+    host: true, // Listen on all addresses (0.0.0.0) to allow external connections
     port: 3000,
     proxy: {
       '/api': {

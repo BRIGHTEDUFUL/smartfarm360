@@ -2,8 +2,8 @@
 
 ## ✅ Completed Integration
 
-**Date**: March 21, 2026  
-**Formspree Endpoint**: https://formspree.io/f/xgvljoyv
+**Date**: March 24, 2026  
+**Formspree Endpoint**: https://formspree.io/f/myknlygk
 
 ---
 
@@ -26,7 +26,7 @@
 
 ---
 
-### 2. ✅ Contact Form (New Contact Page)
+### 2. ✅ Contact Form (Contact Page)
 **Location**: `frontend/src/pages/ContactPage.tsx`
 
 **Features**:
@@ -54,25 +54,44 @@
 - `_subject` (hidden) - "Contact Form - Smart Farming 360"
 - `_next` (hidden) - Redirect to `/contact?submitted=true`
 
-**Contact Info Displayed**:
-- Address: Accra, Ghana (East Legon)
-- Phone: +233 50 123 4567
-- Email: support@smartfarming360.com, info@smartfarming360.com
-- Business Hours: Mon-Fri 8am-6pm, Sat 9am-4pm
+---
 
-**Social Links**:
-- Facebook
-- Twitter
-- Instagram
-- LinkedIn
+### 3. ✅ Order Notification (Checkout Page)
+**Location**: `frontend/src/pages/CheckoutPage.tsx`
+
+**Features**:
+- Sends order details to admin via Formspree
+- Includes all order information
+- Customer contact details
+- Order items with quantities and prices
+- Delivery address
+- Payment method
+- Order status and timestamp
+- Reply-to customer email
+
+**Fields Sent**:
+- `_subject` - "🛒 New Order #[ID] - Smart Farming 360"
+- `order_id` - Order ID from database
+- `customer_name` - Full name
+- `customer_email` - Email address
+- `customer_phone` - Phone number
+- `delivery_address` - Full delivery address
+- `payment_method` - Selected payment method
+- `total_amount` - Total in GH₵
+- `order_items` - List of products with quantities
+- `notes` - Customer notes
+- `order_status` - "Pending Payment"
+- `order_date` - Formatted timestamp
+- `_replyto` - Customer email for replies
+- `_next` - Redirect to orders page
 
 ---
 
 ## 🎨 Branding Customization
 
 ### Color Scheme
-- **Primary Green**: #2E7D32 (agriculture theme)
-- **Secondary Orange**: #FF9800 (warmth)
+- **Primary Green**: #0D5415, #1B7E28, #2E9B3F
+- **Secondary Gold**: #FBBF24, #F59E0B
 - **Success Green**: #4CAF50
 - **Background**: Linear gradient (#F9FAFB to #E8F5E9)
 
@@ -112,18 +131,23 @@
 6. After 5 seconds, URL cleans up (removes `?submitted=true`)
 7. Success banner fades out
 
+### Order Notification
+1. User completes checkout
+2. Order created in database
+3. Order details sent to Formspree
+4. Admin receives email notification
+5. User redirected to orders page
+6. Success message displayed
+
 ---
 
-## 📁 Files Created/Modified
+## 📁 Files Modified
 
-### Created Files
-1. `frontend/src/pages/ContactPage.tsx` - Full contact page component
-2. `frontend/src/pages/ContactPage.css` - Contact page styling
-3. `FORMSPREE_INTEGRATION.md` - This documentation
-
-### Modified Files
-1. `frontend/src/pages/HomePage.tsx` - Updated newsletter form, footer links
-2. `frontend/src/App.tsx` - Added Contact page route
+### Updated Files
+1. `frontend/src/pages/HomePage.tsx` - Newsletter form endpoint updated
+2. `frontend/src/pages/ContactPage.tsx` - Contact form endpoint updated
+3. `frontend/src/pages/CheckoutPage.tsx` - Order notification endpoint updated
+4. `docs/FORMSPREE_INTEGRATION.md` - This documentation updated
 
 ---
 
@@ -151,117 +175,17 @@
 7. After 5 seconds, URL should clean up
 8. Check Formspree dashboard for submission
 
----
-
-## 🎯 Dashboard & Cart Verification
-
-### Admin Dashboard (`/admin`)
-**Test Account**: admin@smartfarming.com / admin123
-
-**Functionality to Verify**:
-- [ ] Login as admin
-- [ ] View statistics cards (Total Products, Active, Pending, Users)
-- [ ] Switch between tabs (Overview, Products, Users)
-- [ ] View products table
-- [ ] Approve pending product
-- [ ] Reject product with reason
-- [ ] Delete product
-- [ ] Refresh product list
-- [ ] Verify access control (non-admin can't access)
-
-**Expected Behavior**:
-- All API calls should work
-- Products should load from backend
-- Approve/reject/delete should update database
-- Status badges should update in real-time
-- Unauthorized users see access denied message
-
----
-
-### Farmer Dashboard (`/farmer`)
-**Test Account**: farmer1@test.com / farmer123
-
-**Functionality to Verify**:
-- [ ] Login as farmer
-- [ ] View product statistics
-- [ ] Click "Add New Product" button
-- [ ] Fill product form:
-  - Name
-  - Description
-  - Category (dropdown)
-  - Unit (dropdown)
-  - Price (GH₵)
-  - Stock quantity
-- [ ] Submit form (product should be pending)
-- [ ] Edit existing product
-- [ ] Delete product
-- [ ] Verify only farmer's products shown
-- [ ] Verify access control (non-farmer can't access)
-
-**Expected Behavior**:
-- Modal opens/closes smoothly
-- Form validation works
-- New products created with "Pending" status
-- Edit updates product correctly
-- Delete removes product after confirmation
-- Only farmer's own products displayed
-
----
-
-### Shopping Cart (`/cart`)
-**Test Account**: consumer@test.com / consumer123
-
-**Functionality to Verify**:
-- [ ] Login as consumer
-- [ ] Browse shop page
-- [ ] Add products to cart
-- [ ] Navigate to cart page
-- [ ] View cart items with images
-- [ ] Update quantities with +/- buttons
-- [ ] Remove items from cart
-- [ ] Verify price calculations:
-  - Subtotal (sum of all items)
-  - Tax (12.5% VAT)
-  - Total (subtotal + tax)
-- [ ] All prices in GH₵
-- [ ] Stock indicators (in stock/low stock/out of stock)
-- [ ] "Continue Shopping" link works
-- [ ] "Proceed to Checkout" button works
-
-**Expected Behavior**:
-- Cart loads from backend
-- Quantity updates reflect immediately
-- Remove item updates cart
-- Price calculations are accurate
-- Stock validation prevents over-ordering
-- Empty cart shows empty state
-- All currency displays as GH₵
-
----
-
-## 🔍 Common Issues & Solutions
-
-### Issue: Form doesn't submit
-**Solution**: Check Formspree endpoint URL is correct: `https://formspree.io/f/xgvljoyv`
-
-### Issue: Redirect doesn't work
-**Solution**: Verify `_next` hidden field has correct URL with `window.location.origin`
-
-### Issue: Success banner doesn't show
-**Solution**: Check URL parameter `?submitted=true` is present after redirect
-
-### Issue: Dashboard not loading
-**Solution**: 
-1. Verify backend is running on port 5000
-2. Check browser console for API errors
-3. Verify user has correct role (Admin/Farmer)
-
-### Issue: Cart not updating
-**Solution**:
-1. Check backend cart API endpoints
-2. Verify authentication token is valid
-3. Check browser console for errors
-4. Refresh cart context
+### Test Order Notification
+1. Navigate to http://localhost:3000/shop
+2. Add products to cart
+3. Go to checkout
+4. Fill in all delivery details
+5. Select payment method
+6. Click "Place Order"
+7. Order should be created in database
+8. Email notification sent to admin via Formspree
+9. User redirected to orders page
+10. Check Formspree dashboard for order notification
 
 ---
 
@@ -270,7 +194,7 @@
 To view form submissions:
 1. Go to https://formspree.io/
 2. Login to your account
-3. Navigate to form: xgvljoyv
+3. Navigate to form: myknlygk
 4. View submissions with:
    - Timestamp
    - Email
@@ -304,29 +228,14 @@ value={`https://yourdomain.com/contact?submitted=true`}
 ## ✅ Verification Checklist
 
 ### Forms
-- [x] Newsletter form integrated with Formspree
-- [x] Contact form created and integrated
+- [x] Newsletter form integrated with Formspree (myknlygk)
+- [x] Contact form integrated with Formspree (myknlygk)
+- [x] Order notification integrated with Formspree (myknlygk)
 - [x] Forms use app branding (colors, fonts, icons)
 - [x] Redirect URLs configured
 - [x] Success messages implemented
 - [x] Form validation working
-- [x] Hidden fields configured (_subject, _next)
-
-### Dashboards
-- [x] Admin dashboard functional
-- [x] Farmer dashboard functional
-- [x] Access control working
-- [x] CRUD operations working
-- [x] Backend sync verified
-
-### Cart
-- [x] Add to cart working
-- [x] Update quantity working
-- [x] Remove item working
-- [x] Price calculations correct
-- [x] Currency in GH₵
-- [x] Stock validation working
-- [x] Empty state working
+- [x] Hidden fields configured (_subject, _next, _replyto)
 
 ### Build
 - [x] TypeScript compilation successful
@@ -351,21 +260,21 @@ For app issues:
 
 ## 🎉 Status
 
-**ALL FORMS INTEGRATED SUCCESSFULLY!**
+**ALL FORMS INTEGRATED WITH NEW ENDPOINT!**
 
-- ✅ Newsletter form with Formspree
-- ✅ Contact page with full form
+- ✅ Newsletter form with Formspree (myknlygk)
+- ✅ Contact form with Formspree (myknlygk)
+- ✅ Order notification with Formspree (myknlygk)
 - ✅ App branding applied
 - ✅ Redirects configured
 - ✅ Success messages implemented
-- ✅ Dashboards verified
-- ✅ Cart functionality verified
 - ✅ Build successful
 
 **Ready for testing and deployment!** 🚀
 
 ---
 
-**Last Updated**: March 21, 2026  
-**Version**: 1.1.0  
+**Last Updated**: March 24, 2026  
+**Version**: 2.0.0  
+**Formspree Endpoint**: myknlygk  
 **Status**: Production Ready ✅

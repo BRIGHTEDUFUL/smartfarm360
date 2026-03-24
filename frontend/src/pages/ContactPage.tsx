@@ -51,7 +51,7 @@ const ContactPage = () => {
             {/* Contact Form */}
             <div className="contact-form-section">
               <form 
-                action="https://formspree.io/f/xgvljoyv" 
+                action="https://formspree.io/f/myknlygk" 
                 method="POST"
                 className="contact-form"
               >
