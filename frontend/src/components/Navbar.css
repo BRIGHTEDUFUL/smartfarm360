@@ -457,7 +457,7 @@
         padding: 2px 0;
     }
 
-    .nav-mobile-search input::placeholder {
+.nav-mobile-search input::placeholder {
         color: #9ca3af;
     }
 
@@ -482,6 +482,28 @@
     .search-clear:active {
         background: #e5e7eb;
     }
+}
+
+.nav-btn-install {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #ffffff !important;
+    border: none;
+    box-shadow: 0 12px 24px rgba(245, 158, 11, 0.22);
+}
+
+.nav-btn-install:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(245, 158, 11, 0.28);
+}
+
+.nav-btn-install:disabled {
+    opacity: 0.75;
+    cursor: progress;
+}
+
+.nav-install-icon {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(245, 158, 11, 0.22));
+    border-color: rgba(255, 255, 255, 0.42);
 }
 
 @media (max-width: 380px) {

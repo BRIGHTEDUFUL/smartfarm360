@@ -2,11 +2,13 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
+import { usePwa } from "../contexts/PwaContext";
 import "./Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { items } = useCart();
+  const { canInstall, isInstalling, installApp } = usePwa();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -62,6 +64,10 @@ const Navbar = () => {
       setSearchOpen(false);
       setSearchQuery("");
     }
+  };
+
+  const handleInstallClick = async () => {
+    await installApp();
   };
 
   return (
@@ -128,6 +134,18 @@ const Navbar = () => {
 
           {/* ── Desktop actions ───────────────────────────────── */}
           <div className="nav-actions">
+            {canInstall && (
+              <button
+                type="button"
+                className="nav-btn nav-btn-install"
+                onClick={handleInstallClick}
+                disabled={isInstalling}
+              >
+                <i className="fas fa-download" aria-hidden="true" />
+                {isInstalling ? "Installing..." : "Install App"}
+              </button>
+            )}
+
             {user ? (
               <>
                 <div className="nav-user-chip" title={user.email}>
@@ -193,6 +211,18 @@ const Navbar = () => {
 
           {/* ── Mobile right-side icons ───────────────────────── */}
           <div className="nav-mobile-actions">
+            {canInstall && (
+              <button
+                className="nav-icon-btn nav-install-icon"
+                onClick={handleInstallClick}
+                aria-label="Install app"
+                type="button"
+                disabled={isInstalling}
+              >
+                <i className="fas fa-download" aria-hidden="true" />
+              </button>
+            )}
+
             {/* Search toggle */}
             <button
               className={`nav-icon-btn${searchOpen ? " active" : ""}`}

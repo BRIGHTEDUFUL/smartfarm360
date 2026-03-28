@@ -1,11 +1,14 @@
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { usePwa } from "../contexts/PwaContext";
 
 import "./HomePage.css";
 
 const HomePage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { canInstall, isInstalling, isInstalled, isSupported, installApp } =
+    usePwa();
   const [currentRegion, setCurrentRegion] = useState(0);
   const [showNewsletterSuccess, setShowNewsletterSuccess] = useState(false);
 
@@ -189,6 +192,10 @@ const HomePage = () => {
     },
   ];
 
+  const handleInstallClick = async () => {
+    await installApp();
+  };
+
   return (
     <div className="home-page">
       {/* Newsletter Success Message */}
@@ -323,6 +330,97 @@ const HomePage = () => {
                 <h4>Fresh Pineapple</h4>
                 <p>GH₵ 20.00/piece</p>
                 <div className="rating">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="pwa-section">
+        <div className="container">
+          <div className="pwa-panel">
+            <div className="pwa-copy">
+              <div className="pwa-eyebrow">
+                <i className="fas fa-mobile-alt"></i>
+                <span>Install Smart Farming 360</span>
+              </div>
+              <h2>Keep Smart Farming 360 on your device</h2>
+              <p>
+                Install the app for a faster launch experience, a full-screen
+                layout, and reliable app-shell access even when the network is
+                unstable.
+              </p>
+
+              <div className="pwa-feature-list">
+                <div className="pwa-feature-item">
+                  <i className="fas fa-bolt"></i>
+                  <span>Launch from your home screen like a real app</span>
+                </div>
+                <div className="pwa-feature-item">
+                  <i className="fas fa-wifi"></i>
+                  <span>Offline fallback for previously loaded pages</span>
+                </div>
+                <div className="pwa-feature-item">
+                  <i className="fas fa-shield-alt"></i>
+                  <span>No stale API caching that can break live data</span>
+                </div>
+              </div>
+
+              <div className="pwa-actions">
+                {canInstall ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary pwa-install-btn"
+                    onClick={handleInstallClick}
+                    disabled={isInstalling}
+                  >
+                    <i className="fas fa-download"></i>
+                    {isInstalling ? "Installing..." : "Install the App"}
+                  </button>
+                ) : (
+                  <div className="pwa-install-note">
+                    <strong>
+                      {isInstalled
+                        ? "App already installed"
+                        : isSupported
+                          ? "Install prompt not available yet"
+                          : "Install works best in a secure supported browser"}
+                    </strong>
+                    <span>
+                      {isInstalled
+                        ? "Open it from your home screen or app launcher."
+                        : isSupported
+                          ? "Use Chrome, Edge, or Safari on a supported device and interact with the site before installing."
+                          : "Open the app over HTTPS in Chrome, Edge, or Safari for installation support."}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="pwa-device">
+              <div className="pwa-device-shell">
+                <div className="pwa-device-notch"></div>
+                <div className="pwa-device-screen">
+                  <div className="pwa-status-bar">
+                    <span>9:41</span>
+                    <div className="pwa-status-icons">
+                      <i className="fas fa-signal"></i>
+                      <i className="fas fa-wifi"></i>
+                      <i className="fas fa-battery-full"></i>
+                    </div>
+                  </div>
+                  <div className="pwa-brand-mark">
+                    <img src="/icons/icon-base.svg" alt="Smart Farming 360" />
+                  </div>
+                  <h3>Smart Farming 360</h3>
+                  <p>Fresh from Ghana's farms</p>
+                  <div className="pwa-app-badges">
+                    <span>Fast</span>
+                    <span>Installable</span>
+                    <span>Reliable</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

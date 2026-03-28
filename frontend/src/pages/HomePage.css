@@ -660,6 +660,261 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
+   PWA INSTALL SECTION
+   ══════════════════════════════════════════════════════════════ */
+.pwa-section {
+    padding: 72px 0;
+    background:
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 32%),
+        linear-gradient(180deg, #ffffff 0%, #f6fbf5 100%);
+}
+
+.pwa-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 420px);
+    gap: 40px;
+    align-items: center;
+    padding: 44px;
+    border-radius: 32px;
+    background: linear-gradient(135deg, #0d5415 0%, #1b7e28 52%, #229b42 100%);
+    box-shadow: 0 30px 70px rgba(13, 84, 21, 0.22);
+    overflow: hidden;
+    position: relative;
+}
+
+.pwa-panel::before {
+    content: "";
+    position: absolute;
+    inset: auto auto -90px -80px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    filter: blur(10px);
+}
+
+.pwa-copy {
+    position: relative;
+    z-index: 1;
+}
+
+.pwa-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pwa-eyebrow span {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.pwa-copy h2 {
+    font-size: 44px;
+    line-height: 1.08;
+    margin: 0 0 16px;
+    color: #ffffff !important;
+}
+
+.pwa-copy p {
+    margin: 0;
+    max-width: 620px;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 17px;
+    line-height: 1.75;
+}
+
+.pwa-feature-list {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.pwa-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.pwa-feature-item i {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fbbf24 !important;
+    flex-shrink: 0;
+}
+
+.pwa-feature-item span {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.pwa-actions {
+    margin-top: 28px;
+}
+
+.pwa-install-btn {
+    min-width: 220px;
+}
+
+.pwa-install-note {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.pwa-install-note strong,
+.pwa-install-note span {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.pwa-install-note span {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.82) !important;
+}
+
+.pwa-device {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.pwa-device-shell {
+    width: 280px;
+    height: 560px;
+    border-radius: 40px;
+    padding: 14px;
+    background: #111827;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28);
+    position: relative;
+}
+
+.pwa-device-notch {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 28px;
+    background: #111827;
+    border-radius: 0 0 18px 18px;
+    z-index: 2;
+}
+
+.pwa-device-screen {
+    height: 100%;
+    border-radius: 28px;
+    padding: 22px 18px 26px;
+    background: linear-gradient(180deg, #10b981 0%, #0d8a70 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.pwa-status-bar {
+    position: absolute;
+    top: 26px;
+    left: 28px;
+    right: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pwa-status-icons {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.pwa-brand-mark {
+    width: 84px;
+    height: 84px;
+    display: grid;
+    place-items: center;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    margin-bottom: 22px;
+}
+
+.pwa-brand-mark img {
+    width: 56px;
+    height: 56px;
+}
+
+.pwa-device-screen h3 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    color: #ffffff !important;
+}
+
+.pwa-device-screen p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82) !important;
+}
+
+.pwa-app-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.pwa-app-badges span {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+@media (max-width: 960px) {
+    .pwa-panel {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 34px 28px;
+    }
+
+    .pwa-copy h2 {
+        font-size: 34px;
+    }
+
+    .pwa-device-shell {
+        width: 248px;
+        height: 500px;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
    AI FARMING SECTION
    ══════════════════════════════════════════════════════════════ */
 .ai-farming-section {
@@ -2103,5 +2358,96 @@
 
     .hero-title {
         font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pwa-section {
+        padding: 52px 0;
+    }
+
+    .pwa-panel {
+        padding: 26px 20px;
+        border-radius: 24px;
+    }
+
+    .pwa-copy h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+
+    .pwa-copy p {
+        font-size: 15px;
+    }
+
+    .pwa-feature-list {
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .pwa-feature-item {
+        align-items: flex-start;
+    }
+
+    .pwa-install-btn,
+    .pwa-install-note {
+        width: 100%;
+    }
+
+    .pwa-device-shell {
+        width: 220px;
+        height: 452px;
+        border-radius: 34px;
+        padding: 12px;
+    }
+
+    .pwa-device-notch {
+        width: 104px;
+        height: 24px;
+    }
+
+    .pwa-device-screen {
+        border-radius: 24px;
+    }
+
+    .pwa-device-screen h3 {
+        font-size: 26px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .pwa-panel {
+        padding: 22px 16px;
+    }
+
+    .pwa-copy h2 {
+        font-size: 24px;
+    }
+
+    .pwa-feature-item {
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .pwa-feature-item i {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+    }
+
+    .pwa-device-shell {
+        width: 204px;
+        height: 420px;
+    }
+
+    .pwa-brand-mark {
+        width: 74px;
+        height: 74px;
+        border-radius: 20px;
+    }
+
+    .pwa-brand-mark img {
+        width: 48px;
+        height: 48px;
     }
 }
