@@ -1,5 +1,5 @@
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePwa } from "../contexts/PwaContext";
 
 import "./HomePage.css";
@@ -7,10 +7,10 @@ import "./HomePage.css";
 const HomePage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { canInstall, isInstalling, isInstalled, isSupported, installApp } =
-    usePwa();
+  const { canInstall, installHint, isInstalling, installApp } = usePwa();
   const [currentRegion, setCurrentRegion] = useState(0);
   const [showNewsletterSuccess, setShowNewsletterSuccess] = useState(false);
+  const newsletterTimerRef = useRef<number | null>(null);
 
   // Ghana's 16 Regional Capitals with Farm Highlights
   const ghanaRegions = [
@@ -116,12 +116,17 @@ const HomePage = () => {
   useEffect(() => {
     if (searchParams.get("subscribed") === "true") {
       setShowNewsletterSuccess(true);
-      // Clear the URL parameter after 5 seconds
-      setTimeout(() => {
+      newsletterTimerRef.current = window.setTimeout(() => {
         navigate("/", { replace: true });
         setShowNewsletterSuccess(false);
       }, 5000);
     }
+
+    return () => {
+      if (newsletterTimerRef.current !== null) {
+        window.clearTimeout(newsletterTimerRef.current);
+      }
+    };
   }, [searchParams, navigate]);
 
   // Rotate through regions every 3 seconds
@@ -259,11 +264,14 @@ const HomePage = () => {
               </div>
               <div className="region-indicators">
                 {ghanaRegions.map((_, index) => (
-                  <span
+                  <button
+                    type="button"
                     key={index}
                     className={`indicator ${index === currentRegion ? "active" : ""}`}
+                    aria-label={`Show ${ghanaRegions[index].capital}, ${ghanaRegions[index].region} Region`}
+                    aria-pressed={index === currentRegion}
                     onClick={() => setCurrentRegion(index)}
-                  ></span>
+                  />
                 ))}
               </div>
             </div>
@@ -380,19 +388,9 @@ const HomePage = () => {
                 ) : (
                   <div className="pwa-install-note">
                     <strong>
-                      {isInstalled
-                        ? "App already installed"
-                        : isSupported
-                          ? "Install prompt not available yet"
-                          : "Install works best in a secure supported browser"}
+                      {installHint.title}
                     </strong>
-                    <span>
-                      {isInstalled
-                        ? "Open it from your home screen or app launcher."
-                        : isSupported
-                          ? "Use Chrome, Edge, or Safari on a supported device and interact with the site before installing."
-                          : "Open the app over HTTPS in Chrome, Edge, or Safari for installation support."}
-                    </span>
+                    <span>{installHint.detail}</span>
                   </div>
                 )}
               </div>

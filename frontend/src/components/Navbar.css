@@ -12,6 +12,12 @@
     transition: box-shadow 0.25s ease;
 }
 
+@supports (padding-top: env(safe-area-inset-top)) {
+    .topnav {
+        padding-top: env(safe-area-inset-top);
+    }
+}
+
 .topnav.scrolled {
     box-shadow: 0 4px 28px rgba(13, 84, 21, 0.55);
 }
@@ -504,6 +510,16 @@
 .nav-install-icon {
     background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(245, 158, 11, 0.22));
     border-color: rgba(255, 255, 255, 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .topnav,
+    .topnav *,
+    .topnav *::before,
+    .topnav *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }
 
 @media (max-width: 380px) {

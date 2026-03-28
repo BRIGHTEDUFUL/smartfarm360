@@ -18,6 +18,10 @@ interface PwaContextValue {
   isInstalled: boolean;
   isInstalling: boolean;
   canInstall: boolean;
+  installHint: {
+    title: string;
+    detail: string;
+  };
   installApp: () => Promise<boolean>;
 }
 
@@ -26,6 +30,66 @@ const PwaContext = createContext<PwaContextValue | undefined>(undefined);
 const isStandaloneDisplay = () =>
   window.matchMedia("(display-mode: standalone)").matches ||
   (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+const getInstallHint = ({
+  isInstalled,
+  isInstallable,
+  isSupported,
+}: {
+  isInstalled: boolean;
+  isInstallable: boolean;
+  isSupported: boolean;
+}) => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isIos = /iphone|ipad|ipod/.test(userAgent);
+  const isSafari =
+    /safari/.test(userAgent) &&
+    !/chrome|crios|crmo|edg|edge|fxios/.test(userAgent);
+
+  if (isInstalled) {
+    return {
+      title: "App already installed",
+      detail: "Open Smart Farming 360 from your home screen or app launcher.",
+    };
+  }
+
+  if (isInstallable) {
+    return {
+      title: "Install is ready",
+      detail: "Use the install button to add Smart Farming 360 to your device.",
+    };
+  }
+
+  if (isIos && isSafari) {
+    return {
+      title: "Add it from Safari",
+      detail:
+        "Tap Share in Safari, then choose Add to Home Screen for the best iPhone or iPad install experience.",
+    };
+  }
+
+  if (isIos) {
+    return {
+      title: "Open this in Safari to install",
+      detail:
+        "iPhone and iPad installation is supported through Safari's Share menu.",
+    };
+  }
+
+  if (isSupported) {
+    return {
+      title: "Install prompt not available yet",
+      detail:
+        "Browse the app for a moment, then try again from the install button or your browser menu.",
+    };
+  }
+
+  return {
+    title: "Install works best in a supported secure browser",
+    detail:
+      "Open the live HTTPS app in Chrome, Edge, or Safari to install Smart Farming 360.",
+  };
+};
 
 export const PwaProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -95,19 +159,26 @@ export const PwaProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [deferredPrompt, isInstalled]);
 
+  const isSupported =
+    "serviceWorker" in navigator &&
+    window.isSecureContext &&
+    !isStandaloneDisplay();
+
   const value = useMemo(
     () => ({
-      isSupported:
-        "serviceWorker" in navigator &&
-        window.isSecureContext &&
-        !isStandaloneDisplay(),
+      isSupported,
       isInstallable,
       isInstalled,
       isInstalling,
       canInstall: isInstallable && !isInstalled,
+      installHint: getInstallHint({
+        isInstalled,
+        isInstallable,
+        isSupported,
+      }),
       installApp,
     }),
-    [installApp, isInstallable, isInstalled, isInstalling],
+    [installApp, isInstallable, isInstalled, isInstalling, isSupported],
   );
 
   return <PwaContext.Provider value={value}>{children}</PwaContext.Provider>;

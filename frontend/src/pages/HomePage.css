@@ -469,7 +469,14 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.3);
     cursor: pointer;
+    border: none;
+    padding: 0;
     transition: all 0.28s ease;
+}
+
+.indicator:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
 }
 
 .indicator.active {
@@ -667,6 +674,7 @@
     background:
         radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 32%),
         linear-gradient(180deg, #ffffff 0%, #f6fbf5 100%);
+    overflow: hidden;
 }
 
 .pwa-panel {
@@ -765,6 +773,8 @@
 
 .pwa-actions {
     margin-top: 28px;
+    display: flex;
+    align-items: flex-start;
 }
 
 .pwa-install-btn {
@@ -779,6 +789,7 @@
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.18);
+    max-width: 480px;
 }
 
 .pwa-install-note strong,
@@ -802,6 +813,7 @@
 
 .pwa-device-shell {
     width: 280px;
+    max-width: 100%;
     height: 560px;
     border-radius: 40px;
     padding: 14px;
@@ -2392,6 +2404,7 @@
     .pwa-install-btn,
     .pwa-install-note {
         width: 100%;
+        max-width: 100%;
     }
 
     .pwa-device-shell {
@@ -2412,6 +2425,23 @@
 
     .pwa-device-screen h3 {
         font-size: 26px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-page *,
+    .home-page *::before,
+    .home-page *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .hero-orb,
+    .floating-card,
+    .ai-pulse {
+        transform: none !important;
     }
 }
 

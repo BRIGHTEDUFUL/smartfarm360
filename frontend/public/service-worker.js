@@ -20,7 +20,19 @@ const APP_SHELL_ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(APP_SHELL_CACHE).then((cache) => cache.addAll(APP_SHELL_ASSETS)),
+    (async () => {
+      const cache = await caches.open(APP_SHELL_CACHE);
+
+      await Promise.allSettled(
+        APP_SHELL_ASSETS.map(async (asset) => {
+          try {
+            await cache.add(new Request(asset, { cache: "reload" }));
+          } catch (error) {
+            console.warn("[SW] Failed to pre-cache asset:", asset, error);
+          }
+        }),
+      );
+    })(),
   );
   self.skipWaiting();
 });
@@ -63,8 +75,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const copy = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, copy));
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, copy));
+          }
           return response;
         })
         .catch(async () => {
