@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "description": "Smart Farming 360 - Full Stack Application",
   "private": true,
+  "engines": {
+    "node": ">=20 <21",
+    "npm": ">=10 <11"
+  },
   "scripts": {
     "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "install:all:ci": "cd backend && npm ci --include=dev && cd ../frontend && npm ci --include=dev",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "build:backend": "npm run build --prefix backend",
     "build:frontend": "npm run build --prefix frontend",
     "build": "npm run build:backend && npm run build:frontend",
-    "build:render": "npm run install:all:ci && npm run build",
+    "build:render": "node scripts/render-build.mjs",
     "start": "npm run build && npm start --prefix backend",
     "start:unified": "npm run install:all && npm run build && npm start --prefix backend",
     "start:prod": "npm start --prefix backend",
@@ -21,9 +24,9 @@
     "test": "npm run test:backend && npm run test:frontend",
     "deploy:render": "bash deploy-render.sh",
     "deploy:render:win": "deploy-render.bat",
-    "deploy:check": "node check-deployment-config.js",
-    "verify": "node verify-deployment.js",
-    "verify:prod": "node verify-deployment.js https://your-app.onrender.com"
+    "deploy:check": "node scripts/render-check.mjs",
+    "verify": "node scripts/render-check.mjs",
+    "verify:prod": "node scripts/render-verify.mjs https://your-app.onrender.com"
   },
   "keywords": ["agriculture", "e-commerce", "farming"],
   "author": "",
