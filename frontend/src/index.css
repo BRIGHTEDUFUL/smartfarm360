@@ -125,6 +125,7 @@ html {
     /* Allow vertical scroll and pinch zoom */
     touch-action: auto;
     -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
+    min-height: calc(var(--vh, 1vh) * 100);
 }
 
 /* Re-enable text selection for content */
@@ -175,6 +176,11 @@ body {
     -ms-overflow-style: -ms-autohiding-scrollbar;
     overscroll-behavior-y: contain;
     -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+#root {
+    min-height: calc(var(--vh, 1vh) * 100);
 }
 
 a {
@@ -1005,6 +1011,12 @@ video {
     .navbar {
         padding-top: max(12px, env(safe-area-inset-top));
     }
+}
+
+html.pwa-standalone,
+body.pwa-standalone,
+body.pwa-standalone #root {
+    min-height: calc(var(--vh, 1vh) * 100);
 }
 
 /* iOS PWA specific */
