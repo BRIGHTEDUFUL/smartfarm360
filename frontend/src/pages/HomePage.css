@@ -3504,3 +3504,125 @@
         right: 0 !important;
     }
 }
+
+.hero-image {
+    width: min(100%, 420px) !important;
+    height: 250px !important;
+}
+
+.hero-image .floating-card {
+    width: 184px !important;
+}
+
+.hero-image .floating-card img {
+    height: 118px !important;
+}
+
+.card-1 {
+    top: 8px !important;
+    left: 8px !important;
+    right: auto !important;
+    bottom: auto !important;
+    z-index: 2;
+}
+
+.card-2 {
+    top: 48px !important;
+    right: 8px !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 3;
+}
+
+@media (max-width: 768px) {
+    .hero-image .card-3,
+    .hero-image .card-4 {
+        display: none !important;
+    }
+
+    .hero-image {
+        display: block !important;
+        width: min(100%, 300px) !important;
+        height: 236px !important;
+        margin: 12px auto 8px !important;
+        overflow: visible !important;
+        padding: 0 !important;
+    }
+
+    .hero-image::before {
+        inset: 12% 10% !important;
+        filter: blur(14px) !important;
+    }
+
+    .hero-image .floating-card {
+        width: 142px !important;
+        position: absolute !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 86px !important;
+    }
+
+    .hero-image .card-content {
+        padding: 9px 10px !important;
+    }
+
+    .hero-image .card-content h4 {
+        font-size: 12px !important;
+        white-space: normal !important;
+        min-height: 28px;
+    }
+
+    .hero-image .card-content p {
+        font-size: 12px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .hero-image .rating {
+        font-size: 10px !important;
+    }
+
+    .card-1 {
+        top: 0 !important;
+        left: 0 !important;
+    }
+
+    .card-2 {
+        top: 26px !important;
+        right: 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-image .card-3,
+    .hero-image .card-4 {
+        display: none !important;
+    }
+
+    .hero-image {
+        width: min(100%, 286px) !important;
+        height: 228px !important;
+    }
+
+    .hero-image .floating-card {
+        width: 136px !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 82px !important;
+    }
+
+    .card-1 {
+        top: 0 !important;
+        left: 0 !important;
+    }
+
+    .card-2 {
+        top: 24px !important;
+        right: 0 !important;
+    }
+}

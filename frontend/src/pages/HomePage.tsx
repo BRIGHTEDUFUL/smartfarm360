@@ -453,15 +453,15 @@ const HomePage = () => {
               <div className="pwa-feature-list">
                 <div className="pwa-feature-item">
                   <i className="fas fa-bolt"></i>
-                  <span>Launch from your home screen like a real app</span>
+                  <span>Fast app access with a dedicated full-screen experience</span>
                 </div>
                 <div className="pwa-feature-item">
                   <i className="fas fa-wifi"></i>
-                  <span>Offline fallback for previously loaded pages</span>
+                  <span>Reliable access even when your connection is unstable</span>
                 </div>
                 <div className="pwa-feature-item">
                   <i className="fas fa-shield-alt"></i>
-                  <span>No stale API caching that can break live data</span>
+                  <span>Built to keep live marketplace data accurate and fresh</span>
                 </div>
               </div>
 
