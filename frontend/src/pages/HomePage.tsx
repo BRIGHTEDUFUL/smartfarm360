@@ -8,7 +8,8 @@ type RegionSpotlight = {
   capital: string;
   region: string;
   highlight: string;
-  icon: string;
+  image: string;
+  imageAlt: string;
 };
 
 type Feature = {
@@ -37,97 +38,113 @@ const ghanaRegions: RegionSpotlight[] = [
     capital: "Accra",
     region: "Greater Accra",
     highlight: "Urban farming and fresh vegetables",
-    icon: "fas fa-leaf",
+    image: "/images/tomato.jpg",
+    imageAlt: "Fresh tomatoes from Accra",
   },
   {
     capital: "Kumasi",
     region: "Ashanti",
     highlight: "Cocoa and plantain hub",
-    icon: "fas fa-seedling",
+    image: "/images/banana.jpg",
+    imageAlt: "Plantains and bananas from Kumasi",
   },
   {
     capital: "Tamale",
     region: "Northern",
     highlight: "Rice and groundnut capital",
-    icon: "fas fa-seedling",
+    image: "/images/rice.jpg",
+    imageAlt: "Rice fields in Tamale",
   },
   {
     capital: "Cape Coast",
     region: "Central",
     highlight: "Coconut and cassava farms",
-    icon: "fas fa-tree",
+    image: "/images/casasava.jpg",
+    imageAlt: "Cassava produce from Cape Coast",
   },
   {
     capital: "Sekondi-Takoradi",
     region: "Western",
     highlight: "Palm oil and rubber plantations",
-    icon: "fas fa-industry",
+    image: "/images/avocado.jpg",
+    imageAlt: "Fresh produce from Sekondi-Takoradi",
   },
   {
     capital: "Koforidua",
     region: "Eastern",
     highlight: "Pineapple and citrus paradise",
-    icon: "fas fa-apple-alt",
+    image: "/images/pineapple.jpg",
+    imageAlt: "Pineapples from Koforidua",
   },
   {
     capital: "Ho",
     region: "Volta",
     highlight: "Organic vegetables and spices",
-    icon: "fas fa-pepper-hot",
+    image: "/images/pepper.jpg",
+    imageAlt: "Peppers and spices from Ho",
   },
   {
     capital: "Sunyani",
     region: "Bono",
     highlight: "Cashew and maize farms",
-    icon: "fas fa-tractor",
+    image: "/images/maize.jpg",
+    imageAlt: "Maize harvest in Sunyani",
   },
   {
     capital: "Bolgatanga",
     region: "Upper East",
     highlight: "Millet and sorghum fields",
-    icon: "fas fa-leaf",
+    image: "/images/Millets.webp",
+    imageAlt: "Millet produce from Bolgatanga",
   },
   {
     capital: "Wa",
     region: "Upper West",
     highlight: "Shea butter and groundnuts",
-    icon: "fas fa-seedling",
+    image: "/images/ginger.jpg",
+    imageAlt: "Ground crops from Wa",
   },
   {
     capital: "Goaso",
     region: "Ahafo",
     highlight: "Cocoa and coffee estates",
-    icon: "fas fa-mug-hot",
+    image: "/images/mango.webp",
+    imageAlt: "Farm produce from Goaso",
   },
   {
     capital: "Dambai",
     region: "Oti",
     highlight: "Yam and soybean cultivation",
-    icon: "fas fa-carrot",
+    image: "/images/yam.jpg",
+    imageAlt: "Yams from Dambai",
   },
   {
     capital: "Nalerigu",
     region: "North East",
     highlight: "Livestock and grain farming",
-    icon: "fas fa-cow",
+    image: "/images/Cow.jpg",
+    imageAlt: "Livestock farming in Nalerigu",
   },
   {
     capital: "Damongo",
     region: "Savannah",
     highlight: "Cashew and shea production",
-    icon: "fas fa-sun",
+    image: "/images/watermelon.jpg",
+    imageAlt: "Fresh produce from Damongo",
   },
   {
     capital: "Sefwi Wiawso",
     region: "Western North",
     highlight: "Cocoa and timber resources",
-    icon: "fas fa-tree",
+    image: "/images/okra.jpg",
+    imageAlt: "Okra produce from Sefwi Wiawso",
   },
   {
     capital: "Bechem",
     region: "Bono East",
     highlight: "Tomato and pepper farms",
-    icon: "fas fa-pepper-hot",
+    image: "/images/chilli.jpg",
+    imageAlt: "Chilli peppers from Bechem",
   },
 ];
 
@@ -216,7 +233,24 @@ const heroCards = [
     title: "Fresh Pineapple",
     price: "GHc 20.00/piece",
   },
+  {
+    className: "card-5",
+    image: "/images/mango.webp",
+    title: "Golden Mangoes",
+    price: "GHc 18.00/basket",
+  },
+  {
+    className: "card-6",
+    image: "/images/avocado.jpg",
+    title: "Creamy Avocados",
+    price: "GHc 14.00/bag",
+  },
 ];
+
+const renderStars = (count: number) =>
+  Array.from({ length: count }, (_, index) => (
+    <i key={index} className="fas fa-star" aria-hidden="true"></i>
+  ));
 
 const HomePage = () => {
   const [searchParams] = useSearchParams();
@@ -318,7 +352,9 @@ const HomePage = () => {
                 <div className="card-content">
                   <h4>{card.title}</h4>
                   <p>{card.price}</p>
-                  <div className="rating">★★★★★</div>
+                  <div className="rating" aria-label="Five star produce">
+                    {renderStars(5)}
+                  </div>
                 </div>
               </div>
             ))}
@@ -328,7 +364,7 @@ const HomePage = () => {
             <div className="regional-showcase">
               <div className="region-card" key={activeRegion.capital}>
                 <div className="region-icon">
-                  <i className={activeRegion.icon}></i>
+                  <img src={activeRegion.image} alt={activeRegion.imageAlt} />
                 </div>
                 <div className="region-info">
                   <h3>{activeRegion.capital}</h3>
@@ -611,7 +647,9 @@ const HomePage = () => {
               <h3>Browse Products</h3>
               <p>Explore thousands of fresh products from local farmers</p>
             </div>
-            <div className="step-arrow">→</div>
+            <div className="step-arrow">
+              <i className="fas fa-arrow-right" aria-hidden="true"></i>
+            </div>
             <div className="step">
               <div className="step-number">2</div>
               <div className="step-icon">
@@ -620,7 +658,9 @@ const HomePage = () => {
               <h3>Add to Cart</h3>
               <p>Select your favorite products and add them to cart</p>
             </div>
-            <div className="step-arrow">→</div>
+            <div className="step-arrow">
+              <i className="fas fa-arrow-right" aria-hidden="true"></i>
+            </div>
             <div className="step">
               <div className="step-number">3</div>
               <div className="step-icon">
@@ -629,7 +669,9 @@ const HomePage = () => {
               <h3>Checkout</h3>
               <p>Secure payment with multiple options available</p>
             </div>
-            <div className="step-arrow">→</div>
+            <div className="step-arrow">
+              <i className="fas fa-arrow-right" aria-hidden="true"></i>
+            </div>
             <div className="step">
               <div className="step-number">4</div>
               <div className="step-icon">
@@ -655,8 +697,11 @@ const HomePage = () => {
                 className="testimonial-card"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="testimonial-rating">
-                  {Array.from({ length: testimonial.rating }, () => "★").join("")}
+                <div
+                  className="testimonial-rating"
+                  aria-label={`${testimonial.rating} stars`}
+                >
+                  {renderStars(testimonial.rating)}
                 </div>
                 <p className="testimonial-text">"{testimonial.text}"</p>
                 <div className="testimonial-author">
