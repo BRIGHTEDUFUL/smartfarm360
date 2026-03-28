@@ -46,21 +46,23 @@
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .scroll-to-top {
-    bottom: 20px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 88px);
     right: 20px;
     width: 48px;
     height: 48px;
     font-size: 18px;
+    z-index: 1700;
   }
 }
 
 /* Ensure it doesn't interfere with other floating elements */
 @media (max-width: 480px) {
   .scroll-to-top {
-    bottom: 16px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 92px);
     right: 16px;
     width: 44px;
     height: 44px;
     font-size: 16px;
+    z-index: 1700;
   }
 }

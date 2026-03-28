@@ -245,6 +245,24 @@ const heroCards = [
     title: "Creamy Avocados",
     price: "GHc 14.00/bag",
   },
+  {
+    className: "card-7",
+    image: "/images/watermelon.jpg",
+    title: "Sweet Watermelon",
+    price: "GHc 22.00/slice set",
+  },
+  {
+    className: "card-8",
+    image: "/images/carrot.jpg",
+    title: "Crisp Carrots",
+    price: "GHc 12.00/bundle",
+  },
+  {
+    className: "card-9",
+    image: "/images/pepper.jpg",
+    title: "Hot Peppers",
+    price: "GHc 11.00/bag",
+  },
 ];
 
 const renderStars = (count: number) =>
@@ -510,7 +528,7 @@ const HomePage = () => {
                     </div>
                   </div>
                   <div className="pwa-brand-mark">
-                    <img src="/icons/icon-192.png" alt="Smart Farming 360" />
+                    <img src="/icons/icon-base.svg" alt="Smart Farming 360" />
                   </div>
                   <h3>Smart Farming 360</h3>
                   <p>Fresh from Ghana&apos;s farms</p>
@@ -824,7 +842,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; 2024 Smart Farming 360. All rights reserved.</p>
+            <p>&copy; 2026 Smart Farming 360. All rights reserved.</p>
           </div>
         </div>
       </footer>
