@@ -1,4 +1,6 @@
 import winston from 'winston';
+import fs from 'fs';
+import path from 'path';
 import { config } from '../config/env';
 
 const maskSensitiveData = (info: any) => {
@@ -31,14 +33,35 @@ const customFormat = winston.format.combine(
 export const logger = winston.createLogger({
   level: config.env === 'production' ? 'info' : 'debug',
   format: customFormat,
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        customFormat
-      ),
-    }),
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-  ],
+  transports: (() => {
+    const transports: winston.transport[] = [
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.colorize(),
+          customFormat
+        ),
+      }),
+    ];
+
+    // In local/dev environments, keep file logs as a convenience.
+    // On hosted platforms like Render, stdout/stderr is the primary log sink.
+    if (config.env !== 'production') {
+      const logsDir = path.resolve(process.cwd(), 'logs');
+      if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir, { recursive: true });
+      }
+
+      transports.push(
+        new winston.transports.File({
+          filename: path.join(logsDir, 'error.log'),
+          level: 'error'
+        }),
+        new winston.transports.File({
+          filename: path.join(logsDir, 'combined.log')
+        })
+      );
+    }
+
+    return transports;
+  })(),
 });
