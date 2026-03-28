@@ -81,7 +81,7 @@ const Navbar = () => {
             aria-label="Smart Farming 360 – Home"
           >
             <div className="nav-logo-icon" aria-hidden="true">
-              <i className="fas fa-leaf" />
+              <img src="/icons/icon-base.svg" alt="" />
             </div>
             <span className="nav-logo-text">
               Smart Farming <span className="dot">360</span>

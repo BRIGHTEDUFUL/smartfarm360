@@ -1,26 +1,33 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="logoBg" x1="88" y1="76" x2="418" y2="432" gradientUnits="userSpaceOnUse">
+    <linearGradient id="logoBg" x1="92" y1="76" x2="420" y2="438" gradientUnits="userSpaceOnUse">
       <stop stop-color="#FBBF24" />
       <stop offset="1" stop-color="#F59E0B" />
     </linearGradient>
-    <filter id="logoShadow" x="58" y="58" width="396" height="396" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+    <filter id="logoShadow" x="56" y="60" width="400" height="400" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feFlood flood-opacity="0" result="BackgroundImageFix"/>
       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-      <feOffset dy="16"/>
+      <feOffset dy="18"/>
       <feGaussianBlur stdDeviation="18"/>
-      <feColorMatrix type="matrix" values="0 0 0 0 0.56 0 0 0 0 0.34 0 0 0 0 0.05 0 0 0 0.26 0"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.78 0 0 0 0 0.46 0 0 0 0 0.03 0 0 0 0.3 0"/>
       <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
       <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
     </filter>
   </defs>
 
-  <rect x="60" y="60" width="392" height="392" rx="104" fill="url(#logoBg)"/>
+  <rect x="60" y="60" width="392" height="392" rx="112" fill="url(#logoBg)"/>
 
   <g filter="url(#logoShadow)">
-    <path d="M254.34 135C287.772 135 323.842 161.942 323.842 214.713C323.842 281.436 281.616 331.871 208.819 365.35C199.323 369.715 189.31 361.766 191.401 351.529C204.826 285.795 203.22 230.537 181.718 189.445C173.996 174.684 164.36 161.419 153.312 149.632C146.489 142.354 150.716 130.376 160.448 128.746C196.323 122.734 226.876 135 254.34 135Z" fill="white"/>
-    <path d="M233.467 177.191C242.591 224.305 240.232 274.788 226.385 328.64" stroke="#A16207" stroke-width="19" stroke-linecap="round"/>
-    <path d="M238.525 214.422C266.897 210.729 292.52 197.427 313.792 175.449" stroke="#A16207" stroke-width="12" stroke-linecap="round"/>
-    <path d="M240.614 255.646C264.753 253.405 286.577 244.349 304.838 230.057" stroke="#A16207" stroke-width="10" stroke-linecap="round"/>
+    <path
+      d="M262.453 143.748C298.66 143.748 327.918 157.471 345.693 182.715C360.925 204.354 367.03 232.674 363.954 262.877C360.692 294.918 345.617 326.668 321.484 349.588C298.793 371.138 270.498 384.934 241.737 388.248C232.842 389.274 226.119 381.371 227.843 372.588C232.363 349.566 241.843 328.482 255.902 309.354C236.687 306.111 220.573 295.01 210.83 277.623C196.543 252.119 198.566 219.863 215.99 193.408C227.706 175.621 244.108 160.418 262.453 143.748Z"
+      fill="white"
+    />
+    <path
+      d="M212.801 351.885C232.934 333.633 255.627 318.943 280.227 308.1C304.826 297.258 331.01 290.475 357.728 288.029"
+      stroke="white"
+      stroke-width="22"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
   </g>
 </svg>
