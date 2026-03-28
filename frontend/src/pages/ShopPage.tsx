@@ -20,6 +20,11 @@ interface Product {
   image_url?: string;
 }
 
+const renderRatingStars = () =>
+  Array.from({ length: 5 }, (_, index) => (
+    <i key={index} className="fas fa-star" aria-hidden="true"></i>
+  ));
+
 const categories = [
   { name: "All Products", icon: "🌾", value: "" },
   { name: "Vegetables", icon: "🥬", value: "Vegetables" },
@@ -37,6 +42,7 @@ const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("created_at");
+  const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const { addToCart } = useCart();
@@ -48,6 +54,24 @@ const ShopPage = () => {
     const cat = searchParams.get("category") || "";
     if (cat) setSelectedCategory(cat);
   }, []);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("sf360_wishlist");
+    if (!stored) return;
+
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        setFavoriteIds(parsed.filter((id) => typeof id === "number"));
+      }
+    } catch {
+      window.localStorage.removeItem("sf360_wishlist");
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("sf360_wishlist", JSON.stringify(favoriteIds));
+  }, [favoriteIds]);
 
   useEffect(() => {
     fetchProducts();
@@ -139,6 +163,21 @@ const ShopPage = () => {
     } catch (error: any) {
       toast.error(error.message || "Failed to add to cart");
     }
+  };
+
+  const handleToggleFavorite = (productId: number, productName: string) => {
+    const isFavorite = favoriteIds.includes(productId);
+    const nextFavorites = isFavorite
+      ? favoriteIds.filter((id) => id !== productId)
+      : [...favoriteIds, productId];
+
+    setFavoriteIds(nextFavorites);
+    toast.success(
+      isFavorite
+        ? `${productName} removed from favorites`
+        : `${productName} saved to favorites`,
+      { autoClose: 1800 },
+    );
   };
 
   const getImagePath = (productName: string) => {
@@ -439,8 +478,22 @@ const ShopPage = () => {
                       <span className={`card-badge ${badge.class}`}>
                         {badge.text}
                       </span>
-                      <button className="card-wishlist">
-                        <i className="far fa-heart"></i>
+                      <button
+                        type="button"
+                        className={`card-wishlist ${favoriteIds.includes(product.id) ? "active" : ""}`}
+                        onClick={() =>
+                          handleToggleFavorite(product.id, product.name)
+                        }
+                        aria-pressed={favoriteIds.includes(product.id)}
+                        aria-label={
+                          favoriteIds.includes(product.id)
+                            ? `Remove ${product.name} from favorites`
+                            : `Save ${product.name} to favorites`
+                        }
+                      >
+                        <i
+                          className={`${favoriteIds.includes(product.id) ? "fas" : "far"} fa-heart`}
+                        ></i>
                       </button>
                       <Link
                         to={`/product/${product.id}`}
@@ -463,7 +516,9 @@ const ShopPage = () => {
                         Farmer #{product.farmer_id}
                       </div>
                       <div className="card-rating">
-                        <span className="stars">⭐⭐⭐⭐⭐</span>
+                        <span className="stars" aria-label="5 star rating">
+                          {renderRatingStars()}
+                        </span>
                         <span className="rating-count">(24)</span>
                       </div>
                       <p className="card-desc">{product.description}</p>

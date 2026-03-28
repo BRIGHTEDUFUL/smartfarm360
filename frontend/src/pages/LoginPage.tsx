@@ -41,13 +41,14 @@ const LoginPage = () => {
           <div className="auth-hero-content">
             <div className="auth-hero-badge">
               <i className="fas fa-seedling"></i>
-              <span>Farm to Table</span>
+              <span>Trusted Marketplace</span>
             </div>
             <h1 className="auth-hero-title">
               Welcome to <span className="gradient-text">Smart Farming 360</span>
             </h1>
             <p className="auth-hero-desc">
-              Connect with local farmers, discover fresh organic produce, and support sustainable agriculture in your community.
+              Sign in to a refined marketplace experience built for fresh
+              produce shopping, farmer connections, and dependable delivery.
             </p>
             <div className="auth-features">
               <div className="auth-feature">
@@ -88,10 +89,10 @@ const LoginPage = () => {
           <div className="auth-card">
             <div className="auth-header">
               <div className="auth-logo">
-                <i className="fas fa-leaf"></i>
+                <img src="/icons/icon-base.svg" alt="Smart Farming 360" />
               </div>
               <h1>Welcome Back</h1>
-              <p>Login to your account</p>
+              <p>Sign in to continue shopping and managing your orders</p>
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
@@ -119,7 +120,7 @@ const LoginPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
+                    placeholder="Enter your password"
                     required
                   />
                   <button

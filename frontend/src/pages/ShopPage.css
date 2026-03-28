@@ -752,6 +752,9 @@
     z-index: 2;
     backdrop-filter: blur(6px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .card-wishlist:hover,
@@ -759,6 +762,11 @@
     color: #e53935;
     background: #fff;
     transform: scale(1.15);
+    box-shadow: 0 10px 24px rgba(229, 57, 53, 0.22);
+}
+
+.card-wishlist i {
+    pointer-events: none;
 }
 
 .card-quick-view {
@@ -843,9 +851,11 @@
 }
 
 .stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
     color: #ffa000;
     font-size: 12px;
-    letter-spacing: 1px;
 }
 
 .rating-count {

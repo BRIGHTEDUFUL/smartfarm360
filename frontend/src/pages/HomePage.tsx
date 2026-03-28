@@ -223,45 +223,15 @@ const heroCards = [
   },
   {
     className: "card-3",
-    image: "/images/eggs.jpg",
-    title: "Farm Eggs",
-    price: "GHc 30.00/crate",
+    image: "/images/avocado.jpg",
+    title: "Fresh Avocados",
+    price: "GHc 14.00/bag",
   },
   {
     className: "card-4",
     image: "/images/pineapple.jpg",
     title: "Fresh Pineapple",
     price: "GHc 20.00/piece",
-  },
-  {
-    className: "card-5",
-    image: "/images/mango.webp",
-    title: "Golden Mangoes",
-    price: "GHc 18.00/basket",
-  },
-  {
-    className: "card-6",
-    image: "/images/avocado.jpg",
-    title: "Creamy Avocados",
-    price: "GHc 14.00/bag",
-  },
-  {
-    className: "card-7",
-    image: "/images/watermelon.jpg",
-    title: "Sweet Watermelon",
-    price: "GHc 22.00/slice set",
-  },
-  {
-    className: "card-8",
-    image: "/images/carrot.jpg",
-    title: "Crisp Carrots",
-    price: "GHc 12.00/bundle",
-  },
-  {
-    className: "card-9",
-    image: "/images/pepper.jpg",
-    title: "Hot Peppers",
-    price: "GHc 11.00/bag",
   },
 ];
 
@@ -843,6 +813,13 @@ const HomePage = () => {
           </div>
           <div className="footer-bottom">
             <p>&copy; 2026 Smart Farming 360. All rights reserved.</p>
+            <p className="developer-credit">
+              Developed by Bright Eduful ·{" "}
+              <a href="tel:+23324251204">+23324251204</a> ·{" "}
+              <a href="mailto:brighteduful22@gmail.com">
+                brighteduful22@gmail.com
+              </a>
+            </p>
           </div>
         </div>
       </footer>

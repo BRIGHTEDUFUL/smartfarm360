@@ -67,13 +67,14 @@ const RegisterPage = () => {
           <div className="auth-hero-content">
             <div className="auth-hero-badge">
               <i className="fas fa-seedling"></i>
-              <span>Join Our Community</span>
+              <span>Grow With Us</span>
             </div>
             <h1 className="auth-hero-title">
               Start Your Journey with <span className="gradient-text">Smart Farming 360</span>
             </h1>
             <p className="auth-hero-desc">
-              Whether you're a farmer looking to sell your produce or a consumer seeking fresh organic products, we've got you covered.
+              Create your account to shop premium produce or launch your farm
+              storefront with a polished, trusted marketplace experience.
             </p>
             <div className="auth-features">
               <div className="auth-feature">
@@ -114,10 +115,10 @@ const RegisterPage = () => {
           <div className="auth-card">
             <div className="auth-header">
               <div className="auth-logo">
-                <i className="fas fa-leaf"></i>
+                <img src="/icons/icon-base.svg" alt="Smart Farming 360" />
               </div>
               <h1>Create Account</h1>
-              <p>Join our farming community</p>
+              <p>Join the community bringing Ghana&apos;s farms online</p>
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
@@ -225,7 +226,7 @@ const RegisterPage = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="••••••••"
+                    placeholder="Create a secure password"
                     minLength={8}
                     required
                   />

@@ -3198,3 +3198,175 @@
         font-size: 12px;
     }
 }
+
+/* Final home sync */
+.footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.developer-credit {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.developer-credit a {
+    color: #fbbf24;
+    text-decoration: none;
+}
+
+.developer-credit a:hover {
+    color: #fde68a;
+}
+
+.hero-image {
+    width: min(100%, 480px) !important;
+    height: 440px !important;
+    margin-inline: auto;
+}
+
+.hero-image .floating-card {
+    width: 188px !important;
+}
+
+.hero-image .floating-card img {
+    height: 118px !important;
+}
+
+.card-1 {
+    top: 0;
+    left: 10px;
+}
+
+.card-2 {
+    top: 36px;
+    right: 14px;
+}
+
+.card-3 {
+    bottom: 18px;
+    left: 30px;
+}
+
+.card-4,
+.card-5 {
+    transform: none !important;
+}
+
+.card-4 {
+    bottom: 14px;
+    right: 22px;
+    top: auto;
+}
+
+.card-5,
+.card-6,
+.card-7,
+.card-8,
+.card-9 {
+    display: none !important;
+}
+
+@media (max-width: 960px) {
+    .hero-image {
+        width: min(100%, 420px) !important;
+        height: 400px !important;
+    }
+
+    .hero-image .floating-card {
+        width: 176px !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 110px !important;
+    }
+
+    .card-1 {
+        top: 0;
+        left: 0;
+    }
+
+    .card-2 {
+        top: 26px;
+        right: 0;
+    }
+
+    .card-3 {
+        bottom: 8px;
+        left: 12px;
+    }
+
+    .card-4 {
+        bottom: 4px;
+        right: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-image {
+        width: min(100%, 336px) !important;
+        height: 352px !important;
+    }
+
+    .hero-image .floating-card {
+        width: 148px !important;
+        border-radius: 18px;
+    }
+
+    .hero-image .floating-card img {
+        height: 92px !important;
+    }
+
+    .hero-image .card-content {
+        padding: 10px 12px !important;
+    }
+
+    .hero-image .card-content h4 {
+        font-size: 14px !important;
+    }
+
+    .hero-image .card-content p {
+        font-size: 13px !important;
+    }
+
+    .card-1 {
+        top: 0;
+        left: 0;
+    }
+
+    .card-2 {
+        top: 12px;
+        right: 0;
+    }
+
+    .card-3 {
+        bottom: 8px;
+        left: 0;
+    }
+
+    .card-4 {
+        bottom: 0;
+        right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-image {
+        width: min(100%, 304px) !important;
+        height: 320px !important;
+    }
+
+    .hero-image .floating-card {
+        width: 136px !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 84px !important;
+    }
+
+    .developer-credit {
+        font-size: 12px;
+        line-height: 1.7;
+    }
+}
