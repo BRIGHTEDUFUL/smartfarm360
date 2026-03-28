@@ -1,8 +1,222 @@
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { usePwa } from "../contexts/PwaContext";
 
 import "./HomePage.css";
+
+type RegionSpotlight = {
+  capital: string;
+  region: string;
+  highlight: string;
+  icon: string;
+};
+
+type Feature = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+type Category = {
+  name: string;
+  icon: string;
+  count: string;
+  color: string;
+};
+
+type Testimonial = {
+  name: string;
+  role: string;
+  avatar: string;
+  text: string;
+  rating: number;
+};
+
+const ghanaRegions: RegionSpotlight[] = [
+  {
+    capital: "Accra",
+    region: "Greater Accra",
+    highlight: "Urban farming and fresh vegetables",
+    icon: "fas fa-leaf",
+  },
+  {
+    capital: "Kumasi",
+    region: "Ashanti",
+    highlight: "Cocoa and plantain hub",
+    icon: "fas fa-seedling",
+  },
+  {
+    capital: "Tamale",
+    region: "Northern",
+    highlight: "Rice and groundnut capital",
+    icon: "fas fa-seedling",
+  },
+  {
+    capital: "Cape Coast",
+    region: "Central",
+    highlight: "Coconut and cassava farms",
+    icon: "fas fa-tree",
+  },
+  {
+    capital: "Sekondi-Takoradi",
+    region: "Western",
+    highlight: "Palm oil and rubber plantations",
+    icon: "fas fa-industry",
+  },
+  {
+    capital: "Koforidua",
+    region: "Eastern",
+    highlight: "Pineapple and citrus paradise",
+    icon: "fas fa-apple-alt",
+  },
+  {
+    capital: "Ho",
+    region: "Volta",
+    highlight: "Organic vegetables and spices",
+    icon: "fas fa-pepper-hot",
+  },
+  {
+    capital: "Sunyani",
+    region: "Bono",
+    highlight: "Cashew and maize farms",
+    icon: "fas fa-tractor",
+  },
+  {
+    capital: "Bolgatanga",
+    region: "Upper East",
+    highlight: "Millet and sorghum fields",
+    icon: "fas fa-leaf",
+  },
+  {
+    capital: "Wa",
+    region: "Upper West",
+    highlight: "Shea butter and groundnuts",
+    icon: "fas fa-seedling",
+  },
+  {
+    capital: "Goaso",
+    region: "Ahafo",
+    highlight: "Cocoa and coffee estates",
+    icon: "fas fa-mug-hot",
+  },
+  {
+    capital: "Dambai",
+    region: "Oti",
+    highlight: "Yam and soybean cultivation",
+    icon: "fas fa-carrot",
+  },
+  {
+    capital: "Nalerigu",
+    region: "North East",
+    highlight: "Livestock and grain farming",
+    icon: "fas fa-cow",
+  },
+  {
+    capital: "Damongo",
+    region: "Savannah",
+    highlight: "Cashew and shea production",
+    icon: "fas fa-sun",
+  },
+  {
+    capital: "Sefwi Wiawso",
+    region: "Western North",
+    highlight: "Cocoa and timber resources",
+    icon: "fas fa-tree",
+  },
+  {
+    capital: "Bechem",
+    region: "Bono East",
+    highlight: "Tomato and pepper farms",
+    icon: "fas fa-pepper-hot",
+  },
+];
+
+const features: Feature[] = [
+  {
+    icon: "fas fa-seedling",
+    title: "Farm Fresh Products",
+    description:
+      "Direct from local farmers to your doorstep. Fresh, traceable, and sustainably grown.",
+  },
+  {
+    icon: "fas fa-truck",
+    title: "Fast Delivery",
+    description:
+      "Same-day delivery options with dependable updates from farm pickup to doorstep.",
+  },
+  {
+    icon: "fas fa-balance-scale",
+    title: "Fair Prices",
+    description:
+      "Fewer middlemen means better value for shoppers and stronger margins for farmers.",
+  },
+  {
+    icon: "fas fa-shield-alt",
+    title: "Quality Guaranteed",
+    description:
+      "Every listing is reviewed for consistency, freshness, and marketplace standards.",
+  },
+];
+
+const categories: Category[] = [
+  { name: "Vegetables", icon: "fas fa-carrot", count: "50+", color: "#4CAF50" },
+  { name: "Fruits", icon: "fas fa-apple-alt", count: "40+", color: "#FF9800" },
+  { name: "Grains", icon: "fas fa-seedling", count: "30+", color: "#8D6E63" },
+  { name: "Poultry", icon: "fas fa-egg", count: "20+", color: "#FF5722" },
+  { name: "Dairy", icon: "fas fa-tint", count: "15+", color: "#2196F3" },
+  { name: "Spices", icon: "fas fa-pepper-hot", count: "25+", color: "#E91E63" },
+];
+
+const testimonials: Testimonial[] = [
+  {
+    name: "Kwame Mensah",
+    role: "Consumer",
+    avatar: "KM",
+    text: "Best quality produce I've ever bought. Fresh, affordable, and delivered right to my door.",
+    rating: 5,
+  },
+  {
+    name: "Ama Osei",
+    role: "Farmer",
+    avatar: "AO",
+    text: "This platform changed my business. I can now reach customers directly and get fair prices.",
+    rating: 5,
+  },
+  {
+    name: "Kofi Asante",
+    role: "Consumer",
+    avatar: "KA",
+    text: "Supporting local farmers while getting the freshest products is a real win-win.",
+    rating: 5,
+  },
+];
+
+const heroCards = [
+  {
+    className: "card-1",
+    image: "/images/tomato.jpg",
+    title: "Fresh Tomatoes",
+    price: "GHc 15.00/kg",
+  },
+  {
+    className: "card-2",
+    image: "/images/banana.jpg",
+    title: "Ripe Bananas",
+    price: "GHc 10.00/bunch",
+  },
+  {
+    className: "card-3",
+    image: "/images/eggs.jpg",
+    title: "Farm Eggs",
+    price: "GHc 30.00/crate",
+  },
+  {
+    className: "card-4",
+    image: "/images/pineapple.jpg",
+    title: "Fresh Pineapple",
+    price: "GHc 20.00/piece",
+  },
+];
 
 const HomePage = () => {
   const [searchParams] = useSearchParams();
@@ -12,107 +226,6 @@ const HomePage = () => {
   const [showNewsletterSuccess, setShowNewsletterSuccess] = useState(false);
   const newsletterTimerRef = useRef<number | null>(null);
 
-  // Ghana's 16 Regional Capitals with Farm Highlights
-  const ghanaRegions = [
-    {
-      capital: "Accra",
-      region: "Greater Accra",
-      highlight: "Urban Farming & Fresh Vegetables",
-      icon: "🥬",
-    },
-    {
-      capital: "Kumasi",
-      region: "Ashanti",
-      highlight: "Cocoa & Plantain Hub",
-      icon: "🍫",
-    },
-    {
-      capital: "Tamale",
-      region: "Northern",
-      highlight: "Rice & Groundnut Capital",
-      icon: "🌾",
-    },
-    {
-      capital: "Cape Coast",
-      region: "Central",
-      highlight: "Coconut & Cassava Farms",
-      icon: "🥥",
-    },
-    {
-      capital: "Sekondi-Takoradi",
-      region: "Western",
-      highlight: "Palm Oil & Rubber Plantations",
-      icon: "🌴",
-    },
-    {
-      capital: "Koforidua",
-      region: "Eastern",
-      highlight: "Pineapple & Citrus Paradise",
-      icon: "🍍",
-    },
-    {
-      capital: "Ho",
-      region: "Volta",
-      highlight: "Organic Vegetables & Spices",
-      icon: "🌶️",
-    },
-    {
-      capital: "Sunyani",
-      region: "Bono",
-      highlight: "Cashew & Maize Farms",
-      icon: "🌽",
-    },
-    {
-      capital: "Bolgatanga",
-      region: "Upper East",
-      highlight: "Millet & Sorghum Fields",
-      icon: "🌾",
-    },
-    {
-      capital: "Wa",
-      region: "Upper West",
-      highlight: "Shea Butter & Groundnuts",
-      icon: "🥜",
-    },
-    {
-      capital: "Goaso",
-      region: "Ahafo",
-      highlight: "Cocoa & Coffee Estates",
-      icon: "☕",
-    },
-    {
-      capital: "Dambai",
-      region: "Oti",
-      highlight: "Yam & Soybean Cultivation",
-      icon: "🍠",
-    },
-    {
-      capital: "Nalerigu",
-      region: "North East",
-      highlight: "Livestock & Grain Farming",
-      icon: "🐄",
-    },
-    {
-      capital: "Damongo",
-      region: "Savannah",
-      highlight: "Cashew & Shea Production",
-      icon: "🌰",
-    },
-    {
-      capital: "Sefwi Wiawso",
-      region: "Western North",
-      highlight: "Cocoa & Timber Resources",
-      icon: "🌳",
-    },
-    {
-      capital: "Bechem",
-      region: "Bono East",
-      highlight: "Tomato & Pepper Farms",
-      icon: "🍅",
-    },
-  ];
-
-  // Check for newsletter subscription success
   useEffect(() => {
     if (searchParams.get("subscribed") === "true") {
       setShowNewsletterSuccess(true);
@@ -127,83 +240,35 @@ const HomePage = () => {
         window.clearTimeout(newsletterTimerRef.current);
       }
     };
-  }, [searchParams, navigate]);
+  }, [navigate, searchParams]);
 
-  // Rotate through regions every 3 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setCurrentRegion((prev) => (prev + 1) % ghanaRegions.length);
-    }, 3000);
-    return () => clearInterval(interval);
+    }, 4000);
+
+    return () => window.clearInterval(interval);
   }, []);
-
-  const features = [
-    {
-      icon: "🌱",
-      title: "Farm Fresh Products",
-      description:
-        "Direct from local farmers to your doorstep. 100% fresh, organic, and sustainably grown.",
-    },
-    {
-      icon: "🚚",
-      title: "Fast Delivery",
-      description:
-        "Same-day delivery available. Track your order in real-time from farm to table.",
-    },
-    {
-      icon: "💰",
-      title: "Fair Prices",
-      description:
-        "No middlemen. Fair prices for farmers, great value for consumers.",
-    },
-    {
-      icon: "🛡️",
-      title: "Quality Guaranteed",
-      description:
-        "Every product is verified for quality. 100% satisfaction guaranteed or money back.",
-    },
-  ];
-
-  const categories = [
-    { name: "Vegetables", icon: "🥬", count: "50+", color: "#4CAF50" },
-    { name: "Fruits", icon: "🍎", count: "40+", color: "#FF9800" },
-    { name: "Grains", icon: "🌾", count: "30+", color: "#8D6E63" },
-    { name: "Poultry", icon: "🐔", count: "20+", color: "#FF5722" },
-    { name: "Dairy", icon: "🥛", count: "15+", color: "#2196F3" },
-    { name: "Spices", icon: "🌶️", count: "25+", color: "#E91E63" },
-  ];
-
-  const testimonials = [
-    {
-      name: "Kwame Mensah",
-      role: "Consumer",
-      image: "👨🏿‍🌾",
-      text: "Best quality produce I've ever bought! Fresh, affordable, and delivered right to my door.",
-      rating: 5,
-    },
-    {
-      name: "Ama Osei",
-      role: "Farmer",
-      image: "👩🏿‍🌾",
-      text: "This platform changed my business. I can now reach customers directly and get fair prices.",
-      rating: 5,
-    },
-    {
-      name: "Kofi Asante",
-      role: "Consumer",
-      image: "👨🏿",
-      text: "Supporting local farmers while getting the freshest products. Win-win!",
-      rating: 5,
-    },
-  ];
 
   const handleInstallClick = async () => {
     await installApp();
   };
 
+  const showPreviousRegion = () => {
+    setCurrentRegion(
+      (prev) => (prev - 1 + ghanaRegions.length) % ghanaRegions.length,
+    );
+  };
+
+  const showNextRegion = () => {
+    setCurrentRegion((prev) => (prev + 1) % ghanaRegions.length);
+  };
+
+  const activeRegion = ghanaRegions[currentRegion];
+  const regionProgress = ((currentRegion + 1) / ghanaRegions.length) * 100;
+
   return (
     <div className="home-page">
-      {/* Newsletter Success Message */}
       {showNewsletterSuccess && (
         <div className="newsletter-success-banner">
           <div className="success-content">
@@ -212,14 +277,13 @@ const HomePage = () => {
               <h3>Successfully Subscribed!</h3>
               <p>
                 Thank you for subscribing to Smart Farming 360 newsletter. Stay
-                tuned for updates!
+                tuned for updates.
               </p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-bg">
           <div className="hero-orb hero-orb-1"></div>
@@ -228,69 +292,107 @@ const HomePage = () => {
         </div>
 
         <div className="hero-content">
-          <div className="hero-text">
+          <div className="hero-copy-top">
             <div className="hero-badge">
               <i className="fas fa-robot"></i>
               <span>AI-Powered Smart Farming</span>
             </div>
+
             <h1 className="hero-title">
-              Fresh from <span className="gradient-text">Ghana's</span>
+              Fresh from <span className="gradient-text">Ghana&apos;s</span>
               <br />
               <span className="gradient-text">16 Regions</span>
             </h1>
 
-            {/* AI Badge */}
             <div className="ai-badge-hero">
               <div className="ai-pulse"></div>
               <i className="fas fa-brain"></i>
               <span>Enhanced by Artificial Intelligence</span>
             </div>
+          </div>
 
-            {/* Animated Regional Highlights */}
-            <div className="regional-showcase">
-              <div className="region-card" key={currentRegion}>
-                <div className="region-icon">
-                  {ghanaRegions[currentRegion].icon}
-                </div>
-                <div className="region-info">
-                  <h3>{ghanaRegions[currentRegion].capital}</h3>
-                  <p className="region-name">
-                    {ghanaRegions[currentRegion].region} Region
-                  </p>
-                  <p className="region-highlight">
-                    {ghanaRegions[currentRegion].highlight}
-                  </p>
+          <div className="hero-image" aria-label="Featured products">
+            {heroCards.map((card) => (
+              <div key={card.title} className={`floating-card ${card.className}`}>
+                <img src={card.image} alt={card.title} />
+                <div className="card-content">
+                  <h4>{card.title}</h4>
+                  <p>{card.price}</p>
+                  <div className="rating">★★★★★</div>
                 </div>
               </div>
-              <div className="region-indicators">
-                {ghanaRegions.map((_, index) => (
-                  <button
-                    type="button"
-                    key={index}
-                    className={`indicator ${index === currentRegion ? "active" : ""}`}
-                    aria-label={`Show ${ghanaRegions[index].capital}, ${ghanaRegions[index].region} Region`}
-                    aria-pressed={index === currentRegion}
-                    onClick={() => setCurrentRegion(index)}
-                  />
-                ))}
+            ))}
+          </div>
+
+          <div className="hero-copy-bottom">
+            <div className="regional-showcase">
+              <div className="region-card" key={activeRegion.capital}>
+                <div className="region-icon">
+                  <i className={activeRegion.icon}></i>
+                </div>
+                <div className="region-info">
+                  <h3>{activeRegion.capital}</h3>
+                  <p className="region-name">{activeRegion.region} Region</p>
+                  <p className="region-highlight">{activeRegion.highlight}</p>
+                </div>
+              </div>
+
+              <div className="region-controls">
+                <button
+                  type="button"
+                  className="region-nav-btn"
+                  onClick={showPreviousRegion}
+                  aria-label="Show previous region"
+                >
+                  <i className="fas fa-chevron-left"></i>
+                </button>
+
+                <div className="region-progress-group">
+                  <div className="region-progress-label">
+                    <span>Regional spotlight</span>
+                    <strong>
+                      {currentRegion + 1} / {ghanaRegions.length}
+                    </strong>
+                  </div>
+                  <div className="region-progress-track" aria-hidden="true">
+                    <span
+                      className="region-progress-fill"
+                      style={{ width: `${regionProgress}%` }}
+                    ></span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="region-nav-btn"
+                  onClick={showNextRegion}
+                  aria-label="Show next region"
+                >
+                  <i className="fas fa-chevron-right"></i>
+                </button>
               </div>
             </div>
 
             <p className="hero-description">
               Connect directly with farmers across all 16 regions of Ghana. Get
               the freshest produce, poultry, and more delivered to your
-              doorstep. Support local agriculture nationwide!
+              doorstep. Support local agriculture nationwide.
             </p>
+
             <div className="hero-buttons">
               <Link to="/shop" className="btn btn-primary">
                 <i className="fas fa-shopping-bag"></i>
                 Start Shopping
               </Link>
-              <Link to="/register" className="btn btn-secondary">
+              <Link
+                to="/register"
+                className="btn btn-secondary hero-btn-secondary"
+              >
                 <i className="fas fa-user-plus"></i>
                 Join as Farmer
               </Link>
             </div>
+
             <div className="hero-stats">
               <div className="stat">
                 <strong>16</strong>
@@ -303,41 +405,6 @@ const HomePage = () => {
               <div className="stat">
                 <strong>5,000+</strong>
                 <span>Products</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="hero-image">
-            <div className="floating-card card-1">
-              <img src="/images/tomato.jpg" alt="Fresh Tomatoes" />
-              <div className="card-content">
-                <h4>Fresh Tomatoes</h4>
-                <p>GH₵ 15.00/kg</p>
-                <div className="rating">⭐⭐⭐⭐⭐</div>
-              </div>
-            </div>
-            <div className="floating-card card-2">
-              <img src="/images/banana.jpg" alt="Ripe Bananas" />
-              <div className="card-content">
-                <h4>Ripe Bananas</h4>
-                <p>GH₵ 10.00/bunch</p>
-                <div className="rating">⭐⭐⭐⭐⭐</div>
-              </div>
-            </div>
-            <div className="floating-card card-3">
-              <img src="/images/eggs.jpg" alt="Farm Eggs" />
-              <div className="card-content">
-                <h4>Farm Eggs</h4>
-                <p>GH₵ 30.00/crate</p>
-                <div className="rating">⭐⭐⭐⭐⭐</div>
-              </div>
-            </div>
-            <div className="floating-card card-4">
-              <img src="/images/pineapple.jpg" alt="Fresh Pineapple" />
-              <div className="card-content">
-                <h4>Fresh Pineapple</h4>
-                <p>GH₵ 20.00/piece</p>
-                <div className="rating">⭐⭐⭐⭐⭐</div>
               </div>
             </div>
           </div>
@@ -387,9 +454,7 @@ const HomePage = () => {
                   </button>
                 ) : (
                   <div className="pwa-install-note">
-                    <strong>
-                      {installHint.title}
-                    </strong>
+                    <strong>{installHint.title}</strong>
                     <span>{installHint.detail}</span>
                   </div>
                 )}
@@ -409,10 +474,10 @@ const HomePage = () => {
                     </div>
                   </div>
                   <div className="pwa-brand-mark">
-                    <img src="/icons/icon-base.svg" alt="Smart Farming 360" />
+                    <img src="/icons/icon-192.png" alt="Smart Farming 360" />
                   </div>
                   <h3>Smart Farming 360</h3>
-                  <p>Fresh from Ghana's farms</p>
+                  <p>Fresh from Ghana&apos;s farms</p>
                   <div className="pwa-app-badges">
                     <span>Fast</span>
                     <span>Installable</span>
@@ -425,7 +490,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* AI-Powered Farming Section */}
       <section className="ai-farming-section">
         <div className="container">
           <div className="section-header">
@@ -480,7 +544,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="features-section">
         <div className="container">
           <div className="section-header">
@@ -490,11 +553,13 @@ const HomePage = () => {
           <div className="features-grid">
             {features.map((feature, index) => (
               <div
-                key={index}
+                key={feature.title}
                 className="feature-card"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="feature-icon">{feature.icon}</div>
+                <div className="feature-icon">
+                  <i className={feature.icon}></i>
+                </div>
                 <h3>{feature.title}</h3>
                 <p>{feature.description}</p>
               </div>
@@ -503,7 +568,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
       <section className="categories-section">
         <div className="container">
           <div className="section-header">
@@ -513,7 +577,7 @@ const HomePage = () => {
           <div className="categories-grid">
             {categories.map((category, index) => (
               <Link
-                key={index}
+                key={category.name}
                 to={`/shop?category=${category.name.toLowerCase()}`}
                 className="category-card"
                 style={{ animationDelay: `${index * 0.1}s` }}
@@ -522,7 +586,7 @@ const HomePage = () => {
                   className="category-icon"
                   style={{ background: category.color }}
                 >
-                  {category.icon}
+                  <i className={category.icon}></i>
                 </div>
                 <h3>{category.name}</h3>
                 <p>{category.count} Products</p>
@@ -532,7 +596,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* How It Works Section */}
       <section className="how-it-works-section">
         <div className="container">
           <div className="section-header">
@@ -542,28 +605,36 @@ const HomePage = () => {
           <div className="steps-grid">
             <div className="step">
               <div className="step-number">1</div>
-              <div className="step-icon">🔍</div>
+              <div className="step-icon">
+                <i className="fas fa-search"></i>
+              </div>
               <h3>Browse Products</h3>
               <p>Explore thousands of fresh products from local farmers</p>
             </div>
             <div className="step-arrow">→</div>
             <div className="step">
               <div className="step-number">2</div>
-              <div className="step-icon">🛒</div>
+              <div className="step-icon">
+                <i className="fas fa-shopping-cart"></i>
+              </div>
               <h3>Add to Cart</h3>
               <p>Select your favorite products and add them to cart</p>
             </div>
             <div className="step-arrow">→</div>
             <div className="step">
               <div className="step-number">3</div>
-              <div className="step-icon">💳</div>
+              <div className="step-icon">
+                <i className="fas fa-credit-card"></i>
+              </div>
               <h3>Checkout</h3>
               <p>Secure payment with multiple options available</p>
             </div>
             <div className="step-arrow">→</div>
             <div className="step">
               <div className="step-number">4</div>
-              <div className="step-icon">🚚</div>
+              <div className="step-icon">
+                <i className="fas fa-truck"></i>
+              </div>
               <h3>Get Delivered</h3>
               <p>Fast delivery right to your doorstep</p>
             </div>
@@ -571,7 +642,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="testimonials-section">
         <div className="container">
           <div className="section-header">
@@ -581,16 +651,16 @@ const HomePage = () => {
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
               <div
-                key={index}
+                key={testimonial.name}
                 className="testimonial-card"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="testimonial-rating">
-                  {Array(testimonial.rating).fill("⭐").join("")}
+                  {Array.from({ length: testimonial.rating }, () => "★").join("")}
                 </div>
                 <p className="testimonial-text">"{testimonial.text}"</p>
                 <div className="testimonial-author">
-                  <div className="author-avatar">{testimonial.image}</div>
+                  <div className="author-avatar">{testimonial.avatar}</div>
                   <div className="author-info">
                     <h4>{testimonial.name}</h4>
                     <p>{testimonial.role}</p>
@@ -602,7 +672,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="cta-section">
         <div className="container">
           <div className="cta-content">
@@ -624,7 +693,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="footer">
         <div className="container">
           <div className="footer-grid">

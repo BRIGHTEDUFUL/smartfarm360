@@ -2481,3 +2481,328 @@
         height: 48px;
     }
 }
+
+/* Render polish overrides */
+.hero-content {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 500px);
+    grid-template-areas:
+        "copyTop image"
+        "copyBottom image";
+    align-items: start;
+}
+
+.hero-copy-top {
+    grid-area: copyTop;
+    animation: fadeInLeft 0.9s ease-out;
+}
+
+.hero-copy-bottom {
+    grid-area: copyBottom;
+    max-width: 620px;
+}
+
+.hero-image {
+    grid-area: image;
+    align-self: center;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    overscroll-behavior: auto !important;
+    touch-action: auto !important;
+}
+
+.hero-buttons .hero-btn-secondary {
+    background: rgba(255, 255, 255, 0.94);
+    color: #0d5415 !important;
+    border: 1px solid rgba(255, 255, 255, 0.98);
+    box-shadow: 0 12px 28px rgba(7, 38, 11, 0.2);
+}
+
+.hero-buttons .hero-btn-secondary i {
+    color: #f59e0b !important;
+}
+
+.hero-buttons .hero-btn-secondary:hover {
+    background: #ffffff;
+    color: #0a3d0f !important;
+    transform: translateY(-3px);
+}
+
+.region-card {
+    margin-bottom: 18px;
+}
+
+.region-icon i {
+    font-size: 38px;
+    color: #ffffff;
+}
+
+.region-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.region-nav-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.region-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.34);
+}
+
+.region-progress-group {
+    flex: 1;
+    min-width: 0;
+}
+
+.region-progress-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.region-progress-label span,
+.region-progress-label strong {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.region-progress-label span {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.region-progress-label strong {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.region-progress-track {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.region-progress-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.45);
+}
+
+.rating {
+    letter-spacing: 0.14em;
+    color: #f59e0b;
+}
+
+.feature-icon i,
+.category-icon i,
+.step-icon i {
+    font-size: inherit;
+}
+
+.author-avatar {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+@media (max-width: 960px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "copyTop"
+            "image"
+            "copyBottom";
+        gap: 18px;
+        padding: 48px 24px 44px;
+    }
+
+    .hero-copy-top,
+    .hero-copy-bottom {
+        max-width: 100%;
+    }
+
+    .hero-image {
+        width: min(100%, 420px) !important;
+        height: 350px !important;
+        margin: 6px auto 2px !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        animation: fadeInRight 0.9s ease-out;
+    }
+
+    .hero-image .floating-card {
+        position: absolute !important;
+        width: 182px !important;
+        animation-duration: 6s !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 112px !important;
+        opacity: 1 !important;
+        animation: none !important;
+    }
+
+    .hero-image .card-content {
+        padding: 12px 14px !important;
+    }
+
+    .hero-image .card-content h4 {
+        font-size: 14px !important;
+    }
+
+    .hero-image .card-content p {
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 32px 16px 42px;
+        gap: 16px;
+    }
+
+    .hero-title {
+        font-size: 42px;
+        margin-bottom: 16px;
+    }
+
+    .hero-image {
+        width: min(100%, 330px) !important;
+        height: 300px !important;
+        margin-top: 4px !important;
+    }
+
+    .hero-image .floating-card {
+        width: 148px !important;
+        border-radius: 16px;
+    }
+
+    .card-1 {
+        top: 8px;
+        left: 0;
+    }
+
+    .card-2 {
+        top: 26px;
+        right: 0;
+    }
+
+    .card-3 {
+        bottom: 14px;
+        left: 10px;
+    }
+
+    .card-4 {
+        top: 132px;
+        right: 30px;
+        transform: none !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 94px !important;
+    }
+
+    .hero-image .card-content {
+        padding: 10px 12px !important;
+    }
+
+    .hero-buttons {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .hero-buttons .btn {
+        font-size: 14px;
+        padding: 14px 12px;
+    }
+
+    .regional-showcase {
+        padding: 18px 16px;
+    }
+
+    .region-icon {
+        width: 58px;
+        height: 58px;
+    }
+
+    .region-icon i {
+        font-size: 28px;
+    }
+
+    .region-controls {
+        gap: 10px;
+    }
+
+    .region-nav-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 36px !important;
+    }
+
+    .hero-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-image {
+        width: min(100%, 296px) !important;
+        height: 270px !important;
+    }
+
+    .hero-image .floating-card {
+        width: 132px !important;
+    }
+
+    .hero-image .floating-card img {
+        height: 86px !important;
+    }
+
+    .region-card {
+        gap: 12px;
+    }
+
+    .region-info h3 {
+        font-size: 18px !important;
+    }
+
+    .region-progress-label {
+        gap: 8px;
+    }
+
+    .region-progress-label span {
+        font-size: 11px;
+    }
+
+    .region-progress-label strong {
+        font-size: 12px;
+    }
+}

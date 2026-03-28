@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const APP_SHELL_CACHE = `sf360-app-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `sf360-runtime-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";
