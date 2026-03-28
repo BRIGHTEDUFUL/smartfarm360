@@ -240,6 +240,8 @@ const renderStars = (count: number) =>
     <i key={index} className="fas fa-star" aria-hidden="true"></i>
   ));
 
+const mobileHeroCards = [...heroCards, ...heroCards];
+
 const HomePage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -333,7 +335,10 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="hero-image" aria-label="Featured products">
+          <div
+            className="hero-image hero-image-desktop"
+            aria-label="Featured products"
+          >
             {heroCards.map((card) => (
               <div key={card.title} className={`floating-card ${card.className}`}>
                 <img src={card.image} alt={card.title} />
@@ -346,6 +351,29 @@ const HomePage = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div
+            className="hero-image-mobile"
+            aria-label="Featured products slideshow"
+          >
+            <div className="hero-mobile-track">
+              {mobileHeroCards.map((card, index) => (
+                <div
+                  key={`${card.title}-${index}`}
+                  className="hero-mobile-card"
+                >
+                  <img src={card.image} alt={card.title} />
+                  <div className="hero-mobile-card-content">
+                    <h4>{card.title}</h4>
+                    <p>{card.price}</p>
+                    <div className="rating" aria-label="Five star produce">
+                      {renderStars(5)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="hero-copy-bottom">
