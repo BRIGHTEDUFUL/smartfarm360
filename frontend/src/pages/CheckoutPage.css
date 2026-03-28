@@ -3,10 +3,6 @@
    ═══════════════════════════════════════════════════════════ */
 
 /* Global text visibility fix */
-.checkout-page * {
-  color: inherit;
-}
-
 .checkout-page h1,
 .checkout-page h2,
 .checkout-page h3,
@@ -247,6 +243,34 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
   transition: all 0.3s ease;
   background: #fff;
+  color: #111827;
+  caret-color: #111827;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+.form-group select,
+.form-group option {
+  color: #111827;
+}
+
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group textarea:-webkit-autofill,
+.form-group textarea:-webkit-autofill:hover,
+.form-group textarea:-webkit-autofill:focus,
+.form-group select:-webkit-autofill,
+.form-group select:-webkit-autofill:hover,
+.form-group select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111827;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 .form-group input:focus,

@@ -48,6 +48,18 @@ const CheckoutPage = () => {
     }
   }, [items, navigate]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      customer_name:
+        `${user.first_name || ""} ${user.last_name || ""}`.trim(),
+      customer_email: user.email || "",
+      customer_phone: user.phone || "",
+    }));
+  }, [user]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -138,7 +150,7 @@ const CheckoutPage = () => {
 
       // Clear cart
       console.log("Clearing cart...");
-      clearCart();
+      await clearCart();
 
       // Show success message
       toast.success(

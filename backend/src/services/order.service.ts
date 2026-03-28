@@ -121,18 +121,21 @@ export class OrderService {
         (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) as item_count
       FROM orders o
     `;
+    const params: number[] = [];
 
     if (role === 'Consumer') {
       sql += ' WHERE o.user_id = ?';
+      params.push(userId);
     } else if (role === 'Farmer') {
       sql += ` WHERE o.id IN (
         SELECT DISTINCT order_id FROM order_items WHERE farmer_id = ?
       )`;
+      params.push(userId);
     }
 
     sql += ' ORDER BY o.created_at DESC';
 
-    const result = await query(sql, [userId]);
+    const result = await query(sql, params);
     return result.rows;
   }
 
