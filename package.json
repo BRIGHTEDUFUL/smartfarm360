@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "install:all:ci": "npm --prefix backend ci --include=dev && npm --prefix frontend ci --include=dev",
+    "install:all:ci": "cd backend && npm ci --include=dev && cd ../frontend && npm ci --include=dev",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
