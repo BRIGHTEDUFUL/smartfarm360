@@ -1,346 +1,432 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
 
-/* CACHE BUSTER v3.0 - MOBILE INTERACTION FIX - 2026-03-23 */
+/* CACHE BUSTER v3.3 - RESPONSIVE ENHANCEMENTS - 2026-03-24 */
+
+/* Reduced Motion Support for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
 
 :root {
-  /* Deep Green Primary Colors - Professional Forest Green */
-  --primary: #0D5415;
-  --primary-dark: #0A3D0F;
-  --primary-light: #A7F3D0;
-  --primary-gradient: linear-gradient(135deg, #0D5415 0%, #0A3D0F 100%);
-  --primary-glow: 0 0 30px rgba(13, 84, 21, 0.4);
-  
-  /* Vivid Secondary Colors - Bright Orange/Amber */
-  --secondary: #F59E0B;
-  --secondary-dark: #D97706;
-  --secondary-light: #FCD34D;
-  --secondary-gradient: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
-  
-  /* Accent Colors - Rich Purple & Pink */
-  --accent-purple: #7C3AED;
-  --accent-pink: #DB2777;
-  --accent-blue: #2563EB;
-  --accent-red: #DC2626;
-  --accent-teal: #0D9488;
-  
-  /* Gradient Combinations */
-  --gradient-primary: linear-gradient(135deg, #0D5415 0%, #1B7E28 50%, #0A3D0F 100%);
-  --gradient-secondary: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
-  --gradient-purple: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 50%, #7C3AED 100%);
-  --gradient-pink: linear-gradient(135deg, #F9A8D4 0%, #EC4899 50%, #DB2777 100%);
-  --gradient-blue: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%);
-  --gradient-sunset: linear-gradient(135deg, #F59E0B 0%, #EC4899 50%, #8B5CF6 100%);
-  --gradient-ocean: linear-gradient(135deg, #14B8A6 0%, #3B82F6 50%, #8B5CF6 100%);
-  --gradient-forest: linear-gradient(135deg, #0D5415 0%, #1B7E28 50%, #0A3D0F 100%);
-  
-  /* Rich Background Colors */
-  --dark: #1a1a1a;
-  --gray: #2d3748;
-  --light-gray: #FFFFFF;
-  --white: #FFFFFF;
-  --border: #E2E8F0;
-  
-  /* Vibrant Shadows with Color */
-  --shadow-sm: 0 2px 8px rgba(13, 84, 21, 0.08);
-  --shadow: 0 4px 20px rgba(13, 84, 21, 0.12);
-  --shadow-lg: 0 12px 40px rgba(13, 84, 21, 0.18);
-  --shadow-xl: 0 32px 64px rgba(13, 84, 21, 0.25);
-  --shadow-colored: 0 8px 32px rgba(13, 84, 21, 0.3);
-  --shadow-glow: 0 0 40px rgba(13, 84, 21, 0.4);
-  
-  /* Enhanced Radius */
-  --radius: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  
-  /* Smooth Transitions */
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  
-  /* Font */
-  --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    /* Deep Green Primary Colors - Professional Forest Green */
+    --primary: #0d5415;
+    --primary-dark: #0a3d0f;
+    --primary-light: #a7f3d0;
+    --primary-gradient: linear-gradient(135deg, #0d5415 0%, #0a3d0f 100%);
+    --primary-glow: 0 0 30px rgba(13, 84, 21, 0.4);
+
+    /* Vivid Secondary Colors - Bright Orange/Amber */
+    --secondary: #f59e0b;
+    --secondary-dark: #d97706;
+    --secondary-light: #fcd34d;
+    --secondary-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+    /* Accent Colors - Rich Purple & Pink */
+    --accent-purple: #7c3aed;
+    --accent-pink: #db2777;
+    --accent-blue: #2563eb;
+    --accent-red: #dc2626;
+    --accent-teal: #0d9488;
+
+    /* Gradient Combinations */
+    --gradient-primary: linear-gradient(
+        135deg,
+        #0d5415 0%,
+        #1b7e28 50%,
+        #0a3d0f 100%
+    );
+    --gradient-secondary: linear-gradient(
+        135deg,
+        #fbbf24 0%,
+        #f59e0b 50%,
+        #d97706 100%
+    );
+    --gradient-purple: linear-gradient(
+        135deg,
+        #a78bfa 0%,
+        #8b5cf6 50%,
+        #7c3aed 100%
+    );
+    --gradient-pink: linear-gradient(
+        135deg,
+        #f9a8d4 0%,
+        #ec4899 50%,
+        #db2777 100%
+    );
+    --gradient-blue: linear-gradient(
+        135deg,
+        #60a5fa 0%,
+        #3b82f6 50%,
+        #2563eb 100%
+    );
+    --gradient-sunset: linear-gradient(
+        135deg,
+        #f59e0b 0%,
+        #ec4899 50%,
+        #8b5cf6 100%
+    );
+    --gradient-ocean: linear-gradient(
+        135deg,
+        #14b8a6 0%,
+        #3b82f6 50%,
+        #8b5cf6 100%
+    );
+    --gradient-forest: linear-gradient(
+        135deg,
+        #0d5415 0%,
+        #1b7e28 50%,
+        #0a3d0f 100%
+    );
+
+    /* Rich Background Colors */
+    --dark: #1a1a1a;
+    --gray: #2d3748;
+    --light-gray: #ffffff;
+    --white: #ffffff;
+    --border: #e2e8f0;
+
+    /* Vibrant Shadows with Color */
+    --shadow-sm: 0 2px 8px rgba(13, 84, 21, 0.08);
+    --shadow: 0 4px 20px rgba(13, 84, 21, 0.12);
+    --shadow-lg: 0 12px 40px rgba(13, 84, 21, 0.18);
+    --shadow-xl: 0 32px 64px rgba(13, 84, 21, 0.25);
+    --shadow-colored: 0 8px 32px rgba(13, 84, 21, 0.3);
+    --shadow-glow: 0 0 40px rgba(13, 84, 21, 0.4);
+
+    /* Enhanced Radius */
+    --radius: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+
+    /* Smooth Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Font */
+    --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: var(--font);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font);
 }
 
 html {
-  scroll-behavior: smooth;
-  touch-action: manipulation;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    scroll-behavior: smooth;
+    /* Allow vertical scroll and pinch zoom */
+    touch-action: auto;
+    -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
 }
 
 /* Re-enable text selection for content */
-p, span, h1, h2, h3, h4, h5, h6, li, td, th, label, input, textarea {
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+td,
+th,
+label,
+input,
+textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 /* Ensure interactive elements are clickable and have proper cursor */
-button, a, select {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: pointer;
-  pointer-events: auto !important;
+button,
+a,
+select,
+[role="button"],
+[onclick] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(13, 84, 21, 0.2);
 }
 
 body {
-  background: #FFFFFF;
-  color: var(--dark);
-  line-height: 1.6;
-  overflow-x: hidden;
-  touch-action: pan-y pinch-zoom;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
-  overscroll-behavior-y: contain;
-  -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
+    background: #ffffff;
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Allow vertical scroll and pinch zoom */
+    touch-action: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    overscroll-behavior-y: contain;
+    -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
 }
 
 a {
-  text-decoration: none;
-  color: inherit;
-  pointer-events: auto !important;
-  cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    pointer-events: auto !important;
+    cursor: pointer;
 }
 
 img {
-  display: block;
-  width: 100%;
-  object-fit: cover;
+    display: block;
+    width: 100%;
+    object-fit: cover;
 }
 
 button {
-  cursor: pointer;
-  font-family: var(--font);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  background: none;
-  touch-action: manipulation;
-  pointer-events: auto !important;
+    cursor: pointer;
+    font-family: var(--font);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    background: none;
+    touch-action: manipulation;
+    pointer-events: auto !important;
 }
 
 /* Input and form element resets for cross-platform consistency */
 input,
 select,
 textarea {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border-radius: 0;
-  font-family: var(--font);
-  pointer-events: auto !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    font-family: var(--font);
+    pointer-events: auto !important;
 }
 
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
-  -webkit-appearance: none;
+    -webkit-appearance: none;
 }
 
 /* Scrollbar - Cross-browser support */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+    width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
-  transition: background 0.3s ease;
+    background: var(--primary);
+    border-radius: 4px;
+    transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
+    background: var(--primary-dark);
 }
 
 /* Firefox scrollbar */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary) #f1f1f1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) #f1f1f1;
 }
 
 /* IE/Edge scrollbar */
 body {
-  -ms-overflow-style: scrollbar;
+    -ms-overflow-style: scrollbar;
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideIn {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .loading-spinner {
-  border: 3px solid var(--border);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 0.8s linear infinite;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
 }
 
 /* Selection */
 ::selection {
-  background: var(--primary-light);
-  color: var(--primary-dark);
+    background: var(--primary-light);
+    color: var(--primary-dark);
 }
 
 /* Focus visible */
 *:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
-/* Smooth transitions for all interactive elements */
-button, a, input, select, textarea {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Smooth transitions for all interactive elements
+   Use specific composited properties — never "all" (causes scroll jank) */
+button,
+a,
+input,
+select,
+textarea {
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
 }
 
 /* Reduced motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 /* Enhanced Mobile Responsiveness */
 @media (max-width: 768px) {
-  /* Improve touch targets - minimum 44x44px */
-  button,
-  a,
-  input[type="button"],
-  input[type="submit"],
-  input[type="checkbox"],
-  input[type="radio"] {
-    min-height: 44px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
-  }
-
-  /* Better mobile spacing */
-  body {
-    font-size: 16px; /* Prevent zoom on iOS */
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  /* Prevent horizontal scroll */
-  html, body {
-    overflow-x: hidden;
-    max-width: 100vw;
-    position: relative;
-  }
-
-  /* Better mobile input styling */
-  input,
-  select,
-  textarea {
-    font-size: 16px; /* Prevent zoom on iOS */
-    touch-action: manipulation;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
-
-  /* Ensure all interactive elements are touchable */
-  a, button, input, select, textarea, label {
-    -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
-    -webkit-touch-callout: none;
-  }
-
-  /* Prevent pull-to-refresh on mobile */
-  body {
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Smooth momentum scrolling */
-  * {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Fix for iOS Safari bottom bar */
-  @supports (-webkit-touch-callout: none) {
-    body {
-      min-height: -webkit-fill-available;
+    /* Improve touch targets - minimum 44x44px */
+    button,
+    a,
+    input[type="button"],
+    input[type="submit"],
+    input[type="checkbox"],
+    input[type="radio"] {
+        min-height: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
     }
-  }
+
+    /* Better mobile spacing */
+    body {
+        font-size: 16px; /* Prevent zoom on iOS */
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Prevent horizontal scroll — only body, never html.
+       Setting overflow-x:hidden on html makes it a new scroll
+       container and breaks touch scroll entirely. */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Better mobile input styling */
+    input,
+    select,
+    textarea {
+        font-size: 16px; /* Prevent zoom on iOS */
+        touch-action: manipulation;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    /* Ensure all interactive elements are touchable */
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    label {
+        -webkit-tap-highlight-color: rgba(13, 84, 21, 0.1);
+        -webkit-touch-callout: none;
+    }
+
+    /* Prevent pull-to-refresh on mobile */
+    body {
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Smooth momentum scrolling */
+    * {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Fix for iOS Safari bottom bar */
+    @supports (-webkit-touch-callout: none) {
+        body {
+            min-height: -webkit-fill-available;
+        }
+    }
 }
 
 /* Extra small devices */
 @media (max-width: 375px) {
-  :root {
-    --radius: 8px;
-    --radius-lg: 12px;
-  }
+    :root {
+        --radius: 8px;
+        --radius-lg: 12px;
+    }
 
-  body {
-    font-size: 14px;
-  }
+    body {
+        font-size: 14px;
+    }
 }
 
 /* Landscape mobile optimization */
 @media (max-height: 500px) and (orientation: landscape) {
-  .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -349,40 +435,42 @@ button, a, input, select, textarea {
 
 /* Smooth page transitions */
 .page-transition-enter {
-  opacity: 0;
-  transform: translateY(10px);
+    opacity: 0;
+    transform: translateY(10px);
 }
 
 .page-transition-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms, transform 300ms;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity 300ms,
+        transform 300ms;
 }
 
 .page-transition-exit {
-  opacity: 1;
+    opacity: 1;
 }
 
 .page-transition-exit-active {
-  opacity: 0;
-  transition: opacity 200ms;
+    opacity: 0;
+    transition: opacity 200ms;
 }
 
 /* Enhanced button interactions */
 button:not(:disabled):active {
-  transform: scale(0.98);
+    transform: scale(0.98);
 }
 
 /* Smooth image loading */
 img {
-  opacity: 0;
-  animation: fadeInImage 0.3s ease-in forwards;
+    opacity: 0;
+    animation: fadeInImage 0.3s ease-in forwards;
 }
 
 @keyframes fadeInImage {
-  to {
-    opacity: 1;
-  }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Enhanced focus states for accessibility */
@@ -391,851 +479,1165 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: 4px;
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 /* Skeleton loading animation */
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 8px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* Smooth hover lift effect */
 .hover-lift {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.3s ease;
+    transition:
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease;
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 /* Ripple effect for buttons */
 .ripple {
-  position: relative;
-  overflow: hidden;
+    position: relative;
+    overflow: hidden;
 }
 
 .ripple::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition:
+        width 0.6s,
+        height 0.6s;
 }
 
 .ripple:active::after {
-  width: 300px;
-  height: 300px;
+    width: 300px;
+    height: 300px;
 }
 
 /* Enhanced toast notifications */
 .Toastify__toast {
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  font-family: var(--font);
-  font-weight: 600;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    font-family: var(--font);
+    font-weight: 600;
 }
 
 .Toastify__toast--success {
-  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
 }
 
 .Toastify__toast--error {
-  background: linear-gradient(135deg, #EF5350, #C62828);
+    background: linear-gradient(135deg, #ef5350, #c62828);
 }
 
 .Toastify__toast--info {
-  background: linear-gradient(135deg, #42A5F5, #1976D2);
+    background: linear-gradient(135deg, #42a5f5, #1976d2);
 }
 
 .Toastify__toast--warning {
-  background: linear-gradient(135deg, #FFA726, #F57C00);
+    background: linear-gradient(135deg, #ffa726, #f57c00);
 }
 
 /* Loading spinner enhancement */
 .spinner-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
 }
 
 .spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid rgba(46, 125, 50, 0.1);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(46, 125, 50, 0.1);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
 
 /* Smooth card entrance animations */
 .card-entrance {
-  animation: cardEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation: cardEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
 }
 
 @keyframes cardEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Stagger animation delays */
-.card-entrance:nth-child(1) { animation-delay: 0.05s; }
-.card-entrance:nth-child(2) { animation-delay: 0.1s; }
-.card-entrance:nth-child(3) { animation-delay: 0.15s; }
-.card-entrance:nth-child(4) { animation-delay: 0.2s; }
-.card-entrance:nth-child(5) { animation-delay: 0.25s; }
-.card-entrance:nth-child(6) { animation-delay: 0.3s; }
+.card-entrance:nth-child(1) {
+    animation-delay: 0.05s;
+}
+.card-entrance:nth-child(2) {
+    animation-delay: 0.1s;
+}
+.card-entrance:nth-child(3) {
+    animation-delay: 0.15s;
+}
+.card-entrance:nth-child(4) {
+    animation-delay: 0.2s;
+}
+.card-entrance:nth-child(5) {
+    animation-delay: 0.25s;
+}
+.card-entrance:nth-child(6) {
+    animation-delay: 0.3s;
+}
 
 /* Enhanced input interactions */
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 input:not([type="checkbox"]):not([type="radio"]):hover:not(:disabled),
 select:hover:not(:disabled),
 textarea:hover:not(:disabled) {
-  border-color: var(--primary);
+    border-color: var(--primary);
 }
 
 /* Smooth badge animations */
 .badge {
-  display: inline-block;
-  animation: badgePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-block;
+    animation: badgePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes badgePop {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Enhanced link hover effects */
 a:not(.btn) {
-  position: relative;
-  transition: color 0.3s ease;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
 a:not(.btn)::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width 0.3s ease;
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
 }
 
 a:not(.btn):hover::after {
-  width: 100%;
+    width: 100%;
 }
 
 /* Smooth modal animations */
 .modal-overlay {
-  animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-  animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Enhanced checkbox and radio styles */
 input[type="checkbox"],
 input[type="radio"] {
-  cursor: pointer;
-  transition: all 0.2s ease;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-  animation: checkPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: checkPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes checkPop {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Performance optimizations */
 * {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 /* GPU acceleration for animations - Cross-browser */
 .animate-gpu {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  will-change: transform;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-perspective: 1000;
-  -moz-perspective: 1000;
-  -ms-perspective: 1000;
-  perspective: 1000;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    -ms-perspective: 1000;
+    perspective: 1000;
 }
 
 /* Prevent layout shift */
 img,
 video {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
 }
 
 /* Enhanced table responsiveness */
 @media (max-width: 768px) {
-  table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-  }
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
 }
 
 /* Print styles */
 @media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  body {
-    background: white;
-  }
-  
-  a {
-    text-decoration: underline;
-  }
-}
+    .no-print {
+        display: none !important;
+    }
 
+    body {
+        background: white;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+}
 
 /* ═══════════════════════════════════════════════════════════
    ENHANCED MOBILE RESPONSIVENESS - NATIVE APP FEEL
    ═══════════════════════════════════════════════════════════ */
 
-/* Touch-friendly tap targets */
+/* Touch-friendly tap targets — only on true controls, not bare <a> text links */
 @media (hover: none) and (pointer: coarse) {
-  button,
-  a,
-  input,
-  select,
-  textarea {
-    min-height: 44px;
-    min-width: 44px;
-  }
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    .btn,
+    .nav-btn,
+    .btb-tab,
+    .cat-item,
+    .add-cart-btn,
+    .qty-btn,
+    .checkout-btn,
+    .card-wishlist,
+    .nav-icon-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
 }
 
 /* Smooth scrolling on mobile */
 @media (max-width: 768px) {
-  html {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  body {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-  }
-
-  /* Prevent zoom on input focus */
-  input,
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-
-  /* Better button touch feedback */
-  button,
-  .btn {
-    -webkit-tap-highlight-color: rgba(16, 185, 129, 0.2);
-    touch-action: manipulation;
-  }
-
-  /* Optimize animations for mobile */
-  * {
-    animation-duration: 0.3s !important;
-  }
-
-  /* Reduce motion for better performance */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+    html {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
     }
-  }
+
+    body {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+    }
+
+    /* Prevent zoom on input focus */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Better button touch feedback */
+    button,
+    .btn {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
 }
 
 /* Mobile-first container improvements */
 @media (max-width: 1200px) {
-  .container {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
+    .container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 
-  /* Stack grids on mobile */
-  .grid,
-  .features-grid,
-  .categories-grid,
-  .testimonials-grid {
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-  }
+    /* Stack generic grids on mobile (page-specific grids are controlled
+       in their own CSS files, so we only target the bare utility class) */
+    .grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
 
-  /* Improve card spacing */
-  .card,
-  .feature-card,
-  .category-card,
-  .testimonial-card {
-    margin-bottom: 16px;
-  }
+    /* Improve card spacing */
+    .card,
+    .feature-card,
+    .category-card,
+    .testimonial-card {
+        margin-bottom: 16px;
+    }
 
-  /* Better typography on mobile */
-  h1 {
-    font-size: clamp(2rem, 8vw, 3rem) !important;
-    line-height: 1.2 !important;
-  }
+    /* Typography — let page-specific CSS handle headings;
+       only enforce minimum readability here */
+    p {
+        line-height: 1.6 !important;
+    }
 
-  h2 {
-    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
-    line-height: 1.3 !important;
-  }
+    /* Form inputs: 16px prevents iOS auto-zoom */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
 
-  h3 {
-    font-size: clamp(1.25rem, 5vw, 1.75rem) !important;
-  }
+    /* Improve modal/dialog on mobile */
+    .modal,
+    .dialog {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 20px auto !important;
+    }
 
-  p {
-    font-size: clamp(0.9375rem, 4vw, 1.125rem) !important;
-    line-height: 1.6 !important;
-  }
+    /* Better navbar on mobile */
+    .navbar {
+        padding: 12px 20px !important;
+    }
 
-  /* Improve button sizing */
-  .btn {
-    padding: 14px 28px !important;
-    font-size: 1rem !important;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .btn-large {
-    padding: 18px 36px !important;
-    font-size: 1.125rem !important;
-  }
-
-  /* Better form inputs */
-  input,
-  select,
-  textarea {
-    padding: 14px 16px !important;
-    font-size: 16px !important;
-    border-radius: 12px !important;
-  }
-
-  /* Improve modal/dialog on mobile */
-  .modal,
-  .dialog {
-    width: 95% !important;
-    max-width: 95% !important;
-    margin: 20px auto !important;
-  }
-
-  /* Better navbar on mobile */
-  .navbar {
-    padding: 12px 20px !important;
-  }
-
-  /* Improve footer on mobile */
-  .footer-grid {
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-    text-align: center !important;
-  }
+    /* Improve footer on mobile */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+        text-align: center !important;
+    }
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 
-  /* Even smaller spacing on small phones */
-  section {
-    padding: 60px 0 !important;
-  }
+    /* Even smaller spacing on small phones */
+    section {
+        padding: 60px 0 !important;
+    }
 
-  .card,
-  .feature-card {
-    padding: 20px !important;
-  }
+    .card,
+    .feature-card {
+        padding: 20px !important;
+    }
 
-  /* Compact buttons */
-  .btn {
-    padding: 12px 24px !important;
-    font-size: 0.9375rem !important;
-  }
+    /* Compact buttons */
+    .btn {
+        padding: 12px 24px !important;
+        font-size: 0.9375rem !important;
+    }
 
-  /* Smaller icons */
-  .icon,
-  .feature-icon {
-    font-size: 2rem !important;
-  }
+    /* Smaller icons */
+    .icon,
+    .feature-icon {
+        font-size: 2rem !important;
+    }
 }
 
 @media (max-width: 360px) {
-  .container {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
 
-  /* Ultra-compact for very small screens */
-  h1 {
-    font-size: 1.75rem !important;
-  }
+    /* Ultra-compact for very small screens */
+    h1 {
+        font-size: 1.75rem !important;
+    }
 
-  h2 {
-    font-size: 1.5rem !important;
-  }
+    h2 {
+        font-size: 1.5rem !important;
+    }
 
-  .btn {
-    padding: 10px 20px !important;
-    font-size: 0.875rem !important;
-  }
+    .btn {
+        padding: 10px 20px !important;
+        font-size: 0.875rem !important;
+    }
 }
 
 /* Landscape orientation optimizations */
 @media (max-height: 500px) and (orientation: landscape) {
-  .hero-section {
-    min-height: auto !important;
-    padding: 40px 0 !important;
-  }
+    .hero-section {
+        min-height: auto !important;
+        padding: 40px 0 !important;
+    }
 
-  .hero-content {
-    flex-direction: row !important;
-  }
+    .hero-content {
+        flex-direction: row !important;
+    }
 
-  section {
-    padding: 40px 0 !important;
-  }
+    section {
+        padding: 40px 0 !important;
+    }
 }
 
 /* High DPI screens (Retina) */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  img {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
+    img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --light-gray: #1E293B;
-    --white: #0F172A;
-    --dark: #F8FAFC;
-    --border: #334155;
-  }
+    :root {
+        --light-gray: #1e293b;
+        --white: #0f172a;
+        --dark: #f8fafc;
+        --border: #334155;
+    }
 }
 
 /* Safe area insets for notched devices - All platforms */
 @supports (padding: max(0px)) {
-  body {
-    padding-left: max(0px, env(safe-area-inset-left));
-    padding-right: max(0px, env(safe-area-inset-right));
-  }
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
 
-  .navbar {
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
-  }
+    .navbar {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
 
-  .container {
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
-  }
+    .container {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
 }
 
 /* iOS-specific safe area support */
 @supports (-webkit-touch-callout: none) {
-  body {
-    padding-left: constant(safe-area-inset-left);
-    padding-right: constant(safe-area-inset-right);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
+    body {
+        padding-left: constant(safe-area-inset-left);
+        padding-right: constant(safe-area-inset-right);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
 }
 
 /* PWA standalone mode adjustments - All platforms */
 @media (display-mode: standalone) {
-  body {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
 
-  .navbar {
-    padding-top: max(12px, env(safe-area-inset-top));
-  }
+    .navbar {
+        padding-top: max(12px, env(safe-area-inset-top));
+    }
 }
 
 /* iOS PWA specific */
 @media (display-mode: standalone) and (-webkit-touch-callout: none) {
-  body {
-    padding-top: constant(safe-area-inset-top);
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+    body {
+        padding-top: constant(safe-area-inset-top);
+        padding-bottom: constant(safe-area-inset-bottom);
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
 }
 
 /* Improve touch scrolling */
 .scrollable {
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
 }
 
 /* Better focus states for accessibility */
 @media (hover: none) {
-  *:focus {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-  }
+    *:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
 }
 
 /* Optimize images for mobile */
 @media (max-width: 768px) {
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
 }
 
 /* Native app-like transitions */
 .page-transition {
-  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* Pull-to-refresh indicator space */
 @media (max-width: 768px) {
-  body {
-    overscroll-behavior-y: contain;
-  }
+    body {
+        overscroll-behavior-y: contain;
+    }
 }
 
 /* Improve card interactions on mobile */
 @media (hover: none) {
-  .card:active,
-  .feature-card:active,
-  .category-card:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
+    .card:active,
+    .feature-card:active,
+    .category-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    MOBILE TEXT VISIBILITY FIX v3.0 - COMPREHENSIVE
    ═══════════════════════════════════════════════════════════ */
 
 /* Global text visibility - all devices */
-h1, h2, h3, h4, h5, h6 {
-  color: #1a1a1a !important;
-  opacity: 1 !important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #1a1a1a !important;
+    opacity: 1 !important;
 }
 
-label, strong, b {
-  color: #1a1a1a !important;
-  opacity: 1 !important;
+label,
+strong,
+b {
+    color: #1a1a1a !important;
+    opacity: 1 !important;
 }
 
-p, span {
-  color: #2d3748 !important;
-  opacity: 1 !important;
+p,
+span {
+    color: #2d3748 !important;
+    opacity: 1 !important;
 }
 
 /* Mobile-specific text visibility enhancements */
 @media (max-width: 768px) {
-  /* Enhanced font rendering on mobile */
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
+    /* Enhanced font rendering on mobile */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
 
-  /* Force high contrast on all text elements */
-  h1, h2, h3, h4, h5, h6 {
-    color: #1a1a1a !important;
-    font-weight: 700 !important;
-    opacity: 1 !important;
-  }
+    /* High contrast headings only inside content areas (not nav/hero) */
+    .home-page section:not(.hero-section):not(.testimonials-section) h1,
+    .home-page section:not(.hero-section):not(.testimonials-section) h2,
+    .home-page section:not(.hero-section):not(.testimonials-section) h3,
+    .shop-page h1,
+    .shop-page h2,
+    .shop-page h3,
+    .cart-page h1,
+    .cart-page h2,
+    .cart-page h3,
+    .orders-page h1,
+    .orders-page h2,
+    .orders-page h3,
+    .farmer-dashboard h1,
+    .farmer-dashboard h2,
+    .farmer-dashboard h3,
+    .admin-dashboard h1,
+    .admin-dashboard h2,
+    .admin-dashboard h3,
+    .checkout-page h1,
+    .checkout-page h2,
+    .checkout-page h3,
+    .about-page h1,
+    .about-page h2,
+    .about-page h3,
+    .contact-page h1,
+    .contact-page h2,
+    .contact-page h3 {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  p, span, div, label, li {
-    color: #2d3748 !important;
-    opacity: 1 !important;
-  }
+    /* Scoped paragraph/span visibility — only in white-bg content sections */
+    .cart-page p,
+    .cart-page span,
+    .orders-page p,
+    .orders-page span,
+    .checkout-page p,
+    .checkout-page span,
+    .farmer-dashboard p,
+    .farmer-dashboard span,
+    .admin-dashboard p,
+    .admin-dashboard span,
+    .about-page p,
+    .about-page span,
+    .contact-page p,
+    .contact-page span {
+        color: #2d3748 !important;
+        opacity: 1 !important;
+    }
 
-  /* Button text visibility */
-  button, .btn {
-    color: inherit !important;
-    font-weight: 700 !important;
-  }
+    /* Button text visibility */
+    button,
+    .btn {
+        color: inherit !important;
+        font-weight: 700 !important;
+    }
 
-  /* Input text visibility */
-  input, select, textarea {
-    color: #1a1a1a !important;
-    opacity: 1 !important;
-  }
+    /* Input text visibility */
+    input,
+    select,
+    textarea {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  input::placeholder {
-    color: #6B7280 !important;
-    opacity: 0.7 !important;
-  }
+    input::placeholder {
+        color: #6b7280 !important;
+        opacity: 0.7 !important;
+    }
 
-  /* Mobile menu text visibility */
-  .nav-links a {
-    color: #1a1a1a !important;
-    font-weight: 600 !important;
-    opacity: 1 !important;
-  }
+    /* Nav mobile actions — colour handled by Navbar.css */
 
-  .nav-links a:hover,
-  .nav-links a.active {
-    color: #FFFFFF !important;
-  }
+    /* Card text visibility on mobile */
+    .product-card .card-name,
+    .product-card .card-category,
+    .product-card .price-amount {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  .nav-actions button,
-  .nav-actions a {
-    color: #1a1a1a !important;
-    font-weight: 700 !important;
-    opacity: 1 !important;
-  }
+    .product-card .card-desc,
+    .product-card .card-farmer,
+    .product-card .price-unit {
+        color: #4a5568 !important;
+        opacity: 1 !important;
+    }
 
-  .nav-user-chip span {
-    color: #1a1a1a !important;
-    font-weight: 700 !important;
-  }
+    /* Dashboard text visibility */
+    .stat-box h3,
+    .stat-box p {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  .nav-user-chip .role {
-    color: #FFFFFF !important;
-  }
+    /* Table text visibility */
+    table th,
+    table td {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  /* Card text visibility on mobile */
-  .product-card .card-name,
-  .product-card .card-category,
-  .product-card .price-amount {
-    color: #1a1a1a !important;
-    opacity: 1 !important;
-  }
+    /* Form label visibility */
+    .form-group label {
+        color: #1a1a1a !important;
+        font-weight: 700 !important;
+        opacity: 1 !important;
+    }
 
-  .product-card .card-desc,
-  .product-card .card-farmer,
-  .product-card .price-unit {
-    color: #4a5568 !important;
-    opacity: 1 !important;
-  }
+    /* Modal text visibility */
+    .modal-header h2,
+    .modal-content h3,
+    .modal-content label {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  /* Dashboard text visibility */
-  .stat-box h3,
-  .stat-box p {
-    color: #1a1a1a !important;
-    opacity: 1 !important;
-  }
+    /* Hero section text on mobile */
+    .shop-hero h1,
+    .shop-hero p,
+    .hero-eyebrow {
+        color: #ffffff !important;
+        opacity: 1 !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
-  /* Table text visibility */
-  table th,
-  table td {
-    color: #1a1a1a !important;
-    opacity: 1 !important;
-  }
+    /* Sidebar text visibility */
+    .sidebar-title,
+    .cat-item {
+        color: #1a1a1a !important;
+        opacity: 1 !important;
+    }
 
-  /* Form label visibility */
-  .form-group label {
-    color: #1a1a1a !important;
-    font-weight: 700 !important;
-    opacity: 1 !important;
-  }
+    /* Footer text visibility */
+    .footer h3,
+    .footer p,
+    .footer a {
+        opacity: 1 !important;
+    }
 
-  /* Modal text visibility */
-  .modal-header h2,
-  .modal-content h3,
-  .modal-content label {
-    color: #1a1a1a !important;
-    opacity: 1 !important;
-  }
+    /* Status badge text */
+    .status-badge {
+        font-weight: 700 !important;
+        opacity: 1 !important;
+    }
 
-  /* Hero section text on mobile */
-  .shop-hero h1,
-  .shop-hero p,
-  .hero-eyebrow {
-    color: #FFFFFF !important;
-    opacity: 1 !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
+    /* Link text visibility */
+    a:not(.btn) {
+        opacity: 1 !important;
+    }
 
-  /* Sidebar text visibility */
-  .sidebar-title,
-  .cat-item {
-    color: #1a1a1a !important;
-    opacity: 1 !important;
-  }
+    /* Ensure minimum font sizes for readability */
+    p {
+        line-height: 1.6 !important;
+    }
 
-  /* Footer text visibility */
-  .footer h3,
-  .footer p,
-  .footer a {
-    opacity: 1 !important;
-  }
-
-  /* Status badge text */
-  .status-badge {
-    font-weight: 700 !important;
-    opacity: 1 !important;
-  }
-
-  /* Link text visibility */
-  a:not(.btn) {
-    opacity: 1 !important;
-  }
-
-  /* Ensure minimum font sizes for readability */
-  p {
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-  }
-
-  h1 {
-    font-size: 28px !important;
-  }
-
-  h2 {
-    font-size: 24px !important;
-  }
-
-  h3 {
-    font-size: 20px !important;
-  }
-
-  h4 {
-    font-size: 18px !important;
-  }
-
-  /* Button text sizing */
-  button, .btn {
-    font-size: 15px !important;
-  }
-
-  /* Input text sizing */
-  input, select, textarea {
-    font-size: 16px !important;
-  }
+    /* Input text sizing — 16px prevents iOS auto-zoom */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
 }
 
 /* Extra small mobile devices */
 @media (max-width: 480px) {
-  /* Ensure text remains readable on very small screens */
-  body {
-    font-size: 14px !important;
-  }
+    /* Ensure inputs don't zoom on very small screens */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
 
-  h1 {
-    font-size: 24px !important;
-  }
+/* ═══════════════════════════════════════════════════════════
+   MOBILE TOUCH INTERACTION FIXES - v3.4
+   ═══════════════════════════════════════════════════════════ */
 
-  h2 {
-    font-size: 20px !important;
-  }
+/* Ensure all interactive elements are touchable on mobile */
+@media (max-width: 768px) {
+    /* Minimum touch target size (44x44px per Apple/Google guidelines) */
+    button,
+    a,
+    [role="button"],
+    [onclick],
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    select,
+    .btn,
+    .nav-btn,
+    .add-cart-btn,
+    .card-quick-view,
+    .card-wishlist,
+    .cat-item,
+    .category-card,
+    .product-card,
+    .mobile-menu-toggle {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(13, 84, 21, 0.2);
+        pointer-events: auto !important;
+        cursor: pointer;
+    }
 
-  h3 {
-    font-size: 18px !important;
-  }
+    /* Ensure proper spacing between touch targets */
+    .nav-links a,
+    .nav-actions button {
+        margin-bottom: 4px;
+    }
 
-  p {
-    font-size: 13px !important;
-  }
+    /* On touch, suppress hover-only lift animations (active states still fire) */
+    @media (hover: none) {
+        .feature-card:hover,
+        .category-card:hover,
+        .ai-feature-card:hover,
+        .testimonial-card:hover,
+        .product-card:hover,
+        .floating-card:hover,
+        .cart-btn:hover,
+        .nav-btn:hover {
+            transform: none;
+        }
+    }
 
-  button, .btn {
-    font-size: 14px !important;
-  }
+    /* Improve form input touch targets */
+    input,
+    textarea,
+    select {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        touch-action: manipulation;
+        pointer-events: auto !important;
+    }
+
+    /* Ensure cards are tappable */
+    .product-card,
+    .category-card,
+    .feature-card,
+    .testimonial-card {
+        cursor: pointer;
+        touch-action: manipulation;
+        pointer-events: auto !important;
+    }
+
+    /* Fix for iOS Safari button rendering */
+    button,
+    input[type="button"],
+    input[type="submit"] {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    /* Prevent text selection during touch interactions */
+    .product-card,
+    .category-card,
+    button,
+    .btn {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* Ensure overlay doesn't block interactions */
+    .mobile-menu-overlay {
+        pointer-events: auto !important;
+        touch-action: manipulation;
+    }
+
+    /* Fix for sticky elements on mobile */
+    .topnav {
+        position: -webkit-sticky;
+        position: sticky;
+        will-change: transform;
+    }
+
+    /* Improve scroll performance */
+    .nav-links,
+    .nav-actions,
+    .products-grid,
+    .shop-main {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    /* Images: allow drag-select on desktop but prevent long-press callout on iOS */
+    img {
+        -webkit-touch-callout: none;
+        -webkit-user-drag: none;
+    }
+
+    /* Ensure all card links remain tappable */
+    .product-card a,
+    .category-card a,
+    .feature-card a {
+        pointer-events: auto !important;
+        touch-action: manipulation;
+    }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+    /* Increase touch targets on very small screens */
+    button,
+    .btn,
+    .nav-btn {
+        min-height: 48px;
+        padding: 12px 20px;
+    }
+
+    /* Ensure text is readable */
+    body {
+        font-size: 16px;
+    }
+
+    /* Prevent horizontal scroll */
+    body {
+        overflow-x: hidden;
+    }
+}
+
+/* Landscape mode on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    /* Reduce vertical spacing in landscape */
+    .topnav-inner {
+        height: 48px;
+    }
+
+    .nav-links {
+        top: 48px;
+        max-height: calc(100vh - 48px);
+    }
+
+    /* Ensure menu is scrollable in landscape */
+    .nav-links,
+    .nav-actions {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Fix for Android Chrome address bar */
+@supports (-webkit-touch-callout: none) {
+    body {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Prevent double-tap zoom on buttons */
+button,
+a,
+[role="button"] {
+    touch-action: manipulation;
+}
+
+/* Ensure proper z-index stacking */
+.topnav {
+    z-index: 1000;
+}
+
+.mobile-menu-overlay {
+    z-index: 997;
+}
+
+.nav-links.mobile-open {
+    z-index: 999;
+}
+
+.nav-actions.mobile-open {
+    z-index: 998;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NATIVE APP LAYOUT — v4.0
+   Bottom tab bar clearance + app shell
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── App main wrapper ──────────────────────────────────── */
+.app-main {
+    flex: 1;
+    min-height: 0;
+}
+
+/* ── Bottom tab bar clearance for every page ───────────── */
+/* All direct page roots get auto-padding on mobile so content
+   never hides behind the 60px + safe-area bottom bar           */
+@media (max-width: 768px) {
+    .app-main > * {
+        padding-bottom: calc(
+            72px + env(safe-area-inset-bottom, 0px)
+        ) !important;
+    }
+
+    /* Override for pages that already set a bottom padding via
+     their own CSS — ensure we never go below the tab bar       */
+    .home-page,
+    .shop-page,
+    .cart-page,
+    .checkout-page,
+    .orders-page,
+    .farmer-dashboard,
+    .admin-dashboard,
+    .contact-page,
+    .about-page,
+    .auth-page,
+    .product-detail-page {
+        padding-bottom: calc(
+            72px + env(safe-area-inset-bottom, 0px)
+        ) !important;
+    }
+
+    /* Sticky sidebars / summaries must not stick under the bar */
+    .cart-summary-section,
+    .order-summary-section {
+        bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+/* ── Remove the global link-underline animation ─────────── */
+/* It was causing broken underline decorations on nav items  */
+a:not(.btn)::after {
+    display: none !important;
+}
+
+/* ── Navbar white text override ─────────────────────────── */
+/* The global `p, span { color: #2d3748 !important }` rule   */
+/* was bleeding into the green navbar — override it here.    */
+.topnav span,
+.topnav p,
+.topnav a,
+.topnav button,
+.nav-logo,
+.nav-logo-text,
+.nav-link,
+.nav-btn,
+.nav-user-chip,
+.chip-name {
+    color: #ffffff !important;
+}
+
+.chip-role {
+    color: #ffffff !important;
+}
+
+/* Bottom tab bar text must use its own colors */
+.btb-tab {
+    color: #9ca3af !important;
+}
+
+.btb-tab.active {
+    color: #0d5415 !important;
+}
+
+.btb-tab .btb-label {
+    color: inherit !important;
+}
+
+.btb-sheet * {
+    /* sheet lives outside the green nav, respect its own palette */
+}
+
+.btb-sheet-name {
+    color: #111827 !important;
+}
+
+.btb-sheet-email {
+    color: #6b7280 !important;
+}
+
+.btb-action-text strong {
+    color: #111827 !important;
+}
+
+.btb-action-text small {
+    color: #6b7280 !important;
+}
+
+/* ── Hero / green-bg section text must stay white ───────── */
+.hero-section p,
+.hero-section span,
+.hero-section h1,
+.hero-section h2,
+.hero-section h3,
+.shop-hero p,
+.shop-hero span,
+.shop-hero h1 {
+    color: #ffffff !important;
+}
+
+/* ── Mobile search bar text ─────────────────────────────── */
+.nav-mobile-search input {
+    color: #111827 !important;
+}
+
+.nav-mobile-search input::placeholder {
+    color: #9ca3af !important;
+}
+
+/* ── Toastify on mobile — sits above bottom bar ─────────── */
+@media (max-width: 768px) {
+    .Toastify__toast-container--bottom-right,
+    .Toastify__toast-container--bottom-left,
+    .Toastify__toast-container--bottom-center {
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+}
+
+/* ── Prevent animation-duration override from breaking      */
+/*    the bottom-sheet slide & tab badge pop                 */
+.btb-sheet,
+.btb-overlay,
+.btb-active-pill,
+.btb-badge,
+.nav-mobile-search {
+    animation-duration: unset !important;
+    transition-duration: unset !important;
+}
+
+/* ── iOS overscroll rubber-band — keep green background ─── */
+html {
+    background: #0d5415;
+}
+
+body {
+    background: #ffffff;
+}
+
+/* ── Viewport height fix for mobile browsers ────────────── */
+:root {
+    --vh: 1vh;
 }

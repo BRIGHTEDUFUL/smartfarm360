@@ -51,6 +51,8 @@ export class ProductService {
     category?: string;
     farmer_id?: number;
     search?: string;
+    sort?: string;
+    order?: string;
     limit?: number;
     offset?: number;
   }): Promise<Product[]> {
@@ -77,7 +79,15 @@ export class ProductService {
       params.push(`%${filters.search}%`, `%${filters.search}%`);
     }
 
-    sql += ' ORDER BY created_at DESC';
+    // Handle sorting
+    const sortField = filters.sort || 'created_at';
+    const sortOrder = filters.order?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    
+    // Validate sort field to prevent SQL injection
+    const validSortFields = ['created_at', 'price', 'name', 'stock_quantity'];
+    const safeSortField = validSortFields.includes(sortField) ? sortField : 'created_at';
+    
+    sql += ` ORDER BY ${safeSortField} ${sortOrder}`;
 
     if (filters.limit) {
       sql += ' LIMIT ?';

@@ -66,9 +66,18 @@ async function seed() {
   const farmer1 = await query('SELECT id FROM users WHERE email = ?', ['farmer1@test.com']);
   const farmer2 = await query('SELECT id FROM users WHERE email = ?', ['farmer2@test.com']);
 
-  // Delete existing products to avoid duplicates
-  await query('DELETE FROM products');
-  console.log('✓ Cleared existing products');
+  // Check if products already exist
+  const existingProducts = await query('SELECT COUNT(*) as count FROM products');
+  if (existingProducts.rows[0].count > 0) {
+    console.log('✓ Products already exist, skipping product creation');
+    saveDatabase();
+    console.log('\n✓ Database seeded successfully!');
+    console.log('\nTest Accounts:');
+    console.log('  Admin: admin@smartfarming.com / admin123');
+    console.log('  Farmer: farmer1@test.com / farmer123');
+    console.log('  Consumer: consumer@test.com / consumer123');
+    return;
+  }
 
   // Create comprehensive product catalog
   const products = [

@@ -1,0 +1,280 @@
+SMART FARMING 360 - COMPLETE PROJECT STRUCTURE
+═══════════════════════════════════════════════
+
+smart-farming-360/
+│
+├── 📁 .github/                          # GitHub Configuration
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/
+│       └── ci.yml
+│
+├── 📁 .kiro/                            # Kiro AI Specs
+│   └── specs/
+│       ├── dashboard-user-audit-enhancements/
+│       ├── product-image-upload/
+│       └── smart-farming-auth-shop/
+│
+├── 📁 backend/                          # Backend Application
+│   ├── 📁 coverage/                     # Test Coverage
+│   ├── 📁 dist/                         # Compiled Output
+│   ├── 📁 logs/                         # Application Logs
+│   │   ├── combined.log
+│   │   └── error.log
+│   ├── 📁 migrations/                   # Database Migrations
+│   │   ├── 001_create_audit_logs.sql
+│   │   ├── 002_add_user_status.sql
+│   │   ├── 003_add_order_fields.sql
+│   │   ├── 004_add_product_image_url.sql
+│   │   └── README.md
+│   ├── 📁 node_modules/                 # Dependencies
+│   ├── 📁 scripts/                      # Setup Scripts
+│   │   └── setup-db.sql
+│   ├── 📁 src/                          # Source Code
+│   │   ├── 📁 config/                   # Configuration
+│   │   │   ├── database.ts
+│   │   │   ├── env.ts
+│   │   │   └── migrate.ts
+│   │   ├── 📁 controllers/              # Controllers
+│   │   │   ├── audit.controller.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── cart.controller.ts
+│   │   │   ├── order.controller.ts
+│   │   │   ├── product.controller.ts
+│   │   │   └── user.controller.ts
+│   │   ├── 📁 middleware/               # Middleware
+│   │   │   ├── audit.middleware.ts
+│   │   │   ├── auth.middleware.ts
+│   │   │   ├── errorHandler.ts
+│   │   │   └── upload.middleware.ts
+│   │   ├── 📁 routes/                   # API Routes
+│   │   │   ├── audit.routes.ts
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── cart.routes.ts
+│   │   │   ├── order.routes.ts
+│   │   │   ├── product.routes.ts
+│   │   │   └── user.routes.ts
+│   │   ├── 📁 scripts/                  # Utility Scripts
+│   │   │   ├── seed.ts
+│   │   │   └── verify-products.ts
+│   │   ├── 📁 services/                 # Business Logic
+│   │   │   ├── audit.service.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── cart.service.ts
+│   │   │   ├── order.service.ts
+│   │   │   ├── product.service.ts
+│   │   │   └── user.service.ts
+│   │   ├── 📁 types/                    # TypeScript Types
+│   │   │   └── index.ts
+│   │   ├── 📁 utils/                    # Utilities
+│   │   │   ├── logger.ts
+│   │   │   └── validation.ts
+│   │   └── server.ts                    # Entry Point
+│   ├── 📁 tests/                        # Tests
+│   │   ├── controllers/
+│   │   │   └── auth.controller.test.ts
+│   │   ├── migrations/
+│   │   ├── services/
+│   │   │   └── auth.service.test.ts
+│   │   └── setup.ts
+│   ├── 📁 uploads/                      # User Uploads
+│   │   └── products/
+│   ├── .env                             # Environment Variables
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── API.md                           # API Documentation
+│   ├── jest.config.js
+│   ├── jest.unit.config.js
+│   ├── package.json
+│   ├── smart_farming.db                 # SQLite Database
+│   ├── SQLITE_MIGRATION.md
+│   └── tsconfig.json
+│
+├── 📁 frontend/                         # Frontend Application
+│   ├── 📁 dist/                         # Build Output
+│   ├── 📁 node_modules/                 # Dependencies
+│   ├── 📁 public/                       # Static Assets
+│   │   ├── 📁 icons/                    # App Icons
+│   │   │   ├── cart-icon.svg
+│   │   │   ├── icon-base.svg
+│   │   │   ├── orders-icon.svg
+│   │   │   ├── shop-icon.svg
+│   │   │   ├── generate-icons.html
+│   │   │   ├── GENERATE_ICONS.md
+│   │   │   └── README.md
+│   │   ├── 📁 images/                   # Product Images (50+)
+│   │   │   ├── about-farm.jpg
+│   │   │   ├── avocado.jpg
+│   │   │   ├── banana.jpg
+│   │   │   ├── BEANS.jpg
+│   │   │   └── [46 more images...]
+│   │   ├── check-css.html
+│   │   ├── mobile-debug.html
+│   │   ├── mobile-interaction-test.html
+│   │   ├── test-mobile-click.html
+│   │   └── test-mobile-responsiveness.html
+│   ├── 📁 src/                          # Source Code
+│   │   ├── 📁 components/               # Components
+│   │   │   ├── ErrorBoundary.tsx
+│   │   │   ├── LoadingSpinner.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── Navbar.css
+│   │   │   ├── ProtectedRoute.tsx
+│   │   │   └── ScrollToTop.tsx
+│   │   ├── 📁 contexts/                 # React Contexts
+│   │   │   ├── AuthContext.tsx
+│   │   │   └── CartContext.tsx
+│   │   ├── 📁 pages/                    # Pages
+│   │   │   ├── AboutPage.tsx
+│   │   │   ├── AboutPage.css
+│   │   │   ├── AdminDashboard.tsx
+│   │   │   ├── AdminDashboard.css
+│   │   │   ├── AuthPages.css
+│   │   │   ├── CartPage.tsx
+│   │   │   ├── CartPage.css
+│   │   │   ├── CheckoutPage.tsx
+│   │   │   ├── CheckoutPage.css
+│   │   │   ├── ContactPage.tsx
+│   │   │   ├── ContactPage.css
+│   │   │   ├── FarmerDashboard.tsx
+│   │   │   ├── FarmerDashboard.css
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── HomePage.css
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── OrdersPage.tsx
+│   │   │   ├── OrdersPage.css
+│   │   │   ├── ProductDetailPage.tsx
+│   │   │   ├── RegisterPage.tsx
+│   │   │   ├── ShopPage.tsx
+│   │   │   └── ShopPage.css
+│   │   ├── 📁 services/                 # API Services
+│   │   │   └── api.ts
+│   │   ├── 📁 styles/                   # Global Styles
+│   │   │   ├── ErrorBoundary.css
+│   │   │   ├── LoadingSpinner.css
+│   │   │   └── ScrollToTop.css
+│   │   ├── 📁 types/                    # TypeScript Types
+│   │   │   └── index.ts
+│   │   ├── 📁 utils/                    # Utilities
+│   │   ├── App.tsx                      # Root Component
+│   │   ├── index.css                    # Global Styles
+│   │   ├── main.tsx                     # Entry Point
+│   │   └── vite-env.d.ts
+│   ├── .env
+│   ├── .env.example
+│   ├── .env.production
+│   ├── .gitignore
+│   ├── DESIGN_SYSTEM.md
+│   ├── index.html
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── UI_REFERENCE.md
+│   └── vite.config.ts
+│
+├── 📁 docs/                             # Documentation
+│   ├── DEPLOYMENT_GUIDE.md
+│   ├── DEPLOYMENT_SUMMARY.md
+│   ├── FORMSPREE_INTEGRATION.md
+│   ├── GHANA_UPDATES.md
+│   ├── GITHUB_SETUP.md
+│   ├── PWA_IMPLEMENTATION.md
+│   ├── PWA_TESTING_GUIDE.md
+│   ├── QUICK_DEPLOY.md
+│   ├── README.md
+│   └── SYNC_IMPROVEMENTS.md
+│
+├── 📁 images/                           # Static Images (50+)
+│   └── [Same as frontend/public/images]
+│
+├── 📁 node_modules/                     # Root Dependencies
+│
+├── 📄 Root Configuration Files
+│   ├── .dockerignore
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── LICENSE
+│   ├── netlify.toml
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── railway.json
+│   ├── render.yaml
+│   └── vercel.json
+│
+├── 📄 Documentation Files
+│   ├── ADMIN_CREDENTIALS.md
+│   ├── CACHE_FIX_INSTRUCTIONS.md
+│   ├── CHANGELOG.md
+│   ├── CONTRIBUTING.md
+│   ├── DEPLOYMENT_QUICK_START.md
+│   ├── FORM_BRANDING_TEST_GUIDE.md
+│   ├── FORMSPREE_BRANDING_COMPLETE.md
+│   ├── FORMSPREE_INTEGRATION_COMPLETE.md
+│   ├── FORMSPREE_QUICK_REFERENCE.md
+│   ├── MOBILE_CONTROL_FIX_FINAL.md
+│   ├── MOBILE_TEST_GUIDE.md
+│   ├── MOBILE_TOUCH_FIX_COMPLETE.md
+│   ├── PROJECT_STATUS.md
+│   ├── PROJECT_STRUCTURE.md             # ← This Document
+│   ├── PWA_REMOVAL_COMPLETE.md
+│   ├── PWA_REMOVAL_VERIFICATION.md
+│   ├── QUICK_START.md
+│   ├── README.md
+│   ├── RESPONSIVE_DESIGN_AUDIT.md
+│   ├── RESPONSIVE_ENHANCEMENTS_COMPLETE.md
+│   ├── RESPONSIVE_ENHANCEMENTS_SUMMARY.md
+│   ├── SETUP.md
+│   ├── SIMPLE_DEPLOY.md
+│   ├── STRUCTURE_TREE.txt               # ← This File
+│   ├── UNIFIED_SERVER_COMPLETE.md
+│   └── UNIFIED_SERVER_GUIDE.md
+│
+└── 📄 Scripts
+    ├── allow-mobile-access.bat
+    ├── clear-cache-and-start.bat
+    ├── deploy-render.bat
+    ├── deploy-render.sh
+    ├── start-dev.bat
+    ├── start-dev.ps1
+    ├── start-unified.bat
+    └── start-unified.sh
+
+
+═══════════════════════════════════════════════
+STATISTICS
+═══════════════════════════════════════════════
+
+Backend:
+  - Controllers: 6
+  - Services: 6
+  - Routes: 6
+  - Middleware: 4
+  - Migrations: 4
+  - Tests: 2
+
+Frontend:
+  - Pages: 11
+  - Components: 6
+  - Contexts: 2
+  - Services: 1
+  - Images: 50+
+
+Documentation:
+  - Guides: 30+
+  - Scripts: 8
+
+Total Files: 200+
+
+═══════════════════════════════════════════════
+KEY DIRECTORIES
+═══════════════════════════════════════════════
+
+📁 backend/src/          → Backend source code
+📁 frontend/src/         → Frontend source code
+📁 docs/                 → Project documentation
+📁 backend/migrations/   → Database migrations
+📁 backend/uploads/      → User uploads
+📁 frontend/public/      → Static assets
+
+═══════════════════════════════════════════════

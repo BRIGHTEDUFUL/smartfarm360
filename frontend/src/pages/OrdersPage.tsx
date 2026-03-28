@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import NotificationSettings from '../components/NotificationSettings';
-import { ordersAPI } from '../services/api';
-import { toast } from 'react-toastify';
-import './OrdersPage.css';
+import { useState, useEffect } from "react";
+
+import { ordersAPI } from "../services/api";
+import { toast } from "react-toastify";
+import "./OrdersPage.css";
 
 interface Order {
   id: number;
@@ -33,7 +32,7 @@ const OrdersPage = () => {
     try {
       const response = await ordersAPI.getAll();
       const ordersData = response.data.data || [];
-      
+
       // Fetch full order details with items for each order
       const ordersWithDetails = await Promise.all(
         ordersData.map(async (order: any) => {
@@ -41,16 +40,20 @@ const OrdersPage = () => {
             const detailsResponse = await ordersAPI.getById(order.id);
             return detailsResponse.data.data;
           } catch (error) {
-            console.error(`Failed to load details for order ${order.id}:`, error);
+            console.error(
+              `Failed to load details for order ${order.id}:`,
+              error,
+            );
             return order; // Return basic order if details fail
           }
-        })
+        }),
       );
-      
+
       setOrders(ordersWithDetails);
     } catch (error: any) {
-      console.error('Failed to fetch orders:', error);
-      const errorMessage = error.response?.data?.error?.message || 'Failed to load orders';
+      console.error("Failed to fetch orders:", error);
+      const errorMessage =
+        error.response?.data?.error?.message || "Failed to load orders";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -59,38 +62,36 @@ const OrdersPage = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', { 
-      day: '2-digit', 
-      month: 'short', 
-      year: 'numeric' 
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   };
 
   const getStatusColor = (status: string) => {
-    const normalizedStatus = status.toLowerCase().replace(/\s+/g, '-');
+    const normalizedStatus = status.toLowerCase().replace(/\s+/g, "-");
     switch (normalizedStatus) {
-      case 'pending':
-      case 'pending-payment':
-        return '#FF9800';
-      case 'processing':
-        return '#2196F3';
-      case 'completed':
-        return '#4CAF50';
-      case 'cancelled':
-        return '#F44336';
-      case 'shipped':
-        return '#9C27B0';
-      case 'delivered':
-        return '#4CAF50';
+      case "pending":
+      case "pending-payment":
+        return "#FF9800";
+      case "processing":
+        return "#2196F3";
+      case "completed":
+        return "#4CAF50";
+      case "cancelled":
+        return "#F44336";
+      case "shipped":
+        return "#9C27B0";
+      case "delivered":
+        return "#4CAF50";
       default:
-        return '#757575';
+        return "#757575";
     }
   };
 
   return (
     <div>
-      <Navbar />
-      
       <div className="orders-page">
         <div className="orders-container">
           <div className="orders-header">
@@ -98,13 +99,15 @@ const OrdersPage = () => {
               <h1>My Orders</h1>
               <p>Track and manage your orders</p>
             </div>
-            <button onClick={fetchOrders} className="btn-refresh" disabled={loading}>
+            <button
+              onClick={fetchOrders}
+              className="btn-refresh"
+              disabled={loading}
+            >
               <i className="fas fa-sync-alt"></i>
               Refresh
             </button>
           </div>
-
-          <NotificationSettings />
 
           {loading ? (
             <div className="loading-state">
@@ -128,29 +131,42 @@ const OrdersPage = () => {
                   <div className="order-header">
                     <div>
                       <h3>Order #{order.id}</h3>
-                      <p className="order-date">{formatDate(order.created_at)}</p>
+                      <p className="order-date">
+                        {formatDate(order.created_at)}
+                      </p>
                     </div>
-                    <span 
-                      className="order-status" 
+                    <span
+                      className="order-status"
                       style={{ background: getStatusColor(order.status) }}
                     >
                       {order.status}
                     </span>
                   </div>
-                  
+
                   {order.items && order.items.length > 0 ? (
                     <div className="order-items">
                       {order.items.map((item: any, idx: number) => (
                         <div key={idx} className="order-item">
                           <span>{item.product_name || item.name}</span>
                           <span>x{item.quantity}</span>
-                          <span>GH₵ {(item.price_at_purchase * item.quantity).toFixed(2)}</span>
+                          <span>
+                            GH₵{" "}
+                            {(item.price_at_purchase * item.quantity).toFixed(
+                              2,
+                            )}
+                          </span>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="order-items">
-                      <p style={{ textAlign: 'center', color: 'var(--gray)', padding: '20px' }}>
+                      <p
+                        style={{
+                          textAlign: "center",
+                          color: "var(--gray)",
+                          padding: "20px",
+                        }}
+                      >
                         Order items not available
                       </p>
                     </div>

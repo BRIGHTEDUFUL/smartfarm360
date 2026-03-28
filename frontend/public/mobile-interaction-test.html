@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Interaction Test - Smart Farming 360</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #0D5415;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .status.pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status.success {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .test-section h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .test-button {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(13, 84, 21, 0.2);
+            transition: all 0.2s;
+        }
+
+        .test-button.primary {
+            background: linear-gradient(135deg, #0D5415, #1B7E28);
+            color: white;
+        }
+
+        .test-button.secondary {
+            background: linear-gradient(135deg, #FBBF24, #F59E0B);
+            color: white;
+        }
+
+        .test-button.outline {
+            background: white;
+            border: 2px solid #0D5415;
+            color: #0D5415;
+        }
+
+        .test-button:active {
+            transform: scale(0.98);
+        }
+
+        .test-link {
+            display: block;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #0D5415;
+            text-decoration: none;
+            font-weight: 500;
+            touch-action: manipulation;
+        }
+
+        .test-link:active {
+            background: #f0f0f0;
+        }
+
+        .test-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            touch-action: manipulation;
+        }
+
+        .test-input:focus {
+            outline: none;
+            border-color: #0D5415;
+        }
+
+        .test-card {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .test-card:active {
+            background: #f5f5f5;
+        }
+
+        .result {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .result.success {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .result.error {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .counter {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0D5415;
+            text-align: center;
+            padding: 20px;
+            background: #E8F5E9;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .scroll-test {
+            height: 200px;
+            overflow-y: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .scroll-content {
+            height: 600px;
+            background: linear-gradient(to bottom, #E8F5E9, #C8E6C9);
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .info {
+            background: #E3F2FD;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #1565C0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Mobile Interaction Test</h1>
+        <div class="status pending" id="overallStatus">
+            Testing in progress... Tap elements below
+        </div>
+
+        <div class="info">
+            ℹ️ This page tests if all touch interactions work correctly on mobile devices.
+            Try tapping, scrolling, and interacting with all elements below.
+        </div>
+
+        <!-- Button Tests -->
+        <div class="test-section">
+            <h2>1. Button Tests</h2>
+            <button class="test-button primary" onclick="testButton('Primary Button')">
+                Tap Primary Button
+            </button>
+            <button class="test-button secondary" onclick="testButton('Secondary Button')">
+                Tap Secondary Button
+            </button>
+            <button class="test-button outline" onclick="testButton('Outline Button')">
+                Tap Outline Button
+            </button>
+            <div id="buttonResult"></div>
+        </div>
+
+        <!-- Link Tests -->
+        <div class="test-section">
+            <h2>2. Link Tests</h2>
+            <a href="#" class="test-link" onclick="testLink(event, 'Link 1')">
+                Tap Link 1
+            </a>
+            <a href="#" class="test-link" onclick="testLink(event, 'Link 2')">
+                Tap Link 2
+            </a>
+            <a href="#" class="test-link" onclick="testLink(event, 'Link 3')">
+                Tap Link 3
+            </a>
+            <div id="linkResult"></div>
+        </div>
+
+        <!-- Input Tests -->
+        <div class="test-section">
+            <h2>3. Input Tests</h2>
+            <input type="text" class="test-input" placeholder="Tap to type (should not zoom)" 
+                   onfocus="testInput('Text Input')">
+            <input type="email" class="test-input" placeholder="Email input" 
+                   onfocus="testInput('Email Input')">
+            <select class="test-input" onchange="testInput('Select')">
+                <option>Select an option</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+            </select>
+            <div id="inputResult"></div>
+        </div>
+
+        <!-- Card Tests -->
+        <div class="test-section">
+            <h2>4. Card/Div Tests</h2>
+            <div class="test-card" onclick="testCard('Card 1')">
+                <strong>Card 1</strong><br>
+                Tap this entire card area
+            </div>
+            <div class="test-card" onclick="testCard('Card 2')">
+                <strong>Card 2</strong><br>
+                Tap this entire card area
+            </div>
+            <div id="cardResult"></div>
+        </div>
+
+        <!-- Counter Test -->
+        <div class="test-section">
+            <h2>5. Rapid Tap Test</h2>
+            <div class="counter" id="tapCounter">0</div>
+            <button class="test-button primary" onclick="incrementCounter()">
+                Tap Rapidly (Test Response Speed)
+            </button>
+            <button class="test-button outline" onclick="resetCounter()">
+                Reset Counter
+            </button>
+        </div>
+
+        <!-- Scroll Test -->
+        <div class="test-section">
+            <h2>6. Scroll Test</h2>
+            <div class="scroll-test">
+                <div class="scroll-content">
+                    <p><strong>Scroll Test Area</strong></p>
+                    <p>Try scrolling this area with your finger.</p>
+                    <p>It should scroll smoothly without lag.</p>
+                    <p style="margin-top: 50px;">Keep scrolling...</p>
+                    <p style="margin-top: 50px;">Almost there...</p>
+                    <p style="margin-top: 50px;">You reached the bottom! ✅</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Summary -->
+        <div class="test-section">
+            <h2>7. Test Summary</h2>
+            <div id="testSummary">
+                <p>Interact with elements above to see results here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = {
+            buttons: 0,
+            links: 0,
+            inputs: 0,
+            cards: 0,
+            taps: 0
+        };
+
+        let tapCount = 0;
+
+        function testButton(name) {
+            testResults.buttons++;
+            showResult('buttonResult', `✅ ${name} clicked! (${testResults.buttons} total)`, 'success');
+            updateSummary();
+            updateOverallStatus();
+        }
+
+        function testLink(event, name) {
+            event.preventDefault();
+            testResults.links++;
+            showResult('linkResult', `✅ ${name} clicked! (${testResults.links} total)`, 'success');
+            updateSummary();
+            updateOverallStatus();
+        }
+
+        function testInput(name) {
+            testResults.inputs++;
+            showResult('inputResult', `✅ ${name} focused! (${testResults.inputs} total)`, 'success');
+            updateSummary();
+            updateOverallStatus();
+        }
+
+        function testCard(name) {
+            testResults.cards++;
+            showResult('cardResult', `✅ ${name} tapped! (${testResults.cards} total)`, 'success');
+            updateSummary();
+            updateOverallStatus();
+        }
+
+        function incrementCounter() {
+            tapCount++;
+            testResults.taps++;
+            document.getElementById('tapCounter').textContent = tapCount;
+            updateSummary();
+            updateOverallStatus();
+        }
+
+        function resetCounter() {
+            tapCount = 0;
+            document.getElementById('tapCounter').textContent = tapCount;
+        }
+
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="result ${type}">${message}</div>`;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 3000);
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('testSummary');
+            summary.innerHTML = `
+                <p><strong>Test Results:</strong></p>
+                <p>✅ Buttons clicked: ${testResults.buttons}</p>
+                <p>✅ Links clicked: ${testResults.links}</p>
+                <p>✅ Inputs focused: ${testResults.inputs}</p>
+                <p>✅ Cards tapped: ${testResults.cards}</p>
+                <p>✅ Rapid taps: ${testResults.taps}</p>
+                <p style="margin-top: 15px; font-weight: bold; color: #0D5415;">
+                    Total Interactions: ${Object.values(testResults).reduce((a, b) => a + b, 0)}
+                </p>
+            `;
+        }
+
+        function updateOverallStatus() {
+            const total = Object.values(testResults).reduce((a, b) => a + b, 0);
+            const status = document.getElementById('overallStatus');
+            
+            if (total === 0) {
+                status.className = 'status pending';
+                status.textContent = 'Testing in progress... Tap elements below';
+            } else if (total < 10) {
+                status.className = 'status pending';
+                status.textContent = `Good! ${total} interactions detected. Keep testing...`;
+            } else {
+                status.className = 'status success';
+                status.textContent = `✅ Excellent! ${total} interactions detected. All touch controls working!`;
+            }
+        }
+
+        // Test for touch support
+        window.addEventListener('load', () => {
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            console.log('Touch device detected:', isTouchDevice);
+            console.log('Max touch points:', navigator.maxTouchPoints);
+            console.log('User agent:', navigator.userAgent);
+        });
+
+        // Log all touch events for debugging
+        document.addEventListener('touchstart', (e) => {
+            console.log('Touch start:', e.target.tagName, e.target.className);
+        });
+
+        document.addEventListener('touchend', (e) => {
+            console.log('Touch end:', e.target.tagName, e.target.className);
+        });
+
+        document.addEventListener('click', (e) => {
+            console.log('Click:', e.target.tagName, e.target.className);
+        });
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import './ContactPage.css';
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
+import "./ContactPage.css";
 
 const ContactPage = () => {
   const [searchParams] = useSearchParams();
@@ -9,11 +9,11 @@ const ContactPage = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    if (searchParams.get('submitted') === 'true') {
+    if (searchParams.get("submitted") === "true") {
       setShowSuccess(true);
       // Clear the URL parameter after 5 seconds
       setTimeout(() => {
-        navigate('/contact', { replace: true });
+        navigate("/contact", { replace: true });
         setShowSuccess(false);
       }, 5000);
     }
@@ -21,8 +21,6 @@ const ContactPage = () => {
 
   return (
     <div>
-      <Navbar />
-      
       <div className="contact-page">
         <div className="contact-container">
           {/* Success Message */}
@@ -32,7 +30,10 @@ const ContactPage = () => {
                 <i className="fas fa-check-circle"></i>
                 <div>
                   <h3>Message Sent Successfully!</h3>
-                  <p>Thank you for contacting Smart Farming 360. We'll get back to you soon.</p>
+                  <p>
+                    Thank you for contacting Smart Farming 360. We'll get back
+                    to you soon.
+                  </p>
                 </div>
               </div>
             </div>
@@ -44,20 +45,31 @@ const ContactPage = () => {
               <i className="fas fa-envelope"></i>
             </div>
             <h1>Get in Touch</h1>
-            <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            <p>
+              Have questions? We'd love to hear from you. Send us a message and
+              we'll respond as soon as possible.
+            </p>
           </div>
 
           <div className="contact-content">
             {/* Contact Form */}
             <div className="contact-form-section">
-              <form 
-                action="https://formspree.io/f/myknlygk" 
+              <form
+                action="https://formspree.io/f/myknlygk"
                 method="POST"
                 className="contact-form"
               >
-                <input type="hidden" name="_subject" value="Contact Form - Smart Farming 360" />
-                <input type="hidden" name="_next" value={`${window.location.origin}/contact?submitted=true`} />
-                
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="Contact Form - Smart Farming 360"
+                />
+                <input
+                  type="hidden"
+                  name="_next"
+                  value={`${window.location.origin}/contact?submitted=true`}
+                />
+
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="name">
@@ -111,7 +123,9 @@ const ContactPage = () => {
                     <option value="General Inquiry">General Inquiry</option>
                     <option value="Product Question">Product Question</option>
                     <option value="Order Support">Order Support</option>
-                    <option value="Farmer Registration">Farmer Registration</option>
+                    <option value="Farmer Registration">
+                      Farmer Registration
+                    </option>
                     <option value="Technical Issue">Technical Issue</option>
                     <option value="Partnership">Partnership Opportunity</option>
                     <option value="Other">Other</option>
@@ -146,7 +160,11 @@ const ContactPage = () => {
                   <i className="fas fa-map-marker-alt"></i>
                 </div>
                 <h3>Visit Us</h3>
-                <p>Accra, Ghana<br />East Legon, Accra</p>
+                <p>
+                  Accra, Ghana
+                  <br />
+                  East Legon, Accra
+                </p>
               </div>
 
               <div className="info-card">
@@ -154,7 +172,11 @@ const ContactPage = () => {
                   <i className="fas fa-phone"></i>
                 </div>
                 <h3>Call Us</h3>
-                <p>+233 50 123 4567<br />Mon-Fri, 8am-6pm</p>
+                <p>
+                  +233 50 123 4567
+                  <br />
+                  Mon-Fri, 8am-6pm
+                </p>
               </div>
 
               <div className="info-card">
@@ -162,7 +184,11 @@ const ContactPage = () => {
                   <i className="fas fa-envelope"></i>
                 </div>
                 <h3>Email Us</h3>
-                <p>support@smartfarming360.com<br />info@smartfarming360.com</p>
+                <p>
+                  support@smartfarming360.com
+                  <br />
+                  info@smartfarming360.com
+                </p>
               </div>
 
               <div className="info-card">
@@ -170,7 +196,13 @@ const ContactPage = () => {
                   <i className="fas fa-clock"></i>
                 </div>
                 <h3>Business Hours</h3>
-                <p>Monday - Friday: 8am - 6pm<br />Saturday: 9am - 4pm<br />Sunday: Closed</p>
+                <p>
+                  Monday - Friday: 8am - 6pm
+                  <br />
+                  Saturday: 9am - 4pm
+                  <br />
+                  Sunday: Closed
+                </p>
               </div>
 
               <div className="social-section">

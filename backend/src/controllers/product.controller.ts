@@ -54,12 +54,14 @@ export class ProductController {
 
   static async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const { status, category, search, limit = '100', offset = '0' } = req.query;
+      const { status, category, search, sort, order, limit = '100', offset = '0' } = req.query;
 
       const products = await ProductService.getProducts({
         status: status as string,
         category: category as string,
         search: search as string,
+        sort: sort as string,
+        order: order as string,
         limit: parseInt(limit as string),
         offset: parseInt(offset as string),
       });

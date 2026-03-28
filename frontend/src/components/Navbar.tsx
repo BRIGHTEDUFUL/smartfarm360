@@ -1,165 +1,261 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useCart } from '../contexts/CartContext';
-import './Navbar.css';
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
+import "./Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { items } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Close mobile menu when resizing to desktop
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Detect scroll for shadow
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768 && mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
-    };
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [mobileMenuOpen]);
-
-  // Lock body scroll when mobile menu is open (only on mobile screens)
+  // Focus search input when opened
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    
-    if (mobileMenuOpen && isMobile) {
-      // Save current scroll position
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-    } else {
-      // Restore scroll position
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
+    if (searchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 60);
     }
+  }, [searchOpen]);
 
-    return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-    };
-  }, [mobileMenuOpen]);
+  // Close search on route change
+  useEffect(() => {
+    setSearchOpen(false);
+    setSearchQuery("");
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
-    setMobileMenuOpen(false);
+    navigate("/login");
   };
 
   const isActive = (path: string) => {
-    return location.pathname === path ? 'active' : '';
+    if (path === "/") return location.pathname === "/";
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
   };
 
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setSearchOpen(false);
+      setSearchQuery("");
+    }
   };
 
   return (
-    <nav className="topnav">
-      <div className="topnav-inner">
-        <Link to="/" className="nav-logo">
-          <div className="nav-logo-icon">
-            <i className="fas fa-leaf"></i>
+    <>
+      <nav className={`topnav${scrolled ? " scrolled" : ""}`}>
+        <div className="topnav-inner">
+          {/* ── Logo ─────────────────────────────────────────── */}
+          <Link
+            to="/"
+            className="nav-logo"
+            aria-label="Smart Farming 360 – Home"
+          >
+            <div className="nav-logo-icon" aria-hidden="true">
+              <i className="fas fa-leaf" />
+            </div>
+            <span className="nav-logo-text">
+              Smart Farming <span className="dot">360</span>
+            </span>
+          </Link>
+
+          {/* ── Desktop nav links ─────────────────────────────── */}
+          <div className="nav-links" role="navigation" aria-label="Site pages">
+            <Link
+              to="/"
+              className={`nav-link${isActive("/") ? " active" : ""}`}
+            >
+              Home
+            </Link>
+            <Link
+              to="/shop"
+              className={`nav-link${isActive("/shop") ? " active" : ""}`}
+            >
+              Shop
+            </Link>
+            <Link
+              to="/about"
+              className={`nav-link${isActive("/about") ? " active" : ""}`}
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className={`nav-link${isActive("/contact") ? " active" : ""}`}
+            >
+              Contact
+            </Link>
           </div>
-          <span>Smart Farming <span className="dot">360</span></span>
-        </Link>
 
-        <button 
-          className="mobile-menu-toggle" 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-        </button>
+          {/* ── Desktop search bar ───────────────────────────── */}
+          <form
+            className="nav-search"
+            onSubmit={handleSearchSubmit}
+            role="search"
+          >
+            <i className="fas fa-search nav-search-icon" aria-hidden="true" />
+            <input
+              type="search"
+              placeholder="Search fresh products…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search products"
+            />
+          </form>
 
-        <div className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-          <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
-          <Link to="/shop" className={isActive('/shop')} onClick={closeMobileMenu}>Shop</Link>
-          <Link to="/about" className={isActive('/about')} onClick={closeMobileMenu}>About</Link>
-          <Link to="/contact" className={isActive('/contact')} onClick={closeMobileMenu}>Contact</Link>
-        </div>
+          {/* ── Desktop actions ───────────────────────────────── */}
+          <div className="nav-actions">
+            {user ? (
+              <>
+                <div className="nav-user-chip" title={user.email}>
+                  <i className="fas fa-user-circle" aria-hidden="true" />
+                  <span className="chip-name">{user.first_name}</span>
+                  <span className="chip-role">{user.role}</span>
+                </div>
 
-        <div className="nav-search">
-          <i className="fas fa-search"></i>
-          <input type="text" placeholder="Search fresh products..." />
-        </div>
+                {user.role === "Farmer" && (
+                  <Link to="/farmer" className="nav-btn nav-btn-outline">
+                    <i className="fas fa-tractor" aria-hidden="true" />
+                    Dashboard
+                  </Link>
+                )}
 
-        <div className={`nav-actions ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-          {user ? (
-            <>
-              <div className="nav-user-chip">
-                <i className="fas fa-user-circle"></i>
-                <span>{user.first_name}</span>
-                <span className="role">{user.role}</span>
-              </div>
+                {user.role === "Admin" && (
+                  <Link to="/admin" className="nav-btn nav-btn-outline">
+                    <i className="fas fa-shield-alt" aria-hidden="true" />
+                    Admin
+                  </Link>
+                )}
 
-              {user.role === 'Farmer' && (
-                <Link to="/farmer" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
-                  <i className="fas fa-tachometer-alt"></i>
-                  Dashboard
+                {user.role === "Consumer" && (
+                  <Link to="/orders" className="nav-btn nav-btn-outline">
+                    <i className="fas fa-box" aria-hidden="true" />
+                    Orders
+                  </Link>
+                )}
+
+                <button
+                  onClick={handleLogout}
+                  className="nav-btn nav-btn-outline"
+                  type="button"
+                >
+                  <i className="fas fa-sign-out-alt" aria-hidden="true" />
+                  Logout
+                </button>
+
+                <Link
+                  to="/cart"
+                  className="cart-btn"
+                  aria-label={`Cart, ${cartCount} item${cartCount !== 1 ? "s" : ""}`}
+                >
+                  <i className="fas fa-shopping-cart" aria-hidden="true" />
+                  {cartCount > 0 && (
+                    <span className="cart-count show" aria-hidden="true">
+                      {cartCount > 99 ? "99+" : cartCount}
+                    </span>
+                  )}
                 </Link>
-              )}
-
-              {user.role === 'Admin' && (
-                <Link to="/admin" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
-                  <i className="fas fa-shield-alt"></i>
-                  Admin
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="nav-btn nav-btn-outline">
+                  Login
                 </Link>
-              )}
-
-              {user.role === 'Consumer' && (
-                <Link to="/orders" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
-                  <i className="fas fa-box"></i>
-                  Orders
+                <Link to="/register" className="nav-btn nav-btn-primary">
+                  Sign Up
                 </Link>
-              )}
+              </>
+            )}
+          </div>
 
-              <button onClick={handleLogout} className="nav-btn nav-btn-outline">
-                <i className="fas fa-sign-out-alt"></i>
-                Logout
-              </button>
+          {/* ── Mobile right-side icons ───────────────────────── */}
+          <div className="nav-mobile-actions">
+            {/* Search toggle */}
+            <button
+              className={`nav-icon-btn${searchOpen ? " active" : ""}`}
+              onClick={() => setSearchOpen((v) => !v)}
+              aria-label={searchOpen ? "Close search" : "Open search"}
+              aria-expanded={searchOpen}
+              type="button"
+            >
+              <i
+                className={`fas ${searchOpen ? "fa-times" : "fa-search"}`}
+                aria-hidden="true"
+              />
+            </button>
 
-              <Link to="/cart" className="cart-btn" onClick={closeMobileMenu}>
-                <i className="fas fa-shopping-cart"></i>
-                {items.length > 0 && (
-                  <span className="cart-count show">{items.length}</span>
+            {/* Cart shortcut — only shown when logged in as Consumer */}
+            {user?.role === "Consumer" && (
+              <Link
+                to="/cart"
+                className="nav-icon-btn nav-cart-icon"
+                aria-label={`Cart, ${cartCount} items`}
+              >
+                <i className="fas fa-shopping-cart" aria-hidden="true" />
+                {cartCount > 0 && (
+                  <span className="nav-cart-dot" aria-hidden="true">
+                    {cartCount > 9 ? "9+" : cartCount}
+                  </span>
                 )}
               </Link>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="nav-btn nav-btn-outline" onClick={closeMobileMenu}>
-                Login
-              </Link>
-              <Link to="/register" className="nav-btn nav-btn-primary" onClick={closeMobileMenu}>
-                Sign Up
-              </Link>
-            </>
-          )}
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Mobile menu overlay backdrop */}
-      <div 
-        className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
-        onClick={closeMobileMenu}
-      />
-    </nav>
+        {/* ── Mobile expanding search bar ───────────────────── */}
+        <div
+          className={`nav-mobile-search${searchOpen ? " open" : ""}`}
+          aria-hidden={!searchOpen}
+        >
+          <form onSubmit={handleSearchSubmit} role="search">
+            <i className="fas fa-search" aria-hidden="true" />
+            <input
+              ref={searchInputRef}
+              type="search"
+              placeholder="Search tomatoes, eggs, rice…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              tabIndex={searchOpen ? 0 : -1}
+              aria-label="Search products"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                className="search-clear"
+                onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
+              >
+                <i className="fas fa-times" aria-hidden="true" />
+              </button>
+            )}
+          </form>
+        </div>
+      </nav>
+    </>
   );
 };
 

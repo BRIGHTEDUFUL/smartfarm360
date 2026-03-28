@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Debug Console</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: monospace;
+            font-size: 12px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+        }
+
+        .header {
+            background: #0D5415;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-card {
+            background: #2d2d2d;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #FBBF24;
+        }
+
+        .info-card strong {
+            color: #FBBF24;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .console {
+            background: #2d2d2d;
+            border: 1px solid #3e3e3e;
+            border-radius: 6px;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .log-entry {
+            padding: 5px;
+            border-bottom: 1px solid #3e3e3e;
+            font-size: 11px;
+        }
+
+        .log-entry.info {
+            color: #4FC3F7;
+        }
+
+        .log-entry.success {
+            color: #81C784;
+        }
+
+        .log-entry.warning {
+            color: #FFB74D;
+        }
+
+        .log-entry.error {
+            color: #E57373;
+        }
+
+        .timestamp {
+            color: #888;
+            margin-right: 8px;
+        }
+
+        .test-buttons {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .test-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: transform 0.1s;
+        }
+
+        .test-btn:active {
+            transform: scale(0.95);
+        }
+
+        .test-btn.primary {
+            background: linear-gradient(135deg, #0D5415, #1B7E28);
+            color: white;
+        }
+
+        .test-btn.secondary {
+            background: linear-gradient(135deg, #FBBF24, #F59E0B);
+            color: white;
+        }
+
+        .test-btn.danger {
+            background: #E57373;
+            color: white;
+        }
+
+        .stats {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #3e3e3e;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-value {
+            color: #FBBF24;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📱 Mobile Debug Console</h1>
+        <p>Real-time touch event monitoring</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <strong>Device</strong>
+            <div id="deviceInfo">Loading...</div>
+        </div>
+        <div class="info-card">
+            <strong>Screen</strong>
+            <div id="screenInfo">Loading...</div>
+        </div>
+        <div class="info-card">
+            <strong>Touch Support</strong>
+            <div id="touchInfo">Loading...</div>
+        </div>
+        <div class="info-card">
+            <strong>Orientation</strong>
+            <div id="orientationInfo">Loading...</div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-row">
+            <span>Touch Events:</span>
+            <span class="stat-value" id="touchCount">0</span>
+        </div>
+        <div class="stat-row">
+            <span>Click Events:</span>
+            <span class="stat-value" id="clickCount">0</span>
+        </div>
+        <div class="stat-row">
+            <span>Button Taps:</span>
+            <span class="stat-value" id="buttonCount">0</span>
+        </div>
+        <div class="stat-row">
+            <span>Last Event:</span>
+            <span class="stat-value" id="lastEvent">None</span>
+        </div>
+    </div>
+
+    <div class="test-buttons">
+        <button class="test-btn primary" id="testBtn1">
+            Test Button 1 (Primary)
+        </button>
+        <button class="test-btn secondary" id="testBtn2">
+            Test Button 2 (Secondary)
+        </button>
+        <button class="test-btn danger" id="clearBtn">
+            Clear Console
+        </button>
+    </div>
+
+    <div class="console" id="console">
+        <div class="log-entry info">
+            <span class="timestamp">--:--:--</span>
+            Console initialized. Tap anywhere to test...
+        </div>
+    </div>
+
+    <script>
+        let touchCount = 0;
+        let clickCount = 0;
+        let buttonCount = 0;
+
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString('en-US', { hour12: false });
+            
+            entry.innerHTML = `<span class="timestamp">${timestamp}</span>${message}`;
+            console.appendChild(entry);
+            console.scrollTop = console.scrollHeight;
+        }
+
+        function updateStats() {
+            document.getElementById('touchCount').textContent = touchCount;
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('buttonCount').textContent = buttonCount;
+        }
+
+        function updateDeviceInfo() {
+            // Device info
+            const ua = navigator.userAgent;
+            let device = 'Unknown';
+            if (/iPhone/.test(ua)) device = 'iPhone';
+            else if (/iPad/.test(ua)) device = 'iPad';
+            else if (/Android/.test(ua)) device = 'Android';
+            else if (/Windows/.test(ua)) device = 'Windows';
+            else if (/Mac/.test(ua)) device = 'Mac';
+            
+            document.getElementById('deviceInfo').textContent = device;
+
+            // Screen info
+            document.getElementById('screenInfo').textContent = 
+                `${window.innerWidth}x${window.innerHeight}`;
+
+            // Touch support
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const touchPoints = navigator.maxTouchPoints || 0;
+            document.getElementById('touchInfo').textContent = 
+                hasTouch ? `Yes (${touchPoints} points)` : 'No';
+
+            // Orientation
+            const orientation = window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait';
+            document.getElementById('orientationInfo').textContent = orientation;
+        }
+
+        // Initialize
+        updateDeviceInfo();
+        log('Device info loaded', 'success');
+
+        // Touch events
+        document.addEventListener('touchstart', (e) => {
+            touchCount++;
+            updateStats();
+            document.getElementById('lastEvent').textContent = 'touchstart';
+            
+            const target = e.target;
+            const tagName = target.tagName;
+            const className = target.className || 'no-class';
+            
+            log(`👆 TOUCH START: ${tagName}.${className}`, 'info');
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const target = e.target;
+            const tagName = target.tagName;
+            const className = target.className || 'no-class';
+            
+            log(`👆 TOUCH END: ${tagName}.${className}`, 'success');
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            document.getElementById('lastEvent').textContent = 'touchmove';
+        });
+
+        document.addEventListener('touchcancel', (e) => {
+            log(`❌ TOUCH CANCELLED`, 'error');
+        });
+
+        // Click events
+        document.addEventListener('click', (e) => {
+            clickCount++;
+            updateStats();
+            document.getElementById('lastEvent').textContent = 'click';
+            
+            const target = e.target;
+            const tagName = target.tagName;
+            const className = target.className || 'no-class';
+            
+            log(`🖱️ CLICK: ${tagName}.${className}`, 'warning');
+        });
+
+        // Test buttons
+        document.getElementById('testBtn1').addEventListener('click', () => {
+            buttonCount++;
+            updateStats();
+            log('✅ Test Button 1 clicked!', 'success');
+        });
+
+        document.getElementById('testBtn2').addEventListener('click', () => {
+            buttonCount++;
+            updateStats();
+            log('✅ Test Button 2 clicked!', 'success');
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            document.getElementById('console').innerHTML = '';
+            log('Console cleared', 'info');
+        });
+
+        // Window events
+        window.addEventListener('resize', () => {
+            updateDeviceInfo();
+            log(`📐 Window resized: ${window.innerWidth}x${window.innerHeight}`, 'info');
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateDeviceInfo();
+                log(`🔄 Orientation changed`, 'info');
+            }, 100);
+        });
+
+        // Pointer events (if supported)
+        if ('PointerEvent' in window) {
+            document.addEventListener('pointerdown', (e) => {
+                log(`👉 POINTER DOWN: ${e.pointerType}`, 'info');
+            });
+        }
+
+        // Log initial state
+        log(`User Agent: ${navigator.userAgent.substring(0, 50)}...`, 'info');
+        log(`Touch support: ${'ontouchstart' in window}`, 'info');
+        log(`Max touch points: ${navigator.maxTouchPoints}`, 'info');
+        log(`Viewport: ${window.innerWidth}x${window.innerHeight}`, 'info');
+        log('Ready to test! Tap anywhere...', 'success');
+    </script>
+</body>
+</html>

@@ -12,7 +12,7 @@ A modern, full-stack e-commerce platform for Ghana's agricultural sector with PW
 - Node.js 16+
 - npm or yarn
 
-### Installation
+### Development Mode (2 servers with hot reload)
 ```bash
 # Install all dependencies
 npm run install:all
@@ -23,6 +23,16 @@ npm run dev
 
 **Frontend**: http://localhost:3000  
 **Backend**: http://localhost:5000
+
+### Production Mode (1 unified server)
+```bash
+# Build and start unified server
+npm run start:unified
+```
+
+**Application**: http://localhost:5000
+
+See **[UNIFIED_SERVER_GUIDE.md](UNIFIED_SERVER_GUIDE.md)** for detailed setup instructions.
 
 ---
 
@@ -74,11 +84,14 @@ npm run dev
 
 ## 📚 Documentation
 
+- **[Project Structure](PROJECT_STRUCTURE.md)** - Complete project organization
+- **[Structure Tree](STRUCTURE_TREE.txt)** - Visual directory tree
+- **[Unified Server Guide](UNIFIED_SERVER_GUIDE.md)** - Run on one server (production)
+- **[Quick Start](QUICK_START.md)** - Quick reference guide
 - **[Setup Guide](SETUP.md)** - Local development setup
 - **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Deploy to production
 - **[Quick Deploy](docs/QUICK_DEPLOY.md)** - 10-minute deployment
 - **[API Documentation](backend/API.md)** - API endpoints
-- **[PWA Guide](docs/PWA_IMPLEMENTATION.md)** - PWA features
 - **[All Documentation](docs/)** - Complete documentation index
 - **[Changelog](CHANGELOG.md)** - Version history
 

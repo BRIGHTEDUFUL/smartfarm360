@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import { productsAPI, usersAPI, auditAPI, ordersAPI } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'react-toastify';
-import './AdminDashboard.css';
+import { useState, useEffect } from "react";
+
+import { productsAPI, usersAPI, auditAPI, ordersAPI } from "../services/api";
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
+import "./AdminDashboard.css";
 
 interface Product {
   id: number;
@@ -50,7 +50,9 @@ interface UserFormData {
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'users' | 'audit'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "products" | "orders" | "users" | "audit"
+  >("overview");
   const [products, setProducts] = useState<Product[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
@@ -61,17 +63,17 @@ const AdminDashboard = () => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [userFormData, setUserFormData] = useState<UserFormData>({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    phone: '',
-    role: 'Consumer',
-    status: 'Active'
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    phone: "",
+    role: "Consumer",
+    status: "Active",
   });
-  const [userSearch, setUserSearch] = useState('');
-  const [userRoleFilter, setUserRoleFilter] = useState('All');
-  const [userStatusFilter, setUserStatusFilter] = useState('All');
+  const [userSearch, setUserSearch] = useState("");
+  const [userRoleFilter, setUserRoleFilter] = useState("All");
+  const [userStatusFilter, setUserStatusFilter] = useState("All");
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
 
@@ -86,25 +88,25 @@ const AdminDashboard = () => {
   });
 
   useEffect(() => {
-    if (user?.role === 'Admin') {
+    if (user?.role === "Admin") {
       loadDashboardData();
     }
   }, [user]);
 
   useEffect(() => {
-    if (activeTab === 'users' && user?.role === 'Admin') {
+    if (activeTab === "users" && user?.role === "Admin") {
       loadUsers();
     }
   }, [activeTab, userSearch, userRoleFilter, userStatusFilter]);
 
   useEffect(() => {
-    if (activeTab === 'orders' && user?.role === 'Admin') {
+    if (activeTab === "orders" && user?.role === "Admin") {
       loadOrders();
     }
   }, [activeTab]);
 
   useEffect(() => {
-    if (activeTab === 'audit' && user?.role === 'Admin') {
+    if (activeTab === "audit" && user?.role === "Admin") {
       loadAuditLogs();
     }
   }, [activeTab]);
@@ -114,7 +116,7 @@ const AdminDashboard = () => {
     try {
       await Promise.all([loadProducts(), loadStats()]);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      console.error("Failed to load dashboard data:", error);
     } finally {
       setLoading(false);
     }
@@ -123,12 +125,12 @@ const AdminDashboard = () => {
   const loadProducts = async () => {
     try {
       const response = await productsAPI.getAll({});
-      const productsData = Array.isArray(response.data.data) 
-        ? response.data.data 
+      const productsData = Array.isArray(response.data.data)
+        ? response.data.data
         : response.data.data?.products || [];
       setProducts(productsData);
     } catch (error) {
-      console.error('Failed to load products:', error);
+      console.error("Failed to load products:", error);
     }
   };
 
@@ -137,26 +139,32 @@ const AdminDashboard = () => {
       const [productsRes, usersRes, ordersRes] = await Promise.all([
         productsAPI.getAll({}),
         usersAPI.getAll({}),
-        ordersAPI.getAll()
+        ordersAPI.getAll(),
       ]);
-      
-      const productsData = Array.isArray(productsRes.data.data) 
-        ? productsRes.data.data 
+
+      const productsData = Array.isArray(productsRes.data.data)
+        ? productsRes.data.data
         : productsRes.data.data?.products || [];
-      
+
       const usersData = usersRes.data.data?.users || [];
       const ordersData = ordersRes.data.data || [];
-      
+
       setStats({
         totalProducts: productsData.length,
         totalUsers: usersData.length,
         totalOrders: ordersData.length,
-        pendingOrders: ordersData.filter((o: any) => o.status === 'Pending Payment').length,
-        pendingProducts: productsData.filter((p: Product) => p.status === 'Pending').length,
-        activeProducts: productsData.filter((p: Product) => p.status === 'Active').length,
+        pendingOrders: ordersData.filter(
+          (o: any) => o.status === "Pending Payment",
+        ).length,
+        pendingProducts: productsData.filter(
+          (p: Product) => p.status === "Pending",
+        ).length,
+        activeProducts: productsData.filter(
+          (p: Product) => p.status === "Active",
+        ).length,
       });
     } catch (error) {
-      console.error('Failed to load stats:', error);
+      console.error("Failed to load stats:", error);
     }
   };
 
@@ -165,14 +173,14 @@ const AdminDashboard = () => {
     try {
       const params: any = {};
       if (userSearch) params.search = userSearch;
-      if (userRoleFilter !== 'All') params.role = userRoleFilter;
-      if (userStatusFilter !== 'All') params.status = userStatusFilter;
+      if (userRoleFilter !== "All") params.role = userRoleFilter;
+      if (userStatusFilter !== "All") params.status = userStatusFilter;
 
       const response = await usersAPI.getAll(params);
       setUsers(response.data.data.users || []);
     } catch (error: any) {
-      toast.error('Failed to load users');
-      console.error('Failed to load users:', error);
+      toast.error("Failed to load users");
+      console.error("Failed to load users:", error);
     } finally {
       setLoading(false);
     }
@@ -184,8 +192,8 @@ const AdminDashboard = () => {
       const response = await auditAPI.getAll({});
       setAuditLogs(response.data.data.logs || []);
     } catch (error: any) {
-      toast.error('Failed to load audit logs');
-      console.error('Failed to load audit logs:', error);
+      toast.error("Failed to load audit logs");
+      console.error("Failed to load audit logs:", error);
     } finally {
       setLoading(false);
     }
@@ -196,7 +204,7 @@ const AdminDashboard = () => {
     try {
       const response = await ordersAPI.getAll();
       const ordersData = response.data.data || [];
-      
+
       // Fetch order details with items for each order
       const ordersWithDetails = await Promise.all(
         ordersData.map(async (order: any) => {
@@ -204,16 +212,19 @@ const AdminDashboard = () => {
             const detailsResponse = await ordersAPI.getById(order.id);
             return detailsResponse.data.data;
           } catch (error) {
-            console.error(`Failed to load details for order ${order.id}:`, error);
+            console.error(
+              `Failed to load details for order ${order.id}:`,
+              error,
+            );
             return order;
           }
-        })
+        }),
       );
-      
+
       setOrders(ordersWithDetails);
     } catch (error: any) {
-      toast.error('Failed to load orders');
-      console.error('Failed to load orders:', error);
+      toast.error("Failed to load orders");
+      console.error("Failed to load orders:", error);
     } finally {
       setLoading(false);
     }
@@ -226,7 +237,9 @@ const AdminDashboard = () => {
       loadOrders();
       loadStats();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to update order status');
+      toast.error(
+        error.response?.data?.error?.message || "Failed to update order status",
+      );
     }
   };
 
@@ -239,38 +252,44 @@ const AdminDashboard = () => {
   const handleApproveProduct = async (productId: number) => {
     try {
       await productsAPI.approve(productId);
-      toast.success('Product approved successfully');
+      toast.success("Product approved successfully");
       loadProducts();
       loadStats();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to approve product');
+      toast.error(
+        error.response?.data?.error?.message || "Failed to approve product",
+      );
     }
   };
 
   const handleRejectProduct = async (productId: number) => {
-    const reason = prompt('Enter rejection reason:');
+    const reason = prompt("Enter rejection reason:");
     if (!reason) return;
 
     try {
       await productsAPI.reject(productId, reason);
-      toast.success('Product rejected');
+      toast.success("Product rejected");
       loadProducts();
       loadStats();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to reject product');
+      toast.error(
+        error.response?.data?.error?.message || "Failed to reject product",
+      );
     }
   };
 
   const handleDeleteProduct = async (productId: number) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
       await productsAPI.delete(productId);
-      toast.success('Product deleted successfully');
+      toast.success("Product deleted successfully");
       loadProducts();
       loadStats();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to delete product');
+      toast.error(
+        error.response?.data?.error?.message || "Failed to delete product",
+      );
     }
   };
 
@@ -278,13 +297,13 @@ const AdminDashboard = () => {
   const handleAddUser = () => {
     setEditingUser(null);
     setUserFormData({
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      phone: '',
-      role: 'Consumer',
-      status: 'Active'
+      first_name: "",
+      last_name: "",
+      email: "",
+      password: "",
+      phone: "",
+      role: "Consumer",
+      status: "Active",
     });
     setShowUserModal(true);
   };
@@ -295,24 +314,31 @@ const AdminDashboard = () => {
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
-      password: '',
+      password: "",
       phone: user.phone,
       role: user.role,
-      status: user.status
+      status: user.status,
     });
     setShowUserModal(true);
   };
 
   const handleDeleteUser = async (userId: number) => {
-    if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
+    if (
+      !confirm(
+        "Are you sure you want to delete this user? This action cannot be undone.",
+      )
+    )
+      return;
 
     try {
       await usersAPI.delete(userId);
-      toast.success('User deleted successfully');
+      toast.success("User deleted successfully");
       loadUsers();
       loadStats();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to delete user');
+      toast.error(
+        error.response?.data?.error?.message || "Failed to delete user",
+      );
     }
   };
 
@@ -328,29 +354,31 @@ const AdminDashboard = () => {
           email: userFormData.email,
           phone: userFormData.phone,
           role: userFormData.role,
-          status: userFormData.status
+          status: userFormData.status,
         };
         await usersAPI.update(editingUser.id, updateData);
-        toast.success('User updated successfully');
+        toast.success("User updated successfully");
       } else {
         // Create user
         await usersAPI.create(userFormData);
-        toast.success('User created successfully');
+        toast.success("User created successfully");
       }
       setShowUserModal(false);
       loadUsers();
       loadStats();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Failed to save user');
+      toast.error(
+        error.response?.data?.error?.message || "Failed to save user",
+      );
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', { 
-      day: '2-digit', 
-      month: 'short', 
-      year: 'numeric' 
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   };
 
@@ -362,39 +390,39 @@ const AdminDashboard = () => {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    
-    return date.toLocaleDateString('en-GB', { 
-      day: '2-digit', 
-      month: 'short', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
+    if (diffHours < 24)
+      return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getActionColor = (actionType: string) => {
     switch (actionType) {
-      case 'CREATE':
-      case 'APPROVE':
-        return '#2E7D32';
-      case 'UPDATE':
-        return '#FF9800';
-      case 'DELETE':
-      case 'REJECT':
-        return '#C62828';
+      case "CREATE":
+      case "APPROVE":
+        return "#2E7D32";
+      case "UPDATE":
+        return "#FF9800";
+      case "DELETE":
+      case "REJECT":
+        return "#C62828";
       default:
-        return '#757575';
+        return "#757575";
     }
   };
 
-  if (user?.role !== 'Admin') {
+  if (user?.role !== "Admin") {
     return (
       <div>
-        <Navbar />
         <div className="admin-unauthorized">
           <i className="fas fa-lock"></i>
           <h2>Access Denied</h2>
@@ -406,14 +434,15 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <Navbar />
-      
       <div className="admin-dashboard">
         <div className="admin-container">
           <div className="admin-header">
             <div>
               <h1>🌾 Smart Farming 360 - Admin Panel</h1>
-              <p>Welcome back, {user.first_name}! Manage your platform efficiently.</p>
+              <p>
+                Welcome back, {user.first_name}! Manage your platform
+                efficiently.
+              </p>
             </div>
             <div className="header-actions">
               <button onClick={loadDashboardData} className="refresh-all-btn">
@@ -426,7 +455,7 @@ const AdminDashboard = () => {
           {/* Stats Cards */}
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-icon" style={{ background: '#4CAF50' }}>
+              <div className="stat-icon" style={{ background: "#4CAF50" }}>
                 <i className="fas fa-box"></i>
               </div>
               <div className="stat-content">
@@ -436,7 +465,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon" style={{ background: '#2196F3' }}>
+              <div className="stat-icon" style={{ background: "#2196F3" }}>
                 <i className="fas fa-shopping-cart"></i>
               </div>
               <div className="stat-content">
@@ -446,7 +475,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon" style={{ background: '#FF9800' }}>
+              <div className="stat-icon" style={{ background: "#FF9800" }}>
                 <i className="fas fa-clock"></i>
               </div>
               <div className="stat-content">
@@ -456,7 +485,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon" style={{ background: '#9C27B0' }}>
+              <div className="stat-icon" style={{ background: "#9C27B0" }}>
                 <i className="fas fa-users"></i>
               </div>
               <div className="stat-content">
@@ -469,22 +498,22 @@ const AdminDashboard = () => {
           {/* Tabs */}
           <div className="admin-tabs">
             <button
-              className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
+              className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
+              onClick={() => setActiveTab("overview")}
             >
               <i className="fas fa-chart-line"></i>
               Overview
             </button>
             <button
-              className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
-              onClick={() => setActiveTab('products')}
+              className={`tab-btn ${activeTab === "products" ? "active" : ""}`}
+              onClick={() => setActiveTab("products")}
             >
               <i className="fas fa-box"></i>
               Products
             </button>
             <button
-              className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
-              onClick={() => setActiveTab('orders')}
+              className={`tab-btn ${activeTab === "orders" ? "active" : ""}`}
+              onClick={() => setActiveTab("orders")}
             >
               <i className="fas fa-shopping-cart"></i>
               Orders
@@ -493,15 +522,15 @@ const AdminDashboard = () => {
               )}
             </button>
             <button
-              className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
-              onClick={() => setActiveTab('users')}
+              className={`tab-btn ${activeTab === "users" ? "active" : ""}`}
+              onClick={() => setActiveTab("users")}
             >
               <i className="fas fa-users"></i>
               Users
             </button>
             <button
-              className={`tab-btn ${activeTab === 'audit' ? 'active' : ''}`}
-              onClick={() => setActiveTab('audit')}
+              className={`tab-btn ${activeTab === "audit" ? "active" : ""}`}
+              onClick={() => setActiveTab("audit")}
             >
               <i className="fas fa-history"></i>
               Audit Logs
@@ -510,21 +539,27 @@ const AdminDashboard = () => {
 
           {/* Tab Content */}
           <div className="tab-content">
-            {activeTab === 'overview' && (
+            {activeTab === "overview" && (
               <div className="overview-section">
                 <h2>Platform Overview</h2>
                 <div className="overview-grid">
                   <div className="overview-card">
                     <h3>Recent Activity</h3>
-                    <p>Monitor recent platform activities and user interactions</p>
+                    <p>
+                      Monitor recent platform activities and user interactions
+                    </p>
                     <div className="activity-list">
                       <div className="activity-item">
                         <i className="fas fa-plus-circle"></i>
-                        <span>{stats.pendingProducts} products awaiting approval</span>
+                        <span>
+                          {stats.pendingProducts} products awaiting approval
+                        </span>
                       </div>
                       <div className="activity-item">
                         <i className="fas fa-check-circle"></i>
-                        <span>{stats.activeProducts} products currently active</span>
+                        <span>
+                          {stats.activeProducts} products currently active
+                        </span>
                       </div>
                       <div className="activity-item">
                         <i className="fas fa-users"></i>
@@ -536,15 +571,24 @@ const AdminDashboard = () => {
                   <div className="overview-card">
                     <h3>Quick Actions</h3>
                     <div className="quick-actions">
-                      <button onClick={() => setActiveTab('products')} className="action-btn">
+                      <button
+                        onClick={() => setActiveTab("products")}
+                        className="action-btn"
+                      >
                         <i className="fas fa-box"></i>
                         Manage Products
                       </button>
-                      <button onClick={() => setActiveTab('users')} className="action-btn">
+                      <button
+                        onClick={() => setActiveTab("users")}
+                        className="action-btn"
+                      >
                         <i className="fas fa-users"></i>
                         Manage Users
                       </button>
-                      <button onClick={() => setActiveTab('audit')} className="action-btn">
+                      <button
+                        onClick={() => setActiveTab("audit")}
+                        className="action-btn"
+                      >
                         <i className="fas fa-history"></i>
                         View Audit Logs
                       </button>
@@ -554,7 +598,7 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            {activeTab === 'products' && (
+            {activeTab === "products" && (
               <div className="products-section">
                 <div className="section-header">
                   <h2>Product Management</h2>
@@ -598,24 +642,30 @@ const AdminDashboard = () => {
                             <td>GH₵ {product.price.toFixed(2)}</td>
                             <td>{product.stock_quantity}</td>
                             <td>
-                              <span className={`status-badge status-${product.status.toLowerCase()}`}>
+                              <span
+                                className={`status-badge status-${product.status.toLowerCase()}`}
+                              >
                                 {product.status}
                               </span>
                             </td>
                             <td>#{product.farmer_id}</td>
                             <td>
                               <div className="action-buttons">
-                                {product.status === 'Pending' && (
+                                {product.status === "Pending" && (
                                   <>
                                     <button
-                                      onClick={() => handleApproveProduct(product.id)}
+                                      onClick={() =>
+                                        handleApproveProduct(product.id)
+                                      }
                                       className="btn-approve"
                                       title="Approve"
                                     >
                                       <i className="fas fa-check"></i>
                                     </button>
                                     <button
-                                      onClick={() => handleRejectProduct(product.id)}
+                                      onClick={() =>
+                                        handleRejectProduct(product.id)
+                                      }
                                       className="btn-reject"
                                       title="Reject"
                                     >
@@ -624,7 +674,9 @@ const AdminDashboard = () => {
                                   </>
                                 )}
                                 <button
-                                  onClick={() => handleDeleteProduct(product.id)}
+                                  onClick={() =>
+                                    handleDeleteProduct(product.id)
+                                  }
                                   className="btn-delete"
                                   title="Delete"
                                 >
@@ -641,7 +693,7 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            {activeTab === 'orders' && (
+            {activeTab === "orders" && (
               <div className="orders-section">
                 <div className="section-header">
                   <h2>Order Management</h2>
@@ -683,9 +735,11 @@ const AdminDashboard = () => {
                             <td>User #{order.user_id}</td>
                             <td>GH₵ {order.total_amount.toFixed(2)}</td>
                             <td>{order.payment_method}</td>
-                            <td>{order.delivery_address || 'N/A'}</td>
+                            <td>{order.delivery_address || "N/A"}</td>
                             <td>
-                              <span className={`status-badge status-${order.status.toLowerCase().replace(' ', '-')}`}>
+                              <span
+                                className={`status-badge status-${order.status.toLowerCase().replace(" ", "-")}`}
+                              >
                                 {order.status}
                               </span>
                             </td>
@@ -699,17 +753,27 @@ const AdminDashboard = () => {
                                 >
                                   <i className="fas fa-eye"></i>
                                 </button>
-                                {order.status === 'Pending Payment' && (
+                                {order.status === "Pending Payment" && (
                                   <>
                                     <button
-                                      onClick={() => handleUpdateOrderStatus(order.id, 'Processing')}
+                                      onClick={() =>
+                                        handleUpdateOrderStatus(
+                                          order.id,
+                                          "Processing",
+                                        )
+                                      }
                                       className="btn-approve"
                                       title="Confirm Payment"
                                     >
                                       <i className="fas fa-check"></i>
                                     </button>
                                     <button
-                                      onClick={() => handleUpdateOrderStatus(order.id, 'Cancelled')}
+                                      onClick={() =>
+                                        handleUpdateOrderStatus(
+                                          order.id,
+                                          "Cancelled",
+                                        )
+                                      }
                                       className="btn-reject"
                                       title="Cancel"
                                     >
@@ -717,9 +781,14 @@ const AdminDashboard = () => {
                                     </button>
                                   </>
                                 )}
-                                {order.status === 'Processing' && (
+                                {order.status === "Processing" && (
                                   <button
-                                    onClick={() => handleUpdateOrderStatus(order.id, 'Completed')}
+                                    onClick={() =>
+                                      handleUpdateOrderStatus(
+                                        order.id,
+                                        "Completed",
+                                      )
+                                    }
                                     className="btn-approve"
                                     title="Mark as Completed"
                                   >
@@ -737,7 +806,7 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            {activeTab === 'users' && (
+            {activeTab === "users" && (
               <div className="users-section">
                 <div className="section-header">
                   <h2>User Management</h2>
@@ -807,16 +876,22 @@ const AdminDashboard = () => {
                         {users.map((u) => (
                           <tr key={u.id}>
                             <td>{u.id}</td>
-                            <td>{u.first_name} {u.last_name}</td>
+                            <td>
+                              {u.first_name} {u.last_name}
+                            </td>
                             <td>{u.email}</td>
                             <td>{u.phone}</td>
                             <td>
-                              <span className={`role-badge role-${u.role.toLowerCase()}`}>
+                              <span
+                                className={`role-badge role-${u.role.toLowerCase()}`}
+                              >
                                 {u.role}
                               </span>
                             </td>
                             <td>
-                              <span className={`status-badge status-${u.status.toLowerCase()}`}>
+                              <span
+                                className={`status-badge status-${u.status.toLowerCase()}`}
+                              >
                                 {u.status}
                               </span>
                             </td>
@@ -848,7 +923,7 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            {activeTab === 'audit' && (
+            {activeTab === "audit" && (
               <div className="audit-section">
                 <div className="section-header">
                   <h2>Audit Logs</h2>
@@ -872,27 +947,53 @@ const AdminDashboard = () => {
                   <div className="audit-logs-list">
                     {auditLogs.map((log) => (
                       <div key={log.id} className="audit-log-item">
-                        <div className="audit-icon" style={{ background: getActionColor(log.action_type) }}>
-                          <i className={`fas fa-${
-                            log.action_type === 'CREATE' ? 'plus' :
-                            log.action_type === 'UPDATE' ? 'edit' :
-                            log.action_type === 'DELETE' ? 'trash' :
-                            log.action_type === 'APPROVE' ? 'check' :
-                            log.action_type === 'REJECT' ? 'times' : 'circle'
-                          }`}></i>
+                        <div
+                          className="audit-icon"
+                          style={{
+                            background: getActionColor(log.action_type),
+                          }}
+                        >
+                          <i
+                            className={`fas fa-${
+                              log.action_type === "CREATE"
+                                ? "plus"
+                                : log.action_type === "UPDATE"
+                                  ? "edit"
+                                  : log.action_type === "DELETE"
+                                    ? "trash"
+                                    : log.action_type === "APPROVE"
+                                      ? "check"
+                                      : log.action_type === "REJECT"
+                                        ? "times"
+                                        : "circle"
+                            }`}
+                          ></i>
                         </div>
                         <div className="audit-content">
                           <div className="audit-header">
-                            <span className="audit-admin">{log.admin_name || 'Unknown Admin'}</span>
-                            <span className="audit-action" style={{ color: getActionColor(log.action_type) }}>
+                            <span className="audit-admin">
+                              {log.admin_name || "Unknown Admin"}
+                            </span>
+                            <span
+                              className="audit-action"
+                              style={{ color: getActionColor(log.action_type) }}
+                            >
                               {log.action_type}
                             </span>
-                            <span className="audit-entity">{log.entity_type}</span>
+                            <span className="audit-entity">
+                              {log.entity_type}
+                            </span>
                           </div>
                           <div className="audit-details">
-                            {log.details?.name && <span>Name: {log.details.name}</span>}
-                            {log.details?.email && <span>Email: {log.details.email}</span>}
-                            {log.details?.reason && <span>Reason: {log.details.reason}</span>}
+                            {log.details?.name && (
+                              <span>Name: {log.details.name}</span>
+                            )}
+                            {log.details?.email && (
+                              <span>Email: {log.details.email}</span>
+                            )}
+                            {log.details?.reason && (
+                              <span>Reason: {log.details.reason}</span>
+                            )}
                           </div>
                           <div className="audit-meta">
                             <span className="audit-time">
@@ -920,12 +1021,15 @@ const AdminDashboard = () => {
         <div className="modal-overlay" onClick={() => setShowUserModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{editingUser ? 'Edit User' : 'Add New User'}</h2>
-              <button onClick={() => setShowUserModal(false)} className="modal-close">
+              <h2>{editingUser ? "Edit User" : "Add New User"}</h2>
+              <button
+                onClick={() => setShowUserModal(false)}
+                className="modal-close"
+              >
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            
+
             <form onSubmit={handleUserSubmit} className="user-form">
               <div className="form-row">
                 <div className="form-group">
@@ -933,7 +1037,12 @@ const AdminDashboard = () => {
                   <input
                     type="text"
                     value={userFormData.first_name}
-                    onChange={(e) => setUserFormData({ ...userFormData, first_name: e.target.value })}
+                    onChange={(e) =>
+                      setUserFormData({
+                        ...userFormData,
+                        first_name: e.target.value,
+                      })
+                    }
                     required
                     placeholder="John"
                   />
@@ -943,7 +1052,12 @@ const AdminDashboard = () => {
                   <input
                     type="text"
                     value={userFormData.last_name}
-                    onChange={(e) => setUserFormData({ ...userFormData, last_name: e.target.value })}
+                    onChange={(e) =>
+                      setUserFormData({
+                        ...userFormData,
+                        last_name: e.target.value,
+                      })
+                    }
                     required
                     placeholder="Doe"
                   />
@@ -955,7 +1069,9 @@ const AdminDashboard = () => {
                 <input
                   type="email"
                   value={userFormData.email}
-                  onChange={(e) => setUserFormData({ ...userFormData, email: e.target.value })}
+                  onChange={(e) =>
+                    setUserFormData({ ...userFormData, email: e.target.value })
+                  }
                   required
                   placeholder="john@example.com"
                 />
@@ -967,7 +1083,12 @@ const AdminDashboard = () => {
                   <input
                     type="password"
                     value={userFormData.password}
-                    onChange={(e) => setUserFormData({ ...userFormData, password: e.target.value })}
+                    onChange={(e) =>
+                      setUserFormData({
+                        ...userFormData,
+                        password: e.target.value,
+                      })
+                    }
                     required
                     minLength={8}
                     placeholder="Min 8 characters"
@@ -980,7 +1101,9 @@ const AdminDashboard = () => {
                 <input
                   type="tel"
                   value={userFormData.phone}
-                  onChange={(e) => setUserFormData({ ...userFormData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setUserFormData({ ...userFormData, phone: e.target.value })
+                  }
                   required
                   placeholder="0241234567"
                 />
@@ -991,7 +1114,9 @@ const AdminDashboard = () => {
                   <label>Role *</label>
                   <select
                     value={userFormData.role}
-                    onChange={(e) => setUserFormData({ ...userFormData, role: e.target.value })}
+                    onChange={(e) =>
+                      setUserFormData({ ...userFormData, role: e.target.value })
+                    }
                     required
                   >
                     <option value="Consumer">Consumer</option>
@@ -1003,7 +1128,12 @@ const AdminDashboard = () => {
                   <label>Status *</label>
                   <select
                     value={userFormData.status}
-                    onChange={(e) => setUserFormData({ ...userFormData, status: e.target.value })}
+                    onChange={(e) =>
+                      setUserFormData({
+                        ...userFormData,
+                        status: e.target.value,
+                      })
+                    }
                     required
                   >
                     <option value="Active">Active</option>
@@ -1014,12 +1144,16 @@ const AdminDashboard = () => {
               </div>
 
               <div className="form-actions">
-                <button type="button" onClick={() => setShowUserModal(false)} className="btn-cancel">
+                <button
+                  type="button"
+                  onClick={() => setShowUserModal(false)}
+                  className="btn-cancel"
+                >
                   Cancel
                 </button>
                 <button type="submit" className="btn-submit">
                   <i className="fas fa-save"></i>
-                  {editingUser ? 'Update User' : 'Create User'}
+                  {editingUser ? "Update User" : "Create User"}
                 </button>
               </div>
             </form>
@@ -1030,14 +1164,20 @@ const AdminDashboard = () => {
       {/* Order Details Modal */}
       {showOrderModal && selectedOrder && (
         <div className="modal-overlay" onClick={() => setShowOrderModal(false)}>
-          <div className="modal-content order-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content order-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="modal-header">
               <h2>Order Details #{selectedOrder.id}</h2>
-              <button onClick={() => setShowOrderModal(false)} className="modal-close">
+              <button
+                onClick={() => setShowOrderModal(false)}
+                className="modal-close"
+              >
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            
+
             <div className="order-details-content">
               <div className="detail-section">
                 <h3>Order Information</h3>
@@ -1048,17 +1188,23 @@ const AdminDashboard = () => {
                   </div>
                   <div className="detail-item">
                     <span className="label">Status:</span>
-                    <span className={`status-badge status-${selectedOrder.status.toLowerCase().replace(' ', '-')}`}>
+                    <span
+                      className={`status-badge status-${selectedOrder.status.toLowerCase().replace(" ", "-")}`}
+                    >
                       {selectedOrder.status}
                     </span>
                   </div>
                   <div className="detail-item">
                     <span className="label">Date:</span>
-                    <span className="value">{formatDate(selectedOrder.created_at)}</span>
+                    <span className="value">
+                      {formatDate(selectedOrder.created_at)}
+                    </span>
                   </div>
                   <div className="detail-item">
                     <span className="label">Payment Method:</span>
-                    <span className="value">{selectedOrder.payment_method}</span>
+                    <span className="value">
+                      {selectedOrder.payment_method}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1068,7 +1214,9 @@ const AdminDashboard = () => {
                   <h3>Delivery Information</h3>
                   <div className="detail-item">
                     <span className="label">Address:</span>
-                    <span className="value">{selectedOrder.delivery_address}</span>
+                    <span className="value">
+                      {selectedOrder.delivery_address}
+                    </span>
                   </div>
                 </div>
               )}
@@ -1095,17 +1243,28 @@ const AdminDashboard = () => {
                     <tbody>
                       {selectedOrder.items.map((item: any, idx: number) => (
                         <tr key={idx}>
-                          <td>{item.name || 'Product'}</td>
+                          <td>{item.name || "Product"}</td>
                           <td>{item.quantity}</td>
                           <td>GH₵ {item.price_at_purchase.toFixed(2)}</td>
-                          <td>GH₵ {(item.price_at_purchase * item.quantity).toFixed(2)}</td>
+                          <td>
+                            GH₵{" "}
+                            {(item.price_at_purchase * item.quantity).toFixed(
+                              2,
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan={3}><strong>Total Amount:</strong></td>
-                        <td><strong>GH₵ {selectedOrder.total_amount.toFixed(2)}</strong></td>
+                        <td colSpan={3}>
+                          <strong>Total Amount:</strong>
+                        </td>
+                        <td>
+                          <strong>
+                            GH₵ {selectedOrder.total_amount.toFixed(2)}
+                          </strong>
+                        </td>
                       </tr>
                     </tfoot>
                   </table>
@@ -1115,11 +1274,11 @@ const AdminDashboard = () => {
               </div>
 
               <div className="modal-actions">
-                {selectedOrder.status === 'Pending Payment' && (
+                {selectedOrder.status === "Pending Payment" && (
                   <>
                     <button
                       onClick={() => {
-                        handleUpdateOrderStatus(selectedOrder.id, 'Processing');
+                        handleUpdateOrderStatus(selectedOrder.id, "Processing");
                         setShowOrderModal(false);
                       }}
                       className="btn-submit"
@@ -1129,7 +1288,7 @@ const AdminDashboard = () => {
                     </button>
                     <button
                       onClick={() => {
-                        handleUpdateOrderStatus(selectedOrder.id, 'Cancelled');
+                        handleUpdateOrderStatus(selectedOrder.id, "Cancelled");
                         setShowOrderModal(false);
                       }}
                       className="btn-cancel"
@@ -1139,10 +1298,10 @@ const AdminDashboard = () => {
                     </button>
                   </>
                 )}
-                {selectedOrder.status === 'Processing' && (
+                {selectedOrder.status === "Processing" && (
                   <button
                     onClick={() => {
-                      handleUpdateOrderStatus(selectedOrder.id, 'Completed');
+                      handleUpdateOrderStatus(selectedOrder.id, "Completed");
                       setShowOrderModal(false);
                     }}
                     className="btn-submit"

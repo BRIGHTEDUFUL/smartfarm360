@@ -1,63 +1,65 @@
-import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import './AboutPage.css';
+import { Link } from "react-router-dom";
+
+import "./AboutPage.css";
 
 const AboutPage = () => {
   const stats = [
-    { icon: '🌍', value: '16', label: 'Regions Covered' },
-    { icon: '👨‍🌾', value: '1,250+', label: 'Active Farmers' },
-    { icon: '🛒', value: '5,000+', label: 'Products Available' },
-    { icon: '😊', value: '10,000+', label: 'Happy Customers' },
+    { icon: "🌍", value: "16", label: "Regions Covered" },
+    { icon: "👨‍🌾", value: "1,250+", label: "Active Farmers" },
+    { icon: "🛒", value: "5,000+", label: "Products Available" },
+    { icon: "😊", value: "10,000+", label: "Happy Customers" },
   ];
 
   const values = [
     {
-      icon: '🌱',
-      title: 'Sustainability',
-      description: 'Supporting eco-friendly farming practices that protect Ghana\'s natural resources for future generations.',
+      icon: "🌱",
+      title: "Sustainability",
+      description:
+        "Supporting eco-friendly farming practices that protect Ghana's natural resources for future generations.",
     },
     {
-      icon: '🤝',
-      title: 'Fair Trade',
-      description: 'Ensuring farmers receive fair prices for their produce while consumers get quality products at great value.',
+      icon: "🤝",
+      title: "Fair Trade",
+      description:
+        "Ensuring farmers receive fair prices for their produce while consumers get quality products at great value.",
     },
     {
-      icon: '💚',
-      title: 'Community First',
-      description: 'Building strong connections between farmers and consumers across all 16 regions of Ghana.',
+      icon: "💚",
+      title: "Community First",
+      description:
+        "Building strong connections between farmers and consumers across all 16 regions of Ghana.",
     },
     {
-      icon: '✨',
-      title: 'Quality Assured',
-      description: 'Every product is verified for freshness and quality before reaching your doorstep.',
+      icon: "✨",
+      title: "Quality Assured",
+      description:
+        "Every product is verified for freshness and quality before reaching your doorstep.",
     },
   ];
 
   const team = [
     {
-      name: 'Kwame Asante',
-      role: 'Founder & CEO',
-      image: '👨🏿‍💼',
-      bio: 'Agricultural economist passionate about connecting farmers to markets.',
+      name: "Kwame Asante",
+      role: "Founder & CEO",
+      image: "👨🏿‍💼",
+      bio: "Agricultural economist passionate about connecting farmers to markets.",
     },
     {
-      name: 'Ama Osei',
-      role: 'Head of Operations',
-      image: '👩🏿‍💼',
-      bio: 'Logistics expert ensuring fresh products reach customers on time.',
+      name: "Ama Osei",
+      role: "Head of Operations",
+      image: "👩🏿‍💼",
+      bio: "Logistics expert ensuring fresh products reach customers on time.",
     },
     {
-      name: 'Kofi Mensah',
-      role: 'Farmer Relations',
-      image: '👨🏿‍🌾',
-      bio: 'Former farmer helping others succeed in the digital marketplace.',
+      name: "Kofi Mensah",
+      role: "Farmer Relations",
+      image: "👨🏿‍🌾",
+      bio: "Former farmer helping others succeed in the digital marketplace.",
     },
   ];
 
   return (
     <div>
-      <Navbar />
-      
       <div className="about-page">
         {/* Hero Section */}
         <section className="about-hero">
@@ -70,10 +72,15 @@ const AboutPage = () => {
               <i className="fas fa-leaf"></i>
               <span>About Smart Farming 360</span>
             </div>
-            <h1>Connecting Ghana's Farmers<br />to Your Table</h1>
+            <h1>
+              Connecting Ghana's Farmers
+              <br />
+              to Your Table
+            </h1>
             <p>
-              We're revolutionizing agriculture in Ghana by creating a direct link between farmers 
-              across all 16 regions and consumers nationwide. Fresh, fair, and sustainable.
+              We're revolutionizing agriculture in Ghana by creating a direct
+              link between farmers across all 16 regions and consumers
+              nationwide. Fresh, fair, and sustainable.
             </p>
           </div>
         </section>
@@ -83,7 +90,11 @@ const AboutPage = () => {
           <div className="container">
             <div className="stats-grid">
               {stats.map((stat, index) => (
-                <div key={index} className="stat-card" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div
+                  key={index}
+                  className="stat-card"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <div className="stat-icon">{stat.icon}</div>
                   <div className="stat-value">{stat.value}</div>
                   <div className="stat-label">{stat.label}</div>
@@ -107,21 +118,24 @@ const AboutPage = () => {
               <div className="story-text">
                 <h2>Our Story</h2>
                 <p>
-                  Smart Farming 360 was born from a simple observation: Ghana's farmers produce 
-                  incredible quality products, but struggle to reach consumers directly. Meanwhile, 
-                  consumers want fresh, locally-sourced produce but don't know where to find it.
+                  Smart Farming 360 was born from a simple observation: Ghana's
+                  farmers produce incredible quality products, but struggle to
+                  reach consumers directly. Meanwhile, consumers want fresh,
+                  locally-sourced produce but don't know where to find it.
                 </p>
                 <p>
-                  We bridge this gap by connecting farmers from all 16 regions of Ghana with 
-                  consumers across the country. From the cocoa farms of Ashanti to the rice fields 
-                  of Northern Region, from the pineapple plantations of Eastern Region to the 
-                  vegetable gardens of Greater Accra - we bring Ghana's agricultural diversity 
-                  to your doorstep.
+                  We bridge this gap by connecting farmers from all 16 regions
+                  of Ghana with consumers across the country. From the cocoa
+                  farms of Ashanti to the rice fields of Northern Region, from
+                  the pineapple plantations of Eastern Region to the vegetable
+                  gardens of Greater Accra - we bring Ghana's agricultural
+                  diversity to your doorstep.
                 </p>
                 <p>
-                  Our platform ensures farmers get fair prices for their hard work while consumers 
-                  enjoy fresh, quality products at competitive prices. It's a win-win that's 
-                  transforming Ghana's agricultural landscape.
+                  Our platform ensures farmers get fair prices for their hard
+                  work while consumers enjoy fresh, quality products at
+                  competitive prices. It's a win-win that's transforming Ghana's
+                  agricultural landscape.
                 </p>
                 <Link to="/shop" className="btn btn-primary">
                   <i className="fas fa-shopping-bag"></i>
@@ -141,7 +155,11 @@ const AboutPage = () => {
             </div>
             <div className="values-grid">
               {values.map((value, index) => (
-                <div key={index} className="value-card" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div
+                  key={index}
+                  className="value-card"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <div className="value-icon">{value.icon}</div>
                   <h3>{value.title}</h3>
                   <p>{value.description}</p>
@@ -160,7 +178,11 @@ const AboutPage = () => {
             </div>
             <div className="team-grid">
               {team.map((member, index) => (
-                <div key={index} className="team-card" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div
+                  key={index}
+                  className="team-card"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <div className="team-avatar">{member.image}</div>
                   <h3>{member.name}</h3>
                   <p className="team-role">{member.role}</p>
@@ -183,24 +205,24 @@ const AboutPage = () => {
                 <div className="impact-icon">🌾</div>
                 <h3>Supporting Farmers</h3>
                 <p>
-                  Over 1,250 farmers across Ghana now have direct access to customers, 
-                  earning 30% more than traditional market prices.
+                  Over 1,250 farmers across Ghana now have direct access to
+                  customers, earning 30% more than traditional market prices.
                 </p>
               </div>
               <div className="impact-card">
                 <div className="impact-icon">🚚</div>
                 <h3>Fast Delivery</h3>
                 <p>
-                  Same-day delivery in major cities ensures products reach consumers 
-                  at peak freshness, reducing waste by 40%.
+                  Same-day delivery in major cities ensures products reach
+                  consumers at peak freshness, reducing waste by 40%.
                 </p>
               </div>
               <div className="impact-card">
                 <div className="impact-icon">🌍</div>
                 <h3>Environmental Care</h3>
                 <p>
-                  Promoting sustainable farming practices and reducing carbon footprint 
-                  through efficient logistics and local sourcing.
+                  Promoting sustainable farming practices and reducing carbon
+                  footprint through efficient logistics and local sourcing.
                 </p>
               </div>
             </div>
@@ -212,7 +234,10 @@ const AboutPage = () => {
           <div className="container">
             <div className="cta-content">
               <h2>Join the Movement</h2>
-              <p>Whether you're a farmer or a consumer, there's a place for you in our community</p>
+              <p>
+                Whether you're a farmer or a consumer, there's a place for you
+                in our community
+              </p>
               <div className="cta-buttons">
                 <Link to="/register" className="btn btn-primary btn-large">
                   <i className="fas fa-user-plus"></i>

@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { useCart } from '../contexts/CartContext';
-import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'react-toastify';
-import './CartPage.css';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
+import "./CartPage.css";
 
 const CartPage = () => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const CartPage = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
     loadCart();
@@ -25,76 +25,79 @@ const CartPage = () => {
       setLoading(true);
       await refreshCart();
     } catch (error) {
-      console.error('Failed to load cart:', error);
-      toast.error('Failed to load cart');
+      console.error("Failed to load cart:", error);
+      toast.error("Failed to load cart");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleUpdateQuantity = async (productId: number, newQuantity: number) => {
+  const handleUpdateQuantity = async (
+    productId: number,
+    newQuantity: number,
+  ) => {
     if (newQuantity < 1) return;
-    
+
     try {
       await updateQuantity(productId, newQuantity);
-      toast.success('Cart updated');
+      toast.success("Cart updated");
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update cart');
+      toast.error(error.message || "Failed to update cart");
     }
   };
 
   const handleRemoveItem = async (productId: number) => {
     try {
       await removeItem(productId);
-      toast.success('Item removed from cart');
+      toast.success("Item removed from cart");
     } catch (error: any) {
-      toast.error(error.message || 'Failed to remove item');
+      toast.error(error.message || "Failed to remove item");
     }
   };
 
   const getImagePath = (productName: string) => {
     const imageMap: { [key: string]: string } = {
-      'Fresh Tomatoes': '/images/tomato.jpg',
-      'Garden Eggs': '/images/eggplant.jpg',
-      'Fresh Carrots': '/images/carrot.jpg',
-      'Fresh Onions': '/images/Onions.jpg',
-      'Fresh Okra': '/images/okra.jpg',
-      'Ripe Bananas': '/images/banana.jpg',
-      'Fresh Pineapples': '/images/pineapple.jpg',
-      'Watermelon': '/images/watermelon.jpg',
-      'Fresh Avocado': '/images/avocado.jpg',
-      'Ripe Mangoes': '/images/mango.webp',
-      'Sweet Corn': '/images/maize.jpg',
-      'Premium Rice': '/images/rice.jpg',
-      'Brown Beans': '/images/BEANS.jpg',
-      'Pearl Millets': '/images/Millets.webp',
-      'Fresh Cassava': '/images/casasava.jpg',
-      'White Yam': '/images/yam.jpg',
-      'Cocoyam': '/images/cocoyam.jpg',
-      'Sweet Potatoes': '/images/sweet potatoes.jpeg',
-      'Free Range Eggs': '/images/eggs.jpg',
-      'Whole Chicken': '/images/chicken.jpg',
-      'Duck Meat': '/images/Duck.jpg',
-      'Turkey': '/images/turkey.webp',
-      'Fresh Beef': '/images/beef.jpg',
-      'Pork Meat': '/images/pork.jpg',
-      'Goat Meat': '/images/goats.webp',
-      'Fresh Fish': '/images/fish.jpg',
-      'Snail Meat': '/images/Snail.jpg',
-      'Rabbit Meat': '/images/rabbit.jpg',
-      'Fresh Milk': '/images/milk.jpg',
-      'Hot Pepper': '/images/pepper.jpg',
-      'Fresh Chilli': '/images/chilli.jpg',
-      'Fresh Ginger': '/images/ginger.jpg',
-      'Raw Honey': '/images/honey.jpg',
-      'Shito Pepper': '/images/Shito.jpeg',
-      'Prekese Spice': '/images/Prekese.jpeg',
+      "Fresh Tomatoes": "/images/tomato.jpg",
+      "Garden Eggs": "/images/eggplant.jpg",
+      "Fresh Carrots": "/images/carrot.jpg",
+      "Fresh Onions": "/images/Onions.jpg",
+      "Fresh Okra": "/images/okra.jpg",
+      "Ripe Bananas": "/images/banana.jpg",
+      "Fresh Pineapples": "/images/pineapple.jpg",
+      Watermelon: "/images/watermelon.jpg",
+      "Fresh Avocado": "/images/avocado.jpg",
+      "Ripe Mangoes": "/images/mango.webp",
+      "Sweet Corn": "/images/maize.jpg",
+      "Premium Rice": "/images/rice.jpg",
+      "Brown Beans": "/images/BEANS.jpg",
+      "Pearl Millets": "/images/Millets.webp",
+      "Fresh Cassava": "/images/casasava.jpg",
+      "White Yam": "/images/yam.jpg",
+      Cocoyam: "/images/cocoyam.jpg",
+      "Sweet Potatoes": "/images/sweet potatoes.jpeg",
+      "Free Range Eggs": "/images/eggs.jpg",
+      "Whole Chicken": "/images/chicken.jpg",
+      "Duck Meat": "/images/Duck.jpg",
+      Turkey: "/images/turkey.webp",
+      "Fresh Beef": "/images/beef.jpg",
+      "Pork Meat": "/images/pork.jpg",
+      "Goat Meat": "/images/goats.webp",
+      "Fresh Fish": "/images/fish.jpg",
+      "Snail Meat": "/images/Snail.jpg",
+      "Rabbit Meat": "/images/rabbit.jpg",
+      "Fresh Milk": "/images/milk.jpg",
+      "Hot Pepper": "/images/pepper.jpg",
+      "Fresh Chilli": "/images/chilli.jpg",
+      "Fresh Ginger": "/images/ginger.jpg",
+      "Raw Honey": "/images/honey.jpg",
+      "Shito Pepper": "/images/Shito.jpeg",
+      "Prekese Spice": "/images/Prekese.jpeg",
     };
-    return imageMap[productName] || '/images/vegitales.jpg';
+    return imageMap[productName] || "/images/vegitales.jpg";
   };
 
   const calculateSubtotal = () => {
-    return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
 
   const calculateTax = () => {
@@ -107,16 +110,15 @@ const CartPage = () => {
 
   const handleCheckout = () => {
     if (items.length === 0) {
-      toast.warning('Your cart is empty');
+      toast.warning("Your cart is empty");
       return;
     }
-    navigate('/checkout');
+    navigate("/checkout");
   };
 
   if (loading) {
     return (
       <div>
-        <Navbar />
         <div className="cart-loading">
           <div className="loading-spinner"></div>
           <p>Loading your cart...</p>
@@ -127,13 +129,14 @@ const CartPage = () => {
 
   return (
     <div>
-      <Navbar />
-      
       <div className="cart-page">
         <div className="cart-container">
           <div className="cart-header-section">
             <h1>Shopping Cart</h1>
-            <p>{items.length} {items.length === 1 ? 'item' : 'items'} in your cart</p>
+            <p>
+              {items.length} {items.length === 1 ? "item" : "items"} in your
+              cart
+            </p>
           </div>
 
           {items.length === 0 ? (
@@ -154,7 +157,7 @@ const CartPage = () => {
                     <div className="cart-item-image">
                       <img src={getImagePath(item.name)} alt={item.name} />
                     </div>
-                    
+
                     <div className="cart-item-details">
                       <h3>{item.name}</h3>
                       <p className="cart-item-price">
@@ -184,7 +187,12 @@ const CartPage = () => {
                       <div className="quantity-controls">
                         <button
                           className="qty-btn"
-                          onClick={() => handleUpdateQuantity(item.product_id, item.quantity - 1)}
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              item.product_id,
+                              item.quantity - 1,
+                            )
+                          }
                           disabled={item.quantity <= 1}
                         >
                           <i className="fas fa-minus"></i>
@@ -192,7 +200,12 @@ const CartPage = () => {
                         <span className="qty-display">{item.quantity}</span>
                         <button
                           className="qty-btn"
-                          onClick={() => handleUpdateQuantity(item.product_id, item.quantity + 1)}
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              item.product_id,
+                              item.quantity + 1,
+                            )
+                          }
                           disabled={item.quantity >= item.stock_quantity}
                         >
                           <i className="fas fa-plus"></i>
@@ -221,7 +234,7 @@ const CartPage = () => {
               <div className="cart-summary-section">
                 <div className="cart-summary-card">
                   <h2>Order Summary</h2>
-                  
+
                   <div className="summary-row">
                     <span>Subtotal ({items.length} items)</span>
                     <span>GH₵ {calculateSubtotal().toFixed(2)}</span>

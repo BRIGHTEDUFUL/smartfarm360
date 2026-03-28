@@ -1,0 +1,577 @@
+/* ═══════════════════════════════════════════════════════════
+   INTERACTIONS.CSS — v1.0
+   Single source of truth for every touch, scroll, focus,
+   and press interaction across the app.
+   Imported after index.css so these rules win cleanly.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────
+   1. GLOBAL TAP HIGHLIGHT
+   Remove the grey flicker on every element; we'll add
+   targeted highlights only where they make sense.
+   ────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Subtle green highlight for real interactive controls */
+a[href],
+button:not(.btb-tab):not(.btb-sheet-action-btn):not(.btb-sheet-logout-btn):not(
+        .nav-icon-btn
+    ),
+[role="button"],
+.cat-item,
+.product-card,
+.category-card {
+    -webkit-tap-highlight-color: rgba(13, 84, 21, 0.06);
+}
+
+/* ──────────────────────────────────────────────────────────
+   2. TOUCH-ACTION — tell the browser exactly what each
+      element scrolls so it never has to guess and delay.
+   ────────────────────────────────────────────────────────── */
+
+/* Page-level scroll — leave as auto so the browser decides.
+   Setting pan-y here would make the intersection with any
+   child's pan-x = empty set, completely killing all gestures. */
+html,
+body {
+    touch-action: auto;
+    overscroll-behavior-y: auto; /* allow natural rubber-band on iOS */
+}
+
+/* Main content area — auto so nothing blocks child scroll dirs */
+.app-main {
+    touch-action: auto;
+}
+
+/* Tappable controls — manipulation = pan-x + pan-y + pinch-zoom
+   minus double-tap-zoom. This eliminates the 300 ms click delay
+   while still letting the page scroll when the user drags. */
+a[href],
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+.btn,
+.nav-btn,
+.btb-tab,
+.cat-item,
+.add-cart-btn,
+.qty-btn,
+.remove-btn,
+.checkout-btn,
+.card-wishlist,
+.nav-icon-btn,
+.btb-sheet-action-btn,
+.btb-sheet-logout-btn,
+.continue-shopping-link,
+.payment-option,
+.sort-select,
+.hero-cat-pill,
+.indicator,
+.deal-cta {
+    touch-action: manipulation;
+}
+
+/* Text inputs need auto so the user can select text */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+textarea {
+    touch-action: auto;
+    font-size: max(16px, 1em); /* prevent iOS zoom-on-focus */
+}
+
+/* Horizontal scroll strips — pan-x pan-y lets the browser
+   pick the dominant direction of the gesture:
+   • horizontal drag  → strip scrolls sideways
+   • vertical drag    → page scrolls up/down  (this is the key fix)
+   Using pan-x alone would intersect with a parent's pan-y
+   and produce an empty set, blocking ALL gestures. */
+.hero-image,
+.testimonials-grid,
+.hero-cats-track,
+.hero-cats-strip {
+    touch-action: pan-x pan-y;
+}
+
+/* Bottom sheet: vertical scroll inside the sheet.
+   pan-y is safe here because nothing inside the sheet
+   has a conflicting pan-x-only touch-action. */
+.btb-sheet {
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+}
+
+/* Overlay blocks all scroll */
+.btb-overlay {
+    touch-action: none;
+    overscroll-behavior: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   3. MOMENTUM (INERTIA) SCROLLING
+   Required on iOS for smooth flicking in scroll containers.
+   ────────────────────────────────────────────────────────── */
+.hero-image,
+.testimonials-grid,
+.hero-cats-track,
+.btb-sheet,
+.products-grid,
+.sidebar,
+.cat-list {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ──────────────────────────────────────────────────────────
+   4. SCROLL SNAP
+   Magnetic alignment for horizontal strips.
+   ────────────────────────────────────────────────────────── */
+.hero-image,
+.testimonials-grid {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}
+
+.hero-image > .floating-card {
+    scroll-snap-align: start;
+}
+
+/* Testimonials: peek the next card on the right */
+.testimonials-grid > .testimonial-card {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+}
+
+/* ──────────────────────────────────────────────────────────
+   5. OVERSCROLL CONTAINMENT
+   Stop horizontal strips from accidentally scrolling the page.
+   ────────────────────────────────────────────────────────── */
+.hero-image,
+.testimonials-grid,
+.hero-cats-track {
+    overscroll-behavior-x: contain;
+}
+
+/* ──────────────────────────────────────────────────────────
+   6. ACTIVE / PRESSED STATE FEEDBACK
+   Touch devices don't have hover, so :active is the only
+   visual confirmation that a tap was registered.
+   We keep transforms OFF the ":hover" path on touch
+   and ON the ":active" path everywhere.
+   ────────────────────────────────────────────────────────── */
+
+/* Generic button press */
+button:not(:disabled):active,
+.btn:active,
+[role="button"]:active {
+    transform: scale(0.95) !important;
+    transition: transform 0.08s ease !important;
+}
+
+/* Softer press for cards */
+.product-card:active,
+.category-card:active,
+.feature-card:active,
+.testimonial-card:active,
+.ai-feature-card:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.08s ease !important;
+}
+
+/* Nav links */
+.nav-link:active,
+.btb-tab:active {
+    opacity: 0.75;
+    transition: opacity 0.08s ease !important;
+}
+
+/* Cart / action buttons */
+.add-cart-btn:active,
+.checkout-btn:active,
+.qty-btn:active,
+.remove-btn:active,
+.deal-cta:active {
+    transform: scale(0.93) !important;
+    transition: transform 0.07s ease !important;
+}
+
+/* Category pills in shop sidebar */
+.cat-item:active {
+    transform: scale(0.96) !important;
+    transition: transform 0.07s ease !important;
+}
+
+/* Icon buttons in navbar */
+.nav-icon-btn:active {
+    transform: scale(0.88) !important;
+    background: rgba(255, 255, 255, 0.32) !important;
+    transition: transform 0.07s ease !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   7. HOVER GUARD — suppress lift animations on touch
+   We only disable the hover-specific lift, NOT the :active
+   transform above, so press feedback still works.
+   ────────────────────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+    .feature-card:hover,
+    .category-card:hover,
+    .ai-feature-card:hover,
+    .testimonial-card:hover,
+    .product-card:hover,
+    .floating-card:hover,
+    .cart-btn:hover,
+    .nav-btn:hover,
+    .nav-logo:hover,
+    .nav-link:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Remove hover underline flicker */
+    .nav-link::after,
+    a:not(.btn)::after {
+        display: none !important;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────
+   8. FAST COMPOSITED TRANSITIONS
+   Replace the old "transition: all 0.3s" (expensive) with
+   targeted composited properties only.
+   ────────────────────────────────────────────────────────── */
+button,
+a[href],
+.cat-item,
+.product-card,
+.category-card,
+.feature-card,
+.testimonial-card,
+.ai-feature-card,
+.btb-tab,
+.nav-icon-btn,
+.nav-btn,
+.add-cart-btn,
+.qty-btn {
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.15s ease,
+        color 0.15s ease !important;
+}
+
+/* Bottom sheet & overlay — keep their own transitions intact */
+.btb-sheet {
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1) !important;
+}
+
+.btb-overlay {
+    transition: background-color 0.32s ease !important;
+}
+
+/* Active pill on tab bar */
+.btb-active-pill {
+    transition:
+        width 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.2s ease !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   9. FOCUS MANAGEMENT
+   Keyboard users get a clear ring; pointer/touch users
+   don't see it (it would flash on tap).
+   ────────────────────────────────────────────────────────── */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid #0d5415;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Inside green nav, use a white ring */
+.topnav :focus-visible {
+    outline-color: rgba(255, 255, 255, 0.8);
+}
+
+/* ──────────────────────────────────────────────────────────
+   10. USER-SELECT — prevent accidental text selection
+       while tapping UI controls
+   ────────────────────────────────────────────────────────── */
+button,
+.btb-tab,
+.btb-sheet-action-btn,
+.btb-sheet-logout-btn,
+.nav-icon-btn,
+.nav-btn,
+.cat-item,
+.card-wishlist,
+.qty-btn,
+.add-cart-btn,
+.checkout-btn,
+.deal-cta,
+.hero-cat-pill,
+.indicator {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Content should remain selectable */
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+td,
+th {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* ──────────────────────────────────────────────────────────
+   11. iOS CALLOUT & DRAG PREVENTION
+   Long-pressing an image or link shows a context menu on
+   iOS; we suppress it on UI elements only.
+   ────────────────────────────────────────────────────────── */
+img {
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    pointer-events: auto; /* ensure images are tappable */
+}
+
+a {
+    -webkit-touch-callout: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   12. SAFE-AREA INSETS
+   Notched phones (iPhone X+) need extra padding on the
+   sides and bottom to avoid the sensor housing.
+   ────────────────────────────────────────────────────────── */
+@supports (padding: max(0px)) {
+    .topnav-inner {
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
+    }
+
+    .btb {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+
+    @media (max-width: 768px) {
+        .topnav-inner {
+            padding-left: max(14px, env(safe-area-inset-left));
+            padding-right: max(14px, env(safe-area-inset-right));
+        }
+
+        /* Page content must not slide under the bottom bar */
+        .app-main > * {
+            padding-bottom: max(
+                72px,
+                calc(60px + env(safe-area-inset-bottom))
+            ) !important;
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────
+   13. BODY SCROLL LOCK (used by BottomTabBar account sheet)
+   JS adds .scroll-locked to <body> when the sheet is open.
+   ────────────────────────────────────────────────────────── */
+body.scroll-locked {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    /* Keep the page from jumping to top when locked */
+    top: var(--scroll-y, 0);
+}
+
+/* ──────────────────────────────────────────────────────────
+   14. SMOOTH SCROLL — global, with reduced-motion override
+   ────────────────────────────────────────────────────────── */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────
+   15. GPU COMPOSITING HINTS
+   Promote animated elements to their own layer so the main
+   thread is never blocked by paint during animations.
+   ────────────────────────────────────────────────────────── */
+.btb,
+.btb-sheet,
+.btb-overlay,
+.topnav,
+.floating-card,
+.product-card,
+.btb-tab {
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Don't promote everything — only elements that actually animate */
+.feature-card,
+.category-card,
+.testimonial-card,
+.ai-feature-card {
+    will-change: auto; /* let browser decide */
+}
+
+/* ──────────────────────────────────────────────────────────
+   16. CURSOR — pointer only on real interactive elements,
+       default everywhere else (prevents the whole page
+       looking clickable on desktop).
+   ────────────────────────────────────────────────────────── */
+button,
+a[href],
+[role="button"],
+select,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+label[for],
+.cat-item,
+.card-wishlist,
+.add-cart-btn,
+.qty-btn,
+.btb-tab,
+.btb-sheet-action-btn,
+.btb-sheet-logout-btn,
+.nav-icon-btn,
+.deal-cta,
+.hero-cat-pill,
+.indicator {
+    cursor: pointer;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+textarea {
+    cursor: text;
+}
+
+/* ──────────────────────────────────────────────────────────
+   17. DISABLED STATE — make it obvious and non-interactive
+   ────────────────────────────────────────────────────────── */
+button:disabled,
+.btn:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+    touch-action: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   18. HORIZONTAL SCROLL STRIP POLISH
+   Hide scrollbars visually (they still function),
+   and add a subtle fade-out at the edges as a scroll hint.
+   ────────────────────────────────────────────────────────── */
+.hero-image,
+.testimonials-grid,
+.hero-cats-track {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.hero-image::-webkit-scrollbar,
+.testimonials-grid::-webkit-scrollbar,
+.hero-cats-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   19. MOBILE-ONLY SCROLL CONTAINER RESETS
+   Ensure vertical page scroll is never hijacked by a child.
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    /* Sidebar category list — horizontal scroll pill strip on mobile.
+     pan-x pan-y so the user can still scroll the page from this area. */
+    .cat-list {
+        touch-action: pan-x pan-y;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Products grid — vertical page scroll; auto is safest here */
+    .products-grid {
+        touch-action: auto;
+        overscroll-behavior-y: auto;
+    }
+
+    /* Form containers — vertical scroll; auto avoids conflict */
+    .checkout-form,
+    .farmer-dashboard,
+    .admin-dashboard {
+        touch-action: auto;
+    }
+
+    /* Hero category strip — pan-x pan-y allows page scroll too */
+    .hero-cats-strip {
+        touch-action: pan-x pan-y;
+        overscroll-behavior-x: contain;
+    }
+
+    /* Cart item cards — let page scroll naturally */
+    .cart-item-card {
+        touch-action: auto;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────
+   20. ANTI-FLICKER FOR FIXED ELEMENTS
+   Prevents 1-pixel subpixel rendering gap between
+   the sticky navbar and the page content on iOS.
+   ────────────────────────────────────────────────────────── */
+.topnav {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.btb {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
