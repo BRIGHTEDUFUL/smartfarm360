@@ -32,6 +32,21 @@ const intelligenceSources = [
   "Buyer demand",
 ];
 
+const workflowSteps = [
+  {
+    title: "Choose a sample",
+    description: "Use a verified crop library image or upload a live farm capture.",
+  },
+  {
+    title: "Tune the scenario",
+    description: "Set crop stage, region, soil, month, and business goal.",
+  },
+  {
+    title: "Read the advisory",
+    description: "Review confidence, actions, risk pressure, and market timing.",
+  },
+];
+
 const capabilityCards = [
   {
     icon: "fas fa-seedling",
@@ -120,6 +135,9 @@ const AIAdvisorPage = () => {
   const scenarioNote =
     selectedPreset?.note ??
     "Custom agronomy scenario using the same advisory workflow with your own crop, region, soil, and timing choices.";
+  const bestFitRegion = selectedCrop?.regionFit[0]?.name ?? form.region;
+  const bestFitSoil = selectedCrop?.preferredSoils[0] ?? form.soil;
+  const bestFitMonth = selectedCrop?.preferredMonths[0] ?? form.month;
 
   const clearPreviewUrl = () => {
     if (previewUrlRef.current) {
@@ -255,11 +273,86 @@ const AIAdvisorPage = () => {
     setPreviewLabel(referenceLabel);
   };
 
+  const handleApplyBestFit = () => {
+    if (!selectedCrop) {
+      return;
+    }
+
+    const nextForm: AdvisorFormState = {
+      ...form,
+      region: bestFitRegion,
+      soil: bestFitSoil,
+      month: bestFitMonth,
+      sampleName: form.sampleName || `${selectedCrop.name} field sample`,
+    };
+
+    const nextSampleInput = uploadedFileName
+      ? sampleInput
+      : buildScenarioReferenceSampleInput(nextForm);
+
+    setSelectedPresetId("");
+    setForm(nextForm);
+    if (!uploadedFileName) {
+      setSampleInput(nextSampleInput);
+      setPreviewSrc(selectedCrop.image);
+      setPreviewLabel(`${selectedCrop.name} sample preview`);
+    }
+
+    runAnalysis(nextForm, nextSampleInput);
+  };
+
+  const handleResetScenario = () => {
+    clearPreviewUrl();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+    const resetPreset = selectedPreset ?? DEFAULT_DEMO_PRESET;
+    const nextForm = buildAdvisorFormFromPreset(resetPreset);
+    const nextSampleInput = buildReferenceSampleInput(
+      resetPreset.id,
+      resetPreset.sampleName,
+    );
+
+    setSelectedPresetId(resetPreset.id);
+    setUploadedFileName("");
+    setPreviewSrc(resetPreset.image);
+    setPreviewLabel(resetPreset.sampleName);
+    setSampleInput(nextSampleInput);
+    setForm(nextForm);
+    runAnalysis(nextForm, nextSampleInput);
+  };
+
   if (!selectedCrop) {
     return null;
   }
 
   const analysisProgress = ((analysisStepIndex + 1) / analysisSteps.length) * 100;
+  const workflowState = [
+    {
+      ...workflowSteps[0],
+      state: previewSrc ? "complete" : "current",
+      helper: uploadedFileName ? "Live farm capture attached" : analysis.sampleSourceLabel,
+    },
+    {
+      ...workflowSteps[1],
+      state: "complete",
+      helper: `${form.region} · ${form.soil} · ${form.month}`,
+    },
+    {
+      ...workflowSteps[2],
+      state: isAnalyzing ? "current" : "complete",
+      helper: isAnalyzing ? analysisSteps[analysisStepIndex] : analysis.readinessBand,
+    },
+  ] as const;
+  const scenarioSummary = [
+    { label: "Crop", value: selectedCrop.name },
+    { label: "Stage", value: analysis.stageLabel },
+    { label: "Region", value: form.region },
+    { label: "Soil", value: form.soil },
+    { label: "Month", value: form.month },
+    { label: "Goal", value: analysis.advisoryFocus },
+  ];
 
   return (
     <div className="ai-advisor-page">
@@ -363,6 +456,22 @@ const AIAdvisorPage = () => {
       <section className="ai-advisor-workspace" id="ai-advisor-workspace">
         <div className="ai-advisor-shell ai-workspace-grid">
           <aside className="ai-control-panel">
+            <div className="ai-workflow-strip" aria-label="AI advisory workflow">
+              {workflowState.map((step, index) => (
+                <div
+                  key={step.title}
+                  className={`ai-workflow-step is-${step.state}`}
+                >
+                  <div className="ai-workflow-index">{index + 1}</div>
+                  <div className="ai-workflow-copy">
+                    <strong>{step.title}</strong>
+                    <p>{step.description}</p>
+                    <span>{step.helper}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div className="ai-panel-heading">
               <div>
                 <span className="ai-section-eyebrow">Advisor setup</span>
@@ -370,6 +479,48 @@ const AIAdvisorPage = () => {
                 <p className="ai-panel-description">{scenarioNote}</p>
               </div>
               <span className="ai-panel-mode">Live advisory</span>
+            </div>
+
+            <div className="ai-scenario-card">
+              <div className="ai-scenario-card-topline">
+                <div>
+                  <span className="ai-section-eyebrow">Current scenario</span>
+                  <h3>{analysis.title}</h3>
+                </div>
+                <span className="ai-scenario-badge">{analysis.advisoryFocus}</span>
+              </div>
+
+              <div className="ai-scenario-chip-grid">
+                {scenarioSummary.map((item) => (
+                  <div key={item.label} className="ai-scenario-chip">
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <div className="ai-scenario-actions">
+                <button
+                  type="button"
+                  className="ai-quick-action ai-quick-action-primary"
+                  onClick={handleApplyBestFit}
+                >
+                  <i className="fas fa-wand-magic-sparkles" aria-hidden="true" />
+                  Use best-fit setup
+                </button>
+                <button
+                  type="button"
+                  className="ai-quick-action"
+                  onClick={handleResetScenario}
+                >
+                  <i className="fas fa-rotate-left" aria-hidden="true" />
+                  Reset to starter scenario
+                </button>
+              </div>
+
+              <p className="ai-scenario-note">
+                Best-fit setup will align this crop to {bestFitRegion}, {bestFitSoil}, and {bestFitMonth} for the fastest strong advisory.
+              </p>
             </div>
 
             <div className="ai-preset-grid">
