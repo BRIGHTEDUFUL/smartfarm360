@@ -593,6 +593,29 @@ const HomePage = () => {
               <span className="ai-badge-stat">-35% Water</span>
             </div>
           </div>
+
+          <div className="ai-demo-banner">
+            <div className="ai-demo-copy">
+              <span className="ai-demo-label">New interactive demo</span>
+              <h3>Show farmers how AI can scan seeds and produce, then recommend where to grow and when to act.</h3>
+              <p>
+                Open the new AI Advisor to explore a realistic farming workflow
+                with crop scans, regional fit scores, timing windows, risk
+                alerts, and market planning built for Ghanaian agriculture.
+              </p>
+            </div>
+
+            <div className="ai-demo-actions">
+              <Link to="/ai-advisor" className="ai-demo-primary">
+                <i className="fas fa-brain"></i>
+                Try AI Advisor
+              </Link>
+              <Link to="/register" className="ai-demo-secondary">
+                <i className="fas fa-user-plus"></i>
+                Join as Farmer
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

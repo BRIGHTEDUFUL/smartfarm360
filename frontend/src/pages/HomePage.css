@@ -1055,6 +1055,79 @@
     color: #fff !important;
 }
 
+.ai-demo-banner {
+    margin-top: 28px;
+    padding: 28px;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at top right, rgba(251, 191, 36, 0.18), transparent 32%),
+        linear-gradient(135deg, #0a3d0f 0%, #0d5415 46%, #1b7e28 100%);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 26px 52px rgba(13, 84, 21, 0.16);
+}
+
+.ai-demo-label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+}
+
+.ai-demo-copy h3 {
+    font-size: 30px;
+    line-height: 1.25;
+    color: #ffffff !important;
+    margin-bottom: 10px;
+}
+
+.ai-demo-copy p {
+    max-width: 700px;
+    color: rgba(255, 255, 255, 0.88) !important;
+    line-height: 1.75;
+}
+
+.ai-demo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ai-demo-primary,
+.ai-demo-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 22px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.ai-demo-primary {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #ffffff !important;
+    box-shadow: 0 16px 32px rgba(245, 158, 11, 0.24);
+}
+
+.ai-demo-secondary {
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
+}
+
 /* ══════════════════════════════════════════════════════════════
    FEATURES SECTION
    ══════════════════════════════════════════════════════════════ */
@@ -3063,6 +3136,24 @@
         padding: 12px;
     }
 
+    .ai-demo-banner {
+        grid-template-columns: 1fr;
+        padding: 22px 20px;
+    }
+
+    .ai-demo-copy h3 {
+        font-size: 24px;
+    }
+
+    .ai-demo-actions {
+        width: 100%;
+    }
+
+    .ai-demo-primary,
+    .ai-demo-secondary {
+        width: 100%;
+    }
+
     .pwa-device-screen {
         justify-content: flex-start;
         padding: 70px 18px 26px;
@@ -3200,6 +3291,10 @@
 
     .region-card {
         gap: 12px;
+    }
+
+    .ai-demo-copy h3 {
+        font-size: 21px;
     }
 
     .region-info h3 {

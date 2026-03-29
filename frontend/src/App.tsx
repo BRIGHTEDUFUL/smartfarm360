@@ -22,6 +22,7 @@ import FarmerDashboard from "./pages/FarmerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
+import AIAdvisorPage from "./pages/AIAdvisorPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/ai-advisor" element={<AIAdvisorPage />} />
 
                 {/* Protected routes */}
                 <Route

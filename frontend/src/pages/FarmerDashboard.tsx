@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { productsAPI, ordersAPI } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
@@ -361,6 +362,10 @@ const FarmerDashboard = () => {
               </p>
             </div>
             <div className="header-actions">
+              <Link to="/ai-advisor" className="btn-ai-advisor">
+                <i className="fas fa-brain"></i>
+                AI Advisor
+              </Link>
               <button onClick={loadMyProducts} className="btn-refresh">
                 <i className="fas fa-sync-alt"></i>
                 Refresh

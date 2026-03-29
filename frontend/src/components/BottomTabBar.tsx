@@ -434,6 +434,27 @@ const BottomTabBar = () => {
               className="btb-sheet-action-btn"
               onClick={() => {
                 closeAccountSheet();
+                setTimeout(() => navigate("/ai-advisor"), 320);
+              }}
+              type="button"
+            >
+              <span
+                className="btb-action-icon"
+                style={{ background: "#0D541518", color: "#0D5415" }}
+              >
+                <i className="fas fa-brain" />
+              </span>
+              <span className="btb-action-text">
+                <strong>AI Advisor</strong>
+                <small>Scan crops and get field timing guidance</small>
+              </span>
+              <i className="fas fa-chevron-right btb-action-arrow" />
+            </button>
+
+            <button
+              className="btb-sheet-action-btn"
+              onClick={() => {
+                closeAccountSheet();
                 setTimeout(() => navigate("/contact"), 320);
               }}
               type="button"

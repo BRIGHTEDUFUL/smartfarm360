@@ -103,6 +103,12 @@ const Navbar = () => {
               Shop
             </Link>
             <Link
+              to="/ai-advisor"
+              className={`nav-link${isActive("/ai-advisor") ? " active" : ""}`}
+            >
+              AI Advisor
+            </Link>
+            <Link
               to="/about"
               className={`nav-link${isActive("/about") ? " active" : ""}`}
             >
@@ -222,6 +228,14 @@ const Navbar = () => {
                 <i className="fas fa-download" aria-hidden="true" />
               </button>
             )}
+
+            <Link
+              to="/ai-advisor"
+              className={`nav-icon-btn nav-ai-icon${isActive("/ai-advisor") ? " active" : ""}`}
+              aria-label="Open AI advisor"
+            >
+              <i className="fas fa-brain" aria-hidden="true" />
+            </Link>
 
             {/* Search toggle */}
             <button
