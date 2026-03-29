@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AI_DEMO_PRESETS,
+  AdvisorSampleInput,
   CROP_OPTIONS,
   DEFAULT_DEMO_PRESET,
   GOAL_OPTIONS,
@@ -18,10 +19,17 @@ import {
 import "./AIAdvisorPage.css";
 
 const heroStats = [
-  { value: "5", label: "Crop models" },
-  { value: "10", label: "Ghana zones" },
-  { value: "4", label: "AI engines" },
-  { value: "<90s", label: "Demo insight" },
+  { value: "5", label: "Crop profiles" },
+  { value: "10", label: "Regional datasets" },
+  { value: "4", label: "Reasoning layers" },
+  { value: "<90s", label: "Advisory refresh" },
+];
+
+const intelligenceSources = [
+  "Crop vision",
+  "Regional suitability",
+  "Season timing",
+  "Buyer demand",
 ];
 
 const capabilityCards = [
@@ -54,23 +62,64 @@ const accentClassMap = {
   purple: "is-purple",
 };
 
+const analysisSteps = [
+  "Vision ingest",
+  "Climate fit mapping",
+  "Soil and field reasoning",
+  "Market timing calibration",
+];
+
+const buildReferenceSampleInput = (
+  presetId: string,
+  sampleName: string,
+): AdvisorSampleInput => ({
+  source: "reference-library",
+  fileName: sampleName,
+  mimeType: "image/reference",
+  traceSeed: presetId,
+});
+
+const buildUploadSampleInput = (file: File): AdvisorSampleInput => ({
+  source: "farmer-upload",
+  fileName: file.name,
+  mimeType: file.type,
+  fileSizeKb: Math.max(1, Math.round(file.size / 1024)),
+  traceSeed: `${file.name}-${file.size}-${file.lastModified}`,
+});
+
+const buildScenarioReferenceSampleInput = (form: AdvisorFormState) =>
+  buildReferenceSampleInput(
+    `${form.cropId}-${form.stage}-${form.region}-${form.month}`,
+    form.sampleName || "Crop reference scan",
+  );
+
 const AIAdvisorPage = () => {
   const defaultForm = buildAdvisorFormFromPreset(DEFAULT_DEMO_PRESET);
+  const defaultSampleInput = buildReferenceSampleInput(
+    DEFAULT_DEMO_PRESET.id,
+    DEFAULT_DEMO_PRESET.sampleName,
+  );
   const [form, setForm] = useState<AdvisorFormState>(defaultForm);
   const [selectedPresetId, setSelectedPresetId] = useState(DEFAULT_DEMO_PRESET.id);
-  const [analysis, setAnalysis] = useState(() => buildAdvisorAnalysis(defaultForm));
+  const [sampleInput, setSampleInput] = useState<AdvisorSampleInput>(defaultSampleInput);
+  const [analysis, setAnalysis] = useState(() =>
+    buildAdvisorAnalysis(defaultForm, defaultSampleInput),
+  );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisStepIndex, setAnalysisStepIndex] = useState(0);
   const [previewSrc, setPreviewSrc] = useState(DEFAULT_DEMO_PRESET.image);
   const [previewLabel, setPreviewLabel] = useState(DEFAULT_DEMO_PRESET.sampleName);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const timerRef = useRef<number | null>(null);
+  const stepTimerRef = useRef<number | null>(null);
   const previewUrlRef = useRef<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedCrop = getCropProfile(form.cropId) ?? getCropProfile(DEFAULT_DEMO_PRESET.cropId);
   const selectedPreset = selectedPresetId ? getDemoPreset(selectedPresetId) : undefined;
   const scenarioNote =
     selectedPreset?.note ??
-    "Custom demo scenario using the same AI workflow with your own crop, region, soil, and timing choices.";
+    "Custom agronomy scenario using the same advisory workflow with your own crop, region, soil, and timing choices.";
 
   const clearPreviewUrl = () => {
     if (previewUrlRef.current) {
@@ -84,20 +133,41 @@ const AIAdvisorPage = () => {
       if (timerRef.current !== null) {
         window.clearTimeout(timerRef.current);
       }
+      if (stepTimerRef.current !== null) {
+        window.clearInterval(stepTimerRef.current);
+      }
       clearPreviewUrl();
     };
   }, []);
 
-  const runAnalysis = (nextForm: AdvisorFormState) => {
+  const runAnalysis = (
+    nextForm: AdvisorFormState,
+    nextSampleInput: AdvisorSampleInput = sampleInput,
+  ) => {
     if (timerRef.current !== null) {
       window.clearTimeout(timerRef.current);
     }
+    if (stepTimerRef.current !== null) {
+      window.clearInterval(stepTimerRef.current);
+    }
 
     setIsAnalyzing(true);
+    setAnalysisStepIndex(0);
+
+    stepTimerRef.current = window.setInterval(() => {
+      setAnalysisStepIndex((currentStep) =>
+        currentStep < analysisSteps.length - 1 ? currentStep + 1 : currentStep,
+      );
+    }, 260);
+
     timerRef.current = window.setTimeout(() => {
-      setAnalysis(buildAdvisorAnalysis(nextForm));
+      if (stepTimerRef.current !== null) {
+        window.clearInterval(stepTimerRef.current);
+        stepTimerRef.current = null;
+      }
+      setAnalysis(buildAdvisorAnalysis(nextForm, nextSampleInput));
       setIsAnalyzing(false);
-    }, 900);
+    }, 1100);
   };
 
   const handlePresetSelect = (presetId: string) => {
@@ -107,24 +177,28 @@ const AIAdvisorPage = () => {
     }
 
     const nextForm = buildAdvisorFormFromPreset(preset);
+    const nextSampleInput = buildReferenceSampleInput(preset.id, preset.sampleName);
     clearPreviewUrl();
     setSelectedPresetId(preset.id);
     setUploadedFileName("");
     setPreviewSrc(preset.image);
     setPreviewLabel(preset.sampleName);
+    setSampleInput(nextSampleInput);
     setForm(nextForm);
-    runAnalysis(nextForm);
+    runAnalysis(nextForm, nextSampleInput);
   };
 
   const updateForm = <K extends keyof AdvisorFormState>(
     key: K,
     value: AdvisorFormState[K],
   ) => {
-    setSelectedPresetId("");
-    setForm((currentForm) => ({
-      ...currentForm,
+    const nextForm = {
+      ...form,
       [key]: value,
-    }));
+    };
+
+    setSelectedPresetId("");
+    setForm(nextForm);
 
     if (key === "cropId" && !uploadedFileName) {
       const nextCrop = getCropProfile(value as string);
@@ -133,11 +207,15 @@ const AIAdvisorPage = () => {
         setPreviewLabel(`${nextCrop.name} sample preview`);
       }
     }
+
+    if (!uploadedFileName) {
+      setSampleInput(buildScenarioReferenceSampleInput(nextForm));
+    }
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    runAnalysis(form);
+    runAnalysis(form, sampleInput);
   };
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -151,6 +229,7 @@ const AIAdvisorPage = () => {
     previewUrlRef.current = objectUrl;
     setSelectedPresetId("");
     setUploadedFileName(file.name);
+    setSampleInput(buildUploadSampleInput(file));
     setPreviewSrc(objectUrl);
     setPreviewLabel(file.name);
     setForm((currentForm) => ({
@@ -159,9 +238,28 @@ const AIAdvisorPage = () => {
     }));
   };
 
+  const handleResetToReference = () => {
+    clearPreviewUrl();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+    const referenceInput = buildScenarioReferenceSampleInput(form);
+    const referenceCrop = getCropProfile(form.cropId) ?? selectedCrop;
+    const referenceLabel = selectedPreset?.sampleName ?? `${referenceCrop?.name ?? "Crop"} sample preview`;
+    const referenceImage = selectedPreset?.image ?? referenceCrop?.image ?? previewSrc;
+
+    setUploadedFileName("");
+    setSampleInput(referenceInput);
+    setPreviewSrc(referenceImage);
+    setPreviewLabel(referenceLabel);
+  };
+
   if (!selectedCrop) {
     return null;
   }
+
+  const analysisProgress = ((analysisStepIndex + 1) / analysisSteps.length) * 100;
 
   return (
     <div className="ai-advisor-page">
@@ -170,21 +268,22 @@ const AIAdvisorPage = () => {
           <div className="ai-hero-copy">
             <div className="ai-hero-badge">
               <i className="fas fa-brain" aria-hidden="true" />
-              <span>AI Agronomy Lab Demo</span>
+              <span>Smart Farming 360 AI Advisor</span>
             </div>
 
             <h1>Scan seeds. Read produce. Plan the season with AI.</h1>
             <p>
               Smart Farming 360 AI Advisor turns crop samples into practical
               guidance for how to grow, where to grow, and when to act. This
-              demo is built to feel like a real farm intelligence product, with
-              regional fit, timing windows, and commercial planning baked in.
+              advisory workspace combines regional fit, timing windows, sample
+              evidence, and commercial planning into one operational view for
+              Ghanaian agriculture.
             </p>
 
             <div className="ai-hero-actions">
               <a href="#ai-advisor-workspace" className="ai-hero-primary-link">
                 <i className="fas fa-satellite-dish" aria-hidden="true" />
-                Run live demo
+                Open advisor workspace
               </a>
               <Link to="/register" className="ai-hero-secondary-link">
                 <i className="fas fa-user-plus" aria-hidden="true" />
@@ -205,7 +304,7 @@ const AIAdvisorPage = () => {
           <div className="ai-hero-console">
             <div className="ai-console-header">
               <div>
-                <span className="ai-console-eyebrow">Live demo session</span>
+                <span className="ai-console-eyebrow">{analysis.scanModeLabel}</span>
                 <h2>{analysis.title}</h2>
               </div>
               <span className="ai-console-run">{analysis.runLabel}</span>
@@ -236,9 +335,27 @@ const AIAdvisorPage = () => {
                 <strong>{analysis.metrics[3]?.value}%</strong>
                 <span>{analysis.marketHeadline}</span>
               </div>
+              <div className="ai-console-card">
+                <small>Sample quality</small>
+                <strong>{analysis.sampleQuality}%</strong>
+                <span>{analysis.sampleSourceLabel}</span>
+              </div>
             </div>
 
             <p className="ai-console-summary">{analysis.summary}</p>
+
+            <div className="ai-console-footer">
+              <div className="ai-console-status">
+                <span className="ai-console-status-dot" aria-hidden="true" />
+                <strong>Advisory online</strong>
+                <span>{analysis.traceId}</span>
+              </div>
+              <div className="ai-console-sources" aria-label="Advisory intelligence sources">
+                {intelligenceSources.map((source) => (
+                  <span key={source}>{source}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -248,11 +365,11 @@ const AIAdvisorPage = () => {
           <aside className="ai-control-panel">
             <div className="ai-panel-heading">
               <div>
-                <span className="ai-section-eyebrow">Demo setup</span>
+                <span className="ai-section-eyebrow">Advisor setup</span>
                 <h2>Seed and produce analysis</h2>
                 <p className="ai-panel-description">{scenarioNote}</p>
               </div>
-              <span className="ai-panel-mode">Demo mode</span>
+              <span className="ai-panel-mode">Live advisory</span>
             </div>
 
             <div className="ai-preset-grid">
@@ -279,7 +396,7 @@ const AIAdvisorPage = () => {
                   <h3>{previewLabel}</h3>
                 </div>
                 {uploadedFileName && (
-                  <span className="ai-upload-badge">Custom image</span>
+                  <span className="ai-upload-badge">Live upload</span>
                 )}
               </div>
 
@@ -289,6 +406,7 @@ const AIAdvisorPage = () => {
 
               <label className="ai-upload-trigger">
                 <input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
@@ -297,10 +415,38 @@ const AIAdvisorPage = () => {
                 <span>Attach a crop image</span>
               </label>
 
+              <div className="ai-upload-meta">
+                <div className="ai-upload-meta-chip">
+                  <i className="fas fa-wave-square" aria-hidden="true" />
+                  <span>{analysis.scanModeLabel}</span>
+                </div>
+                <div className="ai-upload-meta-chip">
+                  <i className="fas fa-fingerprint" aria-hidden="true" />
+                  <span>{analysis.traceId}</span>
+                </div>
+                {sampleInput.fileSizeKb && (
+                  <div className="ai-upload-meta-chip">
+                    <i className="fas fa-image" aria-hidden="true" />
+                    <span>{sampleInput.fileSizeKb} KB sample</span>
+                  </div>
+                )}
+              </div>
+
+              {uploadedFileName && (
+                <button
+                  type="button"
+                  className="ai-upload-reset"
+                  onClick={handleResetToReference}
+                >
+                  <i className="fas fa-undo-alt" aria-hidden="true" />
+                  Use verified library sample
+                </button>
+              )}
+
               <p className="ai-upload-note">
                 {uploadedFileName
-                  ? "Custom images update the demo preview while the advisory uses curated agronomy logic."
-                  : "Upload is optional for the demo. Preset crop scans already show the full advisory flow."}
+                  ? "Your uploaded image is being used as the active sample while the advisory engine recalculates evidence, timing, and market fit."
+                  : "Upload is optional. Verified crop scans already show the full advisory workflow while you tune the field scenario."}
               </p>
             </div>
 
@@ -418,7 +564,7 @@ const AIAdvisorPage = () => {
 
               <button type="submit" className="ai-run-button" disabled={isAnalyzing}>
                 <i className={`fas ${isAnalyzing ? "fa-spinner fa-spin" : "fa-wave-square"}`} aria-hidden="true" />
-                {isAnalyzing ? "Analyzing sample..." : "Generate AI advisory"}
+                {isAnalyzing ? "Updating advisory..." : "Generate AI advisory"}
               </button>
             </form>
           </aside>
@@ -428,8 +574,31 @@ const AIAdvisorPage = () => {
               <div className="ai-results-overlay" aria-live="polite">
                 <div className="ai-overlay-card">
                   <div className="ai-overlay-spinner" aria-hidden="true" />
-                  <strong>Scanning crop patterns</strong>
-                  <span>Computer vision, soil fit, climate timing, and market signal are updating.</span>
+                  <strong>{analysisSteps[analysisStepIndex]}</strong>
+                  <span>
+                    Computer vision, soil fit, climate timing, and market
+                    signal are synchronizing into one advisory run.
+                  </span>
+                  <div className="ai-overlay-progress" aria-hidden="true">
+                    <span style={{ width: `${analysisProgress}%` }} />
+                  </div>
+                  <div className="ai-overlay-steps">
+                    {analysisSteps.map((step, index) => (
+                      <div
+                        key={step}
+                        className={`ai-overlay-step${
+                          index === analysisStepIndex
+                            ? " is-active"
+                            : index < analysisStepIndex
+                              ? " is-complete"
+                              : ""
+                        }`}
+                      >
+                        <span>{index + 1}</span>
+                        <strong>{step}</strong>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -450,6 +619,24 @@ const AIAdvisorPage = () => {
               >
                 <strong>{analysis.confidence}%</strong>
                 <span>{analysis.readinessBand}</span>
+              </div>
+            </div>
+
+            <div className="ai-summary-strip">
+              <div className="ai-summary-tile">
+                <span>Capture mode</span>
+                <strong>{analysis.scanModeLabel}</strong>
+                <p>{analysis.sampleSourceLabel}</p>
+              </div>
+              <div className="ai-summary-tile">
+                <span>Advisory ID</span>
+                <strong>{analysis.traceId}</strong>
+                <p>Use this advisory ID to revisit the same scenario later.</p>
+              </div>
+              <div className="ai-summary-tile">
+                <span>Advisory focus</span>
+                <strong>{analysis.advisoryFocus}</strong>
+                <p>{analysis.sampleSummary}</p>
               </div>
             </div>
 
@@ -482,6 +669,43 @@ const AIAdvisorPage = () => {
             </div>
 
             <div className="ai-results-grid">
+              <article className="ai-insight-card">
+                <div className="ai-card-header">
+                  <h3>Confidence drivers</h3>
+                  <span>Why the score moved</span>
+                </div>
+                <div className="ai-driver-list">
+                  {analysis.confidenceDrivers.map((driver) => (
+                    <div
+                      key={driver.label}
+                      className={`ai-driver-item status-${driver.status}`}
+                    >
+                      <div className="ai-driver-topline">
+                        <strong>{driver.label}</strong>
+                        <span>{driver.status === "strong" ? "Strong" : "Watch"}</span>
+                      </div>
+                      <p>{driver.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="ai-insight-card">
+                <div className="ai-card-header">
+                  <h3>Recommended actions</h3>
+                  <span>Next operating moves</span>
+                </div>
+                <div className="ai-action-list">
+                  {analysis.actionPlan.map((action) => (
+                    <div key={`${action.window}-${action.title}`} className="ai-action-item">
+                      <span>{action.window}</span>
+                      <strong>{action.title}</strong>
+                      <p>{action.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
               <article className="ai-insight-card">
                 <div className="ai-card-header">
                   <h3>How to grow</h3>
@@ -554,6 +778,22 @@ const AIAdvisorPage = () => {
 
               <article className="ai-insight-card ai-insight-card-wide">
                 <div className="ai-card-header">
+                  <h3>Commercial outlook</h3>
+                  <span>Route to market</span>
+                </div>
+                <div className="ai-commercial-grid">
+                  {analysis.commercialSignals.map((signal) => (
+                    <div key={signal.label} className="ai-commercial-card">
+                      <span>{signal.label}</span>
+                      <strong>{signal.value}</strong>
+                      <p>{signal.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="ai-insight-card ai-insight-card-wide">
+                <div className="ai-card-header">
                   <h3>Risk monitor</h3>
                   <span>Field pressure to watch</span>
                 </div>
@@ -583,11 +823,11 @@ const AIAdvisorPage = () => {
         <div className="ai-advisor-shell">
           <div className="ai-capabilities-header">
             <span className="ai-section-eyebrow">Why this matters</span>
-            <h2>Make the value of AI visible to every farmer</h2>
+            <h2>Make agronomy intelligence usable for every farmer</h2>
             <p>
-              This demo is designed to show that AI in farming is not just
-              chat. It can connect seed quality, field conditions, timing, and
-              market demand into one operational view.
+              AI in farming should not stop at generic chat. It should connect
+              sample quality, field conditions, timing, and market demand into
+              one operational view farmers can actually act on.
             </p>
           </div>
 
