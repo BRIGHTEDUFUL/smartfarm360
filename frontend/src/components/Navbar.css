@@ -108,45 +108,6 @@
     box-shadow: 0 10px 22px rgba(245, 158, 11, 0.18);
 }
 
-/* ── Desktop search ────────────────────────────────────── */
-.nav-search {
-    flex: 1;
-    max-width: 380px;
-    position: relative;
-    margin: 0 auto;
-}
-
-.nav-search-icon {
-    position: absolute;
-    left: 13px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6b7280;
-    font-size: 13px;
-    pointer-events: none;
-}
-
-.nav-search input {
-    width: 100%;
-    padding: 9px 14px 9px 38px;
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    border-radius: 22px;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.94);
-    outline: none;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    color: #111827;
-}
-
-.nav-search input:focus {
-    border-color: #fbbf24;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.22);
-}
-
 /* ── Desktop actions ───────────────────────────────────── */
 .nav-actions {
     display: flex;
@@ -300,20 +261,11 @@
     display: none;
 }
 
-/* ── Mobile search bar (hidden on desktop) ─────────────── */
-.nav-mobile-search {
-    display: none;
-}
-
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE — Tablet
    ═══════════════════════════════════════════════════════════ */
 
 @media (max-width: 1100px) {
-    .nav-search {
-        max-width: 260px;
-    }
-
     .nav-btn {
         padding: 7px 11px;
         font-size: 12px;
@@ -323,10 +275,6 @@
 @media (max-width: 960px) {
     .nav-links {
         display: none;
-    }
-
-    .nav-search {
-        max-width: 220px;
     }
 }
 
@@ -357,7 +305,6 @@
 
     /* Hide everything that the bottom tab bar replaces */
     .nav-links,
-    .nav-search,
     .nav-actions {
         display: none !important;
     }
@@ -370,7 +317,7 @@
         margin-left: auto;
     }
 
-    /* Icon button (search toggle, cart shortcut) */
+    /* Icon button (Vision Lab, cart shortcut) */
     .nav-icon-btn {
         position: relative;
         width: 40px;
@@ -422,80 +369,6 @@
         border: 2px solid transparent;
         line-height: 1;
         pointer-events: none;
-    }
-
-    /* ── Expanding mobile search bar ────────────────────── */
-    .nav-mobile-search {
-        display: block;
-        overflow: hidden;
-        max-height: 0;
-        opacity: 0;
-        transition:
-            max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-            opacity 0.22s ease,
-            padding 0.28s ease;
-        background: rgba(255, 255, 255, 0.96);
-        -webkit-backdrop-filter: blur(16px);
-        backdrop-filter: blur(16px);
-        border-top: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .nav-mobile-search.open {
-        max-height: 72px;
-        opacity: 1;
-        padding: 0;
-    }
-
-    .nav-mobile-search form {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 14px;
-        position: relative;
-    }
-
-    .nav-mobile-search form > i {
-        color: #9ca3af;
-        font-size: 14px;
-        flex-shrink: 0;
-    }
-
-    .nav-mobile-search input {
-        flex: 1;
-        border: none;
-        outline: none;
-        background: transparent;
-        font-size: 16px; /* prevents iOS zoom */
-        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-        color: #111827;
-        caret-color: #0d5415;
-        padding: 2px 0;
-    }
-
-.nav-mobile-search input::placeholder {
-        color: #9ca3af;
-    }
-
-    .search-clear {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: #f3f4f6;
-        border: none;
-        color: #6b7280;
-        font-size: 11px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        flex-shrink: 0;
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-        transition: background 0.15s ease;
-    }
-
-    .search-clear:active {
-        background: #e5e7eb;
     }
 }
 
