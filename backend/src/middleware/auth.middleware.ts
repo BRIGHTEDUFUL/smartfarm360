@@ -103,6 +103,43 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 };
 
 /**
+ * Middleware for optional authentication.
+ * If a valid token is supplied, attaches req.user without rejecting unauthenticated requests.
+ */
+export const optionalAuthenticate = async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return next();
+    }
+
+    const token = authHeader.substring(7);
+    let decoded;
+    try {
+      decoded = AuthService.verifyToken(token, false);
+    } catch {
+      return next();
+    }
+
+    const userResult = await query(
+      'SELECT id, email, role, status FROM users WHERE id = ?',
+      [decoded.userId]
+    );
+
+    if (userResult.rows.length > 0 && userResult.rows[0].status === 'Active') {
+      req.user = {
+        id: userResult.rows[0].id,
+        email: userResult.rows[0].email,
+        role: userResult.rows[0].role,
+      };
+    }
+    next();
+  } catch {
+    next();
+  }
+};
+
+/**
  * Middleware to authorize user based on roles
  * @param allowedRoles - Array of roles that are allowed to access the route
  */

@@ -6,30 +6,29 @@ export class MessageService {
     // Find all distinct partners this user has exchanged messages with
     const result = await query(
       `SELECT
-        partner_id,
+        conv.partner_id,
         u.first_name  AS partner_first_name,
         u.last_name   AS partner_last_name,
         u.role        AS partner_role,
         u.profile_photo_url AS partner_profile_photo_url,
-        last_message,
-        last_message_at,
-        unread_count
+        (SELECT content FROM messages
+         WHERE (sender_id = ? AND receiver_id = conv.partner_id)
+            OR (sender_id = conv.partner_id AND receiver_id = ?)
+         ORDER BY created_at DESC LIMIT 1) AS last_message,
+        conv.last_message_at,
+        (SELECT COUNT(*) FROM messages
+         WHERE sender_id = conv.partner_id AND receiver_id = ? AND is_read = 0) AS unread_count
        FROM (
          SELECT
            CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END AS partner_id,
-           (SELECT content FROM messages m2
-            WHERE (m2.sender_id = ? AND m2.receiver_id = CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END)
-               OR (m2.receiver_id = ? AND m2.sender_id = CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END)
-            ORDER BY m2.created_at DESC LIMIT 1) AS last_message,
-           MAX(created_at) AS last_message_at,
-           SUM(CASE WHEN receiver_id = ? AND is_read = 0 AND sender_id = CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END THEN 1 ELSE 0 END) AS unread_count
-         FROM messages m
+           MAX(created_at) AS last_message_at
+         FROM messages
          WHERE sender_id = ? OR receiver_id = ?
          GROUP BY partner_id
        ) conv
        JOIN users u ON u.id = conv.partner_id
-       ORDER BY last_message_at DESC`,
-      [userId, userId, userId, userId, userId, userId, userId, userId, userId]
+       ORDER BY conv.last_message_at DESC`,
+      [userId, userId, userId, userId, userId, userId]
     );
     return result.rows as Conversation[];
   }

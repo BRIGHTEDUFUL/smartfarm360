@@ -42,7 +42,20 @@ export class ProductService {
   }
 
   static async getProductById(id: number): Promise<Product | null> {
-    const result = await query('SELECT * FROM products WHERE id = ?', [id]);
+    const result = await query(
+      `SELECT p.*,
+        u.first_name AS farmer_first_name,
+        u.last_name  AS farmer_last_name,
+        u.phone      AS farmer_phone,
+        fp.farm_name,
+        fp.farm_location,
+        fp.verification_status AS farmer_verification_status
+       FROM products p
+       JOIN users u ON p.farmer_id = u.id
+       LEFT JOIN farmer_profiles fp ON fp.user_id = u.id
+       WHERE p.id = ?`,
+      [id]
+    );
     return result.rows.length > 0 ? (result.rows[0] as Product) : null;
   }
 

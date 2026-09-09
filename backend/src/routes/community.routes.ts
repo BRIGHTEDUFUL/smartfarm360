@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { CommunityController } from '../controllers/community.controller';
-import { authenticate, authorize } from '../middleware/auth.middleware';
+import { authenticate, authorize, optionalAuthenticate } from '../middleware/auth.middleware';
 
 const router = Router();
 
-// Public
-router.get('/posts', CommunityController.getPosts);
-router.get('/posts/:id', CommunityController.getPost);
-router.get('/posts/:id/replies', CommunityController.getReplies);
+// Public / optional auth
+router.get('/posts', optionalAuthenticate, CommunityController.getPosts);
+router.get('/posts/:id', optionalAuthenticate, CommunityController.getPost);
+router.get('/posts/:id/replies', optionalAuthenticate, CommunityController.getReplies);
 router.get('/officers', CommunityController.getOfficers);
 router.get('/farmers', authenticate, CommunityController.getFarmers);
 
