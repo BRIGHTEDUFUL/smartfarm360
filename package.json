@@ -22,6 +22,7 @@
     "test:backend": "npm test --prefix backend",
     "test:frontend": "npm test --prefix frontend",
     "test": "npm run test:backend && npm run test:frontend",
+    "deploy:pages": "npm run build:frontend && npx wrangler pages deploy frontend/dist --project-name=smartfarm360 --branch=main",
     "deploy:render": "bash deploy-render.sh",
     "deploy:render:win": "deploy-render.bat",
     "deploy:check": "node scripts/render-check.mjs",
