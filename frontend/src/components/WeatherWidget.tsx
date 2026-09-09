@@ -20,9 +20,9 @@ function weatherCodeToInfo(code: number): { emoji: string; description: string }
 
 export default function WeatherWidget({ region = 'Greater Accra' }: { region?: string }) {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState<CurrentWeather | null>(null);
+  const [current, setCurrent] = useState<CurrentWeather | null>({ temperature: 28, weathercode: 1, windspeed: 14 });
   const [rain, setRain] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {

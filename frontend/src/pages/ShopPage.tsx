@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { productsAPI } from "../services/api";
+import { MOCK_PRODUCTS } from "../data/mockData";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
@@ -37,9 +38,9 @@ const categories = [
 ];
 
 const ShopPage = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [allProducts, setAllProducts] = useState<Product[]>([]); // Keep all products for counting
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
+  const [allProducts, setAllProducts] = useState<Product[]>(MOCK_PRODUCTS); // Keep all products for counting
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("created_at");
   const [favoriteIds, setFavoriteIds] = useState<number[]>([]);

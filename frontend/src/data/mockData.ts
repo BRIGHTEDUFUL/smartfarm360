@@ -451,3 +451,117 @@ export const MOCK_CONVERSATIONS = [
     unread_count: 0,
   },
 ];
+
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  unit: string;
+  stock_quantity: number;
+  status: string;
+  farmer_id: number;
+  image_url?: string;
+  rating?: number;
+  reviews_count?: number;
+}
+
+export const MOCK_PRODUCTS: Product[] = [
+  // Vegetables
+  { id: 1, name: 'Fresh Tomatoes', description: 'Organic red vine tomatoes, perfect for salads and stews', category: 'Vegetables', price: 15.00, unit: 'kg', stock_quantity: 120, status: 'Active', farmer_id: 1, rating: 4.8, reviews_count: 24 },
+  { id: 2, name: 'Garden Eggs', description: 'Crisp, locally grown garden eggs (eggplants) from Eastern Region', category: 'Vegetables', price: 12.00, unit: 'kg', stock_quantity: 85, status: 'Active', farmer_id: 1, rating: 4.7, reviews_count: 18 },
+  { id: 3, name: 'Fresh Carrots', description: 'Sweet, crunchy orange carrots harvested fresh daily from Aburi highlands', category: 'Vegetables', price: 10.00, unit: 'kg', stock_quantity: 90, status: 'Active', farmer_id: 1, rating: 4.9, reviews_count: 31 },
+  { id: 4, name: 'Fresh Onions', description: 'Pungent Bawku red onions, long shelf life and bursting with flavor', category: 'Vegetables', price: 8.00, unit: 'kg', stock_quantity: 150, status: 'Active', farmer_id: 2, rating: 4.6, reviews_count: 15 },
+  { id: 5, name: 'Fresh Okra', description: 'Tender baby okra pods, ideal for Ghanaian soups and sauces', category: 'Vegetables', price: 14.00, unit: 'kg', stock_quantity: 65, status: 'Active', farmer_id: 2, rating: 4.5, reviews_count: 12 },
+
+  // Fruits
+  { id: 6, name: 'Ripe Bananas', description: 'Naturally sweet Cavendish bananas from the Ashanti green belt', category: 'Fruits', price: 10.00, unit: 'bunch', stock_quantity: 110, status: 'Active', farmer_id: 2, rating: 4.9, reviews_count: 42 },
+  { id: 7, name: 'Fresh Pineapples', description: 'Sugar loaf pineapples from Nsawam, golden and bursting with juice', category: 'Fruits', price: 20.00, unit: 'piece', stock_quantity: 75, status: 'Active', farmer_id: 1, rating: 5.0, reviews_count: 38 },
+  { id: 8, name: 'Watermelon', description: 'Juicy, deep-red sweet watermelons grown under Ada sunshine', category: 'Fruits', price: 25.00, unit: 'piece', stock_quantity: 45, status: 'Active', farmer_id: 1, rating: 4.8, reviews_count: 29 },
+  { id: 9, name: 'Fresh Avocado', description: 'Rich, buttery Hass and local hybrid avocados packed with nutrients', category: 'Fruits', price: 18.00, unit: 'kg', stock_quantity: 50, status: 'Active', farmer_id: 1, rating: 4.7, reviews_count: 22 },
+  { id: 10, name: 'Ripe Mangoes', description: 'Sweet Keitt mangoes handpicked at peak ripeness in Somanya', category: 'Fruits', price: 22.00, unit: 'kg', stock_quantity: 80, status: 'Active', farmer_id: 2, rating: 4.9, reviews_count: 35 },
+
+  // Grains & Tubers
+  { id: 11, name: 'Sweet Corn', description: 'Freshly harvested yellow sweet corn on the cob', category: 'Grains', price: 8.00, unit: 'piece', stock_quantity: 200, status: 'Active', farmer_id: 1, rating: 4.6, reviews_count: 19 },
+  { id: 12, name: 'Premium Rice', description: 'Aromatic local Ghana jasmine rice, stone-free and parboiled', category: 'Grains', price: 35.00, unit: 'kg', stock_quantity: 160, status: 'Active', farmer_id: 1, rating: 4.9, reviews_count: 53 },
+  { id: 13, name: 'Brown Beans', description: 'Clean brown cowpea beans, high in protein and cook tenderly', category: 'Grains', price: 28.00, unit: 'kg', stock_quantity: 100, status: 'Active', farmer_id: 2, rating: 4.7, reviews_count: 20 },
+  { id: 14, name: 'Pearl Millets', description: 'Nutritious golden millet grains from Upper East, gluten-free', category: 'Grains', price: 30.00, unit: 'kg', stock_quantity: 80, status: 'Active', farmer_id: 2, rating: 4.8, reviews_count: 14 },
+  { id: 15, name: 'Fresh Cassava', description: 'Starchy, firm cassava roots freshly uprooted for banku and fufu', category: 'Grains', price: 12.00, unit: 'kg', stock_quantity: 130, status: 'Active', farmer_id: 1, rating: 4.5, reviews_count: 17 },
+  { id: 16, name: 'White Yam', description: 'Pona grade Ghanaian white yam, ideal for frying, boiling, or pounding', category: 'Grains', price: 20.00, unit: 'kg', stock_quantity: 95, status: 'Active', farmer_id: 1, rating: 5.0, reviews_count: 48 },
+  { id: 17, name: 'Cocoyam', description: 'Creamy cocoyam tubers and fresh tender kontomire leaves', category: 'Grains', price: 15.00, unit: 'kg', stock_quantity: 70, status: 'Active', farmer_id: 2, rating: 4.6, reviews_count: 16 },
+  { id: 18, name: 'Sweet Potatoes', description: 'Beta-carotene rich orange sweet potatoes from Volta basin', category: 'Grains', price: 16.00, unit: 'kg', stock_quantity: 85, status: 'Active', farmer_id: 2, rating: 4.7, reviews_count: 21 },
+
+  // Poultry & Eggs
+  { id: 19, name: 'Free Range Eggs', description: 'Farm fresh crate of 30 brown eggs from pasture-raised hens', category: 'Poultry', price: 30.00, unit: 'crate', stock_quantity: 60, status: 'Active', farmer_id: 1, rating: 4.9, reviews_count: 64 },
+  { id: 20, name: 'Whole Chicken', description: 'Dressed organic farm chicken, healthy and antibiotic-free', category: 'Poultry', price: 55.00, unit: 'piece', stock_quantity: 40, status: 'Active', farmer_id: 1, rating: 4.8, reviews_count: 33 },
+  { id: 21, name: 'Duck Meat', description: 'Freshly prepped tender farm duck meat, rich and flavorful', category: 'Poultry', price: 65.00, unit: 'kg', stock_quantity: 25, status: 'Active', farmer_id: 2, rating: 4.6, reviews_count: 11 },
+  { id: 22, name: 'Turkey', description: 'Plump festive local turkey, premium raised on grain feed', category: 'Poultry', price: 120.00, unit: 'piece', stock_quantity: 18, status: 'Active', farmer_id: 2, rating: 4.9, reviews_count: 15 },
+
+  // Meat
+  { id: 23, name: 'Fresh Beef', description: 'Prime local grass-fed beef cuts, inspected and hygienically butchered', category: 'Meat', price: 80.00, unit: 'kg', stock_quantity: 45, status: 'Active', farmer_id: 1, rating: 4.8, reviews_count: 28 },
+  { id: 24, name: 'Pork Meat', description: 'Tender grain-fed pork chops and cuts, farm inspected', category: 'Meat', price: 70.00, unit: 'kg', stock_quantity: 35, status: 'Active', farmer_id: 1, rating: 4.7, reviews_count: 19 },
+  { id: 25, name: 'Goat Meat', description: 'Succulent Sahelian goat meat, popular for light soup and grilling', category: 'Meat', price: 90.00, unit: 'kg', stock_quantity: 30, status: 'Active', farmer_id: 2, rating: 5.0, reviews_count: 36 },
+  { id: 26, name: 'Fresh Fish', description: 'Fresh tilapia caught from Volta lake, cleaned and scaled', category: 'Meat', price: 45.00, unit: 'kg', stock_quantity: 55, status: 'Active', farmer_id: 2, rating: 4.9, reviews_count: 40 },
+  { id: 27, name: 'Snail Meat', description: 'Giant African land snails, cleaned and vacuum sealed', category: 'Meat', price: 55.00, unit: 'kg', stock_quantity: 25, status: 'Active', farmer_id: 1, rating: 4.9, reviews_count: 23 },
+  { id: 28, name: 'Rabbit Meat', description: 'Lean, low-cholesterol farm-raised rabbit meat cuts', category: 'Meat', price: 60.00, unit: 'kg', stock_quantity: 20, status: 'Active', farmer_id: 1, rating: 4.6, reviews_count: 8 },
+
+  // Dairy
+  { id: 29, name: 'Fresh Milk', description: 'Pasteurized whole cow milk straight from Amrahia dairy farms', category: 'Dairy', price: 18.00, unit: 'liter', stock_quantity: 60, status: 'Active', farmer_id: 2, rating: 4.8, reviews_count: 27 },
+
+  // Spices & Condiments
+  { id: 30, name: 'Hot Pepper', description: 'Fiery scotch bonnet peppers, pungent and aromatic', category: 'Spices', price: 20.00, unit: 'kg', stock_quantity: 40, status: 'Active', farmer_id: 1, rating: 4.9, reviews_count: 32 },
+  { id: 31, name: 'Fresh Chilli', description: 'Long green and red birds eye chilies from Keta sand spits', category: 'Spices', price: 25.00, unit: 'kg', stock_quantity: 35, status: 'Active', farmer_id: 1, rating: 4.7, reviews_count: 16 },
+  { id: 32, name: 'Fresh Ginger', description: 'Potent aromatic ginger roots harvested from Juaben', category: 'Spices', price: 22.00, unit: 'kg', stock_quantity: 50, status: 'Active', farmer_id: 2, rating: 4.9, reviews_count: 29 },
+  { id: 33, name: 'Raw Honey', description: 'Unfiltered 100% pure wildflower bush honey from Afram Plains', category: 'Spices', price: 45.00, unit: 'jar', stock_quantity: 40, status: 'Active', farmer_id: 2, rating: 5.0, reviews_count: 51 },
+  { id: 34, name: 'Shito Pepper', description: 'Artisanal authentic black pepper sauce cooked with dried shrimp and fish', category: 'Spices', price: 35.00, unit: 'jar', stock_quantity: 60, status: 'Active', farmer_id: 1, rating: 5.0, reviews_count: 74 },
+  { id: 35, name: 'Prekese Spice', description: 'Aromatic medicinal prekese (Aidan fruit) pods for palm nut soup', category: 'Spices', price: 15.00, unit: 'piece', stock_quantity: 80, status: 'Active', farmer_id: 1, rating: 4.8, reviews_count: 21 },
+];
+
+export const MOCK_DEFAULT_WEATHER = {
+  location: 'Greater Accra',
+  latitude: 5.6037,
+  longitude: -0.1870,
+  current: {
+    temperature: 28.5,
+    weathercode: 2,
+    windspeed: 14.2,
+    is_day: 1,
+  },
+  daily: {
+    time: [
+      new Date().toISOString().split('T')[0],
+      new Date(Date.now() + 86400000).toISOString().split('T')[0],
+      new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
+      new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+      new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
+      new Date(Date.now() + 86400000 * 5).toISOString().split('T')[0],
+      new Date(Date.now() + 86400000 * 6).toISOString().split('T')[0],
+    ],
+    temperature_2m_max: [31.2, 30.8, 31.5, 32.0, 31.0, 30.5, 31.8],
+    temperature_2m_min: [24.1, 23.8, 24.5, 24.0, 23.9, 24.2, 24.0],
+    precipitation_sum: [0.0, 1.2, 0.4, 0.0, 3.5, 0.8, 0.0],
+    precipitation_probability_max: [10, 35, 20, 15, 60, 25, 10],
+    weathercode: [1, 2, 2, 1, 61, 2, 1],
+    windspeed_10m_max: [15.1, 16.5, 14.0, 13.8, 18.2, 14.5, 13.2],
+    uv_index_max: [9.2, 8.8, 9.5, 9.8, 7.5, 9.0, 9.4],
+  },
+  hourly: {
+    time: Array.from({ length: 24 }, (_, i) => `${new Date().toISOString().split('T')[0]}T${String(i).padStart(2, '0')}:00`),
+    relativehumidity_2m: [82, 84, 86, 88, 90, 91, 88, 82, 75, 68, 65, 63, 62, 64, 67, 71, 74, 78, 80, 82, 83, 84, 84, 83],
+    soil_moisture_0_to_1cm: Array.from({ length: 24 }, () => 0.28),
+  },
+};
+
+export function getMockWeatherForRegion(regionName: string) {
+  const isNorthern = ['Northern', 'Upper East', 'Upper West', 'North East', 'Savannah'].includes(regionName);
+  const baseTemp = isNorthern ? 34.0 : 28.5;
+  return {
+    ...MOCK_DEFAULT_WEATHER,
+    location: regionName,
+    current: {
+      ...MOCK_DEFAULT_WEATHER.current,
+      temperature: baseTemp,
+    },
+  };
+}

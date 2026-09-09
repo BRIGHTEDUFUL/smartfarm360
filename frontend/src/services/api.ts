@@ -3,7 +3,10 @@ import axios from 'axios';
 // Use environment variable or relative path for API calls
 // In production (unified build), use relative path
 // In development, use proxy or full URL
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const PROD_API_URL = 'https://smart-farming-360.onrender.com/api';
+const isProductionDomain = typeof window !== 'undefined' && 
+  (window.location.hostname.includes('pages.dev') || window.location.hostname.includes('onrender.com'));
+const API_URL = import.meta.env.VITE_API_URL || (isProductionDomain ? PROD_API_URL : '/api');
 
 console.log('API URL:', API_URL);
 
