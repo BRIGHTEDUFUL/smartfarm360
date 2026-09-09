@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { irrigationAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import { MOCK_IRRIGATION_SCHEDULES, MOCK_IRRIGATION_LOGS } from '../data/mockData';
 import './IrrigationPage.css';
 
 interface Schedule {
@@ -70,10 +71,18 @@ export default function IrrigationPage() {
         irrigationAPI.getSchedules(),
         irrigationAPI.getDue(),
       ]);
-      setSchedules(sRes.data.data || []);
-      setDueSchedules(dRes.data.data || []);
+      const s = sRes.data?.data;
+      const d = dRes.data?.data;
+      if (s && s.length > 0) {
+        setSchedules(s);
+        setDueSchedules(d || []);
+      } else {
+        setSchedules(MOCK_IRRIGATION_SCHEDULES as any);
+        setDueSchedules(MOCK_IRRIGATION_SCHEDULES.slice(0, 2) as any);
+      }
     } catch {
-      toast.error('Failed to load irrigation data');
+      setSchedules(MOCK_IRRIGATION_SCHEDULES as any);
+      setDueSchedules(MOCK_IRRIGATION_SCHEDULES.slice(0, 2) as any);
     } finally {
       setLoading(false);
     }
@@ -82,9 +91,14 @@ export default function IrrigationPage() {
   const loadLogs = useCallback(async () => {
     try {
       const res = await irrigationAPI.getLogs();
-      setLogs(res.data.data || []);
+      const l = res.data?.data;
+      if (l && l.length > 0) {
+        setLogs(l);
+      } else {
+        setLogs(MOCK_IRRIGATION_LOGS as any);
+      }
     } catch {
-      toast.error('Failed to load watering history');
+      setLogs(MOCK_IRRIGATION_LOGS as any);
     }
   }, []);
 

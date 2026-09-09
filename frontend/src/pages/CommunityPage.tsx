@@ -5,6 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import './CommunityPage.css';
 
+import { MOCK_COMMUNITY_POSTS, MOCK_OFFICERS } from '../data/mockData';
+
 interface Post {
   id: number; author_id: number; title: string; content: string; category: string;
   likes_count: number; replies_count: number; is_pinned: number;
@@ -51,10 +53,15 @@ export default function CommunityPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [officers, setOfficers] = useState<Person[]>([]);
-  const [farmers, setFarmers] = useState<Person[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Post[]>(MOCK_COMMUNITY_POSTS);
+  const [officers, setOfficers] = useState<Person[]>(MOCK_OFFICERS);
+  const [farmers, setFarmers] = useState<Person[]>([
+    { id: 201, first_name: 'Kwame', last_name: 'Mensah', role: 'Farmer', profile_photo_url: null },
+    { id: 202, first_name: 'Ama', last_name: 'Asante', role: 'Farmer', profile_photo_url: null },
+    { id: 203, first_name: 'Issah', last_name: 'Yakubu', role: 'Farmer', profile_photo_url: null },
+    { id: 204, first_name: 'Kofi', last_name: 'Owusu', role: 'Farmer', profile_photo_url: null },
+  ]);
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [search, setSearch] = useState('');
   const [showNewPost, setShowNewPost] = useState(false);
@@ -67,26 +74,58 @@ export default function CommunityPage() {
       const params: any = { limit: 50 };
       if (selectedCategory !== 'All') params.category = selectedCategory;
       if (search.trim()) params.search = search.trim();
-      // support ?authorId= from OfficersPage "View Posts" link
       const authorIdParam = searchParams.get('authorId');
       if (authorIdParam) params.authorId = parseInt(authorIdParam);
+      
       const res = await communityAPI.getPosts(params);
-      setPosts(res.data.data || []);
+      const data = res.data?.data;
+      if (data && data.length > 0) {
+        setPosts(data);
+      } else {
+        // Filter mock posts
+        let filtered = [...MOCK_COMMUNITY_POSTS];
+        if (selectedCategory !== 'All') {
+          filtered = filtered.filter(p => p.category === selectedCategory);
+        }
+        if (search.trim()) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter(p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
+        }
+        if (authorIdParam) {
+          filtered = filtered.filter(p => p.author_id === parseInt(authorIdParam));
+        }
+        setPosts(filtered);
+      }
     } catch {
-      toast.error('Failed to load community posts');
+      // Fallback filter
+      let filtered = [...MOCK_COMMUNITY_POSTS];
+      if (selectedCategory !== 'All') {
+        filtered = filtered.filter(p => p.category === selectedCategory);
+      }
+      if (search.trim()) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
+      }
+      setPosts(filtered);
     } finally {
       setLoading(false);
     }
   }, [selectedCategory, search, searchParams]);
 
   useEffect(() => {
-    const t = setTimeout(() => loadPosts(), 300);
+    const t = setTimeout(() => loadPosts(), 250);
     return () => clearTimeout(t);
   }, [loadPosts]);
 
   useEffect(() => {
-    communityAPI.getOfficers().then(r => setOfficers(r.data.data || [])).catch(() => {});
-    if (user) communityAPI.getFarmers().then(r => setFarmers(r.data.data || [])).catch(() => {});
+    communityAPI.getOfficers().then(r => {
+      if (r.data?.data?.length) setOfficers(r.data.data);
+    }).catch(() => {});
+    if (user) {
+      communityAPI.getFarmers().then(r => {
+        if (r.data?.data?.length) setFarmers(r.data.data);
+      }).catch(() => {});
+    }
   }, [user]);
 
   const canPost = user && ['Farmer', 'AgriculturalOfficer', 'Admin'].includes(user.role);

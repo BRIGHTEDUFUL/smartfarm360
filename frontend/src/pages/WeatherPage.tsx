@@ -95,8 +95,45 @@ export default function WeatherPage() {
       setWeather(wRes.data.data);
       setAlerts(aRes.data.data || []);
     } catch {
-      setError('Failed to load weather data. Please check your internet connection and try again.');
-      toast.error('Could not load weather data');
+      // Direct browser fallback from Open-Meteo public API
+      try {
+        const reg = GHANA_REGIONS.find(r => r.name.toLowerCase() === region.toLowerCase()) || GHANA_REGIONS[0];
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${reg.lat}&longitude=${reg.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,weathercode,windspeed_10m_max,uv_index_max&hourly=relativehumidity_2m,soil_moisture_0_to_1cm&current_weather=true&timezone=Africa%2FAccra&forecast_days=7`;
+        const res = await fetch(url);
+        const raw = await res.json();
+        const directData: WeatherData = {
+          location: reg.name,
+          latitude: reg.lat,
+          longitude: reg.lon,
+          current: raw.current_weather,
+          daily: raw.daily,
+          hourly: raw.hourly,
+        };
+        setWeather(directData);
+
+        // Generate client alerts
+        const generatedAlerts: FarmingAlert[] = [];
+        const next3Rain = (raw.daily?.precipitation_sum || []).slice(0, 3).reduce((a: number, b: number) => a + b, 0);
+        const maxRainProb = Math.max(...(raw.daily?.precipitation_probability_max || []).slice(0, 3));
+        const maxTemp = Math.max(...(raw.daily?.temperature_2m_max || []).slice(0, 3));
+        
+        if (next3Rain < 2) {
+          generatedAlerts.push({ type: 'warning', message: 'No significant rain expected in next 3 days. Irrigate crops in early morning.' });
+        }
+        if (maxRainProb > 70) {
+          generatedAlerts.push({ type: 'info', message: 'Heavy rain probable this week. Hold off on excess irrigation.' });
+        }
+        if (maxTemp > 34) {
+          generatedAlerts.push({ type: 'danger', message: `High temperature expected (${Math.round(maxTemp)}°C). Mulch soil to protect roots.` });
+        }
+        if (generatedAlerts.length === 0) {
+          generatedAlerts.push({ type: 'info', message: 'Favorable farming weather conditions forecast across the district.' });
+        }
+        setAlerts(generatedAlerts);
+      } catch {
+        setError('Failed to load weather data. Please check your internet connection and try again.');
+        toast.error('Could not load weather data');
+      }
     } finally {
       setLoading(false);
     }

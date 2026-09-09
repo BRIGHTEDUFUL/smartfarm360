@@ -38,7 +38,21 @@ export default function WeatherWidget({ region = 'Greater Accra' }: { region?: s
           setRain(data.daily?.precipitation_probability_max?.[0] ?? 0);
         }
       })
-      .catch(() => { if (!cancelled) setFailed(true); })
+      .catch(async () => {
+        if (cancelled) return;
+        try {
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=5.6037&longitude=-0.1870&current_weather=true&daily=precipitation_probability_max&timezone=Africa%2FAccra`;
+          const raw = await (await fetch(url)).json();
+          if (raw?.current_weather) {
+            setCurrent(raw.current_weather);
+            setRain(raw.daily?.precipitation_probability_max?.[0] ?? 10);
+            return;
+          }
+          setFailed(true);
+        } catch {
+          setFailed(true);
+        }
+      })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [region]);

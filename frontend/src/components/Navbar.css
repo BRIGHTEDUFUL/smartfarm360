@@ -108,6 +108,98 @@
     box-shadow: 0 10px 22px rgba(245, 158, 11, 0.18);
 }
 
+/* ── Desktop Search Bar ───────────────────────────────── */
+.nav-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 220px;
+    margin: 0 8px;
+    flex-shrink: 1;
+}
+
+.nav-search .nav-search-icon {
+    position: absolute;
+    left: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.nav-search input {
+    width: 100%;
+    padding: 7px 14px 7px 34px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.nav-search input::placeholder {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.nav-search input:focus {
+    background: rgba(255, 255, 255, 0.24);
+    border-color: #fbbf24;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.28);
+}
+
+/* ── Mobile expanding search bar ──────────────────────── */
+.nav-mobile-search {
+    display: none;
+    background: #0d5415;
+    padding: 10px 16px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.nav-mobile-search.open {
+    display: block;
+}
+
+.nav-mobile-search form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.nav-mobile-search i {
+    position: absolute;
+    left: 14px;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.nav-mobile-search input {
+    width: 100%;
+    padding: 9px 36px 9px 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 12px;
+    color: #111827;
+    font-size: 14px;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.nav-mobile-search .search-clear {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+}
+
 /* ── Desktop actions ───────────────────────────────────── */
 .nav-actions {
     display: flex;
@@ -273,8 +365,15 @@
 }
 
 @media (max-width: 960px) {
-    .nav-links {
-        display: none;
+    .nav-links,
+    .nav-search {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .nav-mobile-search {
+        display: none !important;
     }
 }
 

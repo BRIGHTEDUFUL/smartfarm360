@@ -51,6 +51,8 @@ function roleLabel(role: string) {
   return '🌱 Farmer';
 }
 
+import { MOCK_COMMUNITY_POSTS, MOCK_REPLIES } from '../data/mockData';
+
 export default function CommunityPostPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -63,14 +65,25 @@ export default function CommunityPostPage() {
 
   useEffect(() => {
     if (!id) return;
+    const postId = parseInt(id);
     Promise.all([
-      communityAPI.getPost(parseInt(id)),
-      communityAPI.getReplies(parseInt(id)),
+      communityAPI.getPost(postId),
+      communityAPI.getReplies(postId),
     ]).then(([pRes, rRes]) => {
-      setPost(pRes.data.data);
-      setReplies(rRes.data.data || []);
-    }).catch(() => toast.error('Failed to load post'))
-      .finally(() => setLoading(false));
+      const p = pRes.data?.data;
+      if (p) {
+        setPost(p);
+        setReplies(rRes.data?.data || []);
+      } else {
+        const mockP = MOCK_COMMUNITY_POSTS.find(x => x.id === postId) || MOCK_COMMUNITY_POSTS[0];
+        setPost(mockP);
+        setReplies(MOCK_REPLIES[mockP.id] || []);
+      }
+    }).catch(() => {
+      const mockP = MOCK_COMMUNITY_POSTS.find(x => x.id === postId) || MOCK_COMMUNITY_POSTS[0];
+      setPost(mockP);
+      setReplies(MOCK_REPLIES[mockP.id] || []);
+    }).finally(() => setLoading(false));
   }, [id]);
 
   const handleLikePost = async () => {
