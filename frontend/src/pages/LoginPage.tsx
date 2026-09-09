@@ -95,6 +95,43 @@ const LoginPage = () => {
               <p>Sign in to continue shopping and managing your orders</p>
             </div>
 
+                        {/* Quick Demo Login Accounts */}
+            <div style={{ margin: '1.25rem 0', padding: '1rem', background: '#f0fdf4', borderRadius: '12px', border: '1.5px solid #bbf7d0' }}>
+              <p style={{ margin: '0 0 0.6rem', fontSize: '0.8rem', fontWeight: 700, color: '#166534', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                ⚡ Quick Demo Accounts (Click to Fill)
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => { setEmail('farmer@smartfarm360.com'); setPassword('Password123!'); }}
+                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                >
+                  👨‍🌾 Farmer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setEmail('consumer@smartfarm360.com'); setPassword('Password123!'); }}
+                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                >
+                  🛒 Consumer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setEmail('officer@smartfarm360.com'); setPassword('Password123!'); }}
+                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                >
+                  🏛️ Agric Officer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setEmail('admin@smartfarm360.com'); setPassword('Password123!'); }}
+                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                >
+                  🛡️ Admin
+                </button>
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="form-group">
                 <label>
