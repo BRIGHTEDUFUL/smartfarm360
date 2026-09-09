@@ -6,6 +6,9 @@ import { usePwa } from "../contexts/PwaContext";
 import { messagesAPI } from "../services/api";
 import "./Navbar.css";
 
+// Pages that have their own search bar — hide the Navbar desktop search on these
+const PAGES_WITH_OWN_SEARCH = ["/community", "/weather", "/officers", "/messages", "/irrigation", "/ai-advisor"];
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { items } = useCart();
@@ -155,21 +158,23 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* ── Desktop search bar ───────────────────────────── */}
-          <form
-            className="nav-search"
-            onSubmit={handleSearchSubmit}
-            role="search"
-          >
-            <i className="fas fa-search nav-search-icon" aria-hidden="true" />
-            <input
-              type="search"
-              placeholder="Search fresh products…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search products"
-            />
-          </form>
+          {/* ── Desktop search bar — only shown on shop-related pages ── */}
+          {!PAGES_WITH_OWN_SEARCH.some(p => location.pathname.startsWith(p)) && (
+            <form
+              className="nav-search"
+              onSubmit={handleSearchSubmit}
+              role="search"
+            >
+              <i className="fas fa-search nav-search-icon" aria-hidden="true" />
+              <input
+                type="search"
+                placeholder="Search fresh products…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search products"
+              />
+            </form>
+          )}
 
           {/* ── Desktop actions ───────────────────────────────── */}
           <div className="nav-actions">
