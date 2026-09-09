@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 // Use environment variable or relative path for API calls
-// In production (unified build), use relative path
-// In development, use proxy or full URL
 const PROD_API_URL = 'https://smart-farming-360.onrender.com/api';
 const isProductionDomain = typeof window !== 'undefined' && 
   (window.location.hostname.includes('pages.dev') || window.location.hostname.includes('onrender.com'));
@@ -29,18 +27,23 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token refresh
+// Response interceptor to handle token refresh gracefully
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Do not intercept auth endpoints
+    if (originalRequest?.url?.includes('/auth/')) {
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
+        if (refreshToken && !refreshToken.startsWith('refresh-') && !refreshToken.startsWith('reg-refresh-')) {
           const response = await axios.post(`${API_URL}/auth/refresh`, {
             refreshToken,
           });
@@ -52,10 +55,8 @@ api.interceptors.response.use(
           return api(originalRequest);
         }
       } catch (refreshError) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
+        // Do NOT forcibly wipe user session or redirect
+        console.warn('Background token refresh not available:', refreshError);
         return Promise.reject(refreshError);
       }
     }
@@ -78,7 +79,6 @@ export const productsAPI = {
   getAll: (params?: any) => api.get('/products', { params }),
   getById: (id: number) => api.get(`/products/${id}`),
   create: (data: any) => {
-    // Handle FormData for file uploads
     if (data instanceof FormData) {
       return api.post('/products', data, {
         headers: {
@@ -89,7 +89,6 @@ export const productsAPI = {
     return api.post('/products', data);
   },
   update: (id: number, data: any) => {
-    // Handle FormData for file uploads
     if (data instanceof FormData) {
       return api.put(`/products/${id}`, data, {
         headers: {

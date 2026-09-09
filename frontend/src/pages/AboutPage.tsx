@@ -1,257 +1,221 @@
 import { Link } from "react-router-dom";
-
 import "./AboutPage.css";
 
+const teamMembers = [
+  {
+    name: "Grant Anaman",
+    role: "Team Lead & Strategy Officer",
+    initials: "GA",
+    avatarBg: "linear-gradient(135deg, #0d5415 0%, #1b7e28 100%)",
+    icon: "fa-chess-king",
+    bio: "Drives strategic vision, operations management, and stakeholder partnerships across the agricultural ecosystem.",
+  },
+  {
+    name: "Maud Ametefe",
+    role: "Marketing & Communications Officer",
+    initials: "MA",
+    avatarBg: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+    icon: "fa-bullhorn",
+    bio: "Leads outreach campaigns, community engagement, brand messaging, and media relations.",
+  },
+  {
+    name: "Kipo Estellela Aliza",
+    role: "Tech Lead Officer",
+    initials: "KA",
+    avatarBg: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
+    icon: "fa-code",
+    bio: "Architects the software infrastructure, AI integrations, and full-stack engineering across mobile and web.",
+  },
+  {
+    name: "Derrick Salasi K. Selormey",
+    role: "Finance & Business Development Lead",
+    initials: "DS",
+    avatarBg: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
+    icon: "fa-chart-line",
+    bio: "Manages financial planning, market expansion, commercial monetization, and business sustainability.",
+  },
+];
+
+const techStack = [
+  {
+    category: "Frontend",
+    icon: "⚛️",
+    name: "React 18 + TypeScript",
+    desc: "Single-page responsive application with component-driven architecture and strict type safety.",
+  },
+  {
+    category: "Styling & UI",
+    icon: "🎨",
+    name: "Custom CSS System",
+    desc: "Modern responsive design with glassmorphism, fluid layouts, and mobile-first navigation.",
+  },
+  {
+    category: "Backend API",
+    icon: "🟢",
+    name: "Node.js + Express",
+    desc: "Modular RESTful API with middleware authentication, rate limiting, and robust validation.",
+  },
+  {
+    category: "Database",
+    icon: "🐘",
+    name: "PostgreSQL",
+    desc: "Relational persistence with ACID compliance, relational schemas, and indexing for fast querying.",
+  },
+  {
+    category: "Artificial Intelligence",
+    icon: "🤖",
+    name: "Google Gemini AI",
+    desc: "Intelligent agricultural advisor providing real-time crop disease diagnosis and farming recommendations.",
+  },
+  {
+    category: "Hosting & CDN",
+    icon: "☁️",
+    name: "Cloudflare Pages",
+    desc: "Ultra-fast global edge CDN distribution with SSL, caching, and instant static asset delivery.",
+  },
+  {
+    category: "Cloud Infrastructure",
+    icon: "🚀",
+    name: "Render Cloud",
+    desc: "Automated production server environment with health monitoring and continuous deployment.",
+  },
+  {
+    category: "Mobile & Offline",
+    icon: "📱",
+    name: "PWA (Progressive Web App)",
+    desc: "Installable on Android, iOS & Desktop with service worker caching and offline resilience.",
+  },
+];
+
+const features = [
+  { icon: "🛒", text: "Direct farm-to-consumer marketplace" },
+  { icon: "🌦️", text: "Real-time weather for all 16 Ghana regions" },
+  { icon: "🤖", text: "AI-powered farming advisor & diagnostics" },
+  { icon: "💬", text: "Community discussions & officer consultations" },
+  { icon: "💧", text: "Smart irrigation scheduling & weather sync" },
+  { icon: "📦", text: "Order management & live tracking" },
+];
+
 const AboutPage = () => {
-  const stats = [
-    { icon: "🌍", value: "16", label: "Regions Covered" },
-    { icon: "👨‍🌾", value: "1,250+", label: "Active Farmers" },
-    { icon: "🛒", value: "5,000+", label: "Products Available" },
-    { icon: "😊", value: "10,000+", label: "Happy Customers" },
-  ];
-
-  const values = [
-    {
-      icon: "🌱",
-      title: "Sustainability",
-      description:
-        "Supporting eco-friendly farming practices that protect Ghana's natural resources for future generations.",
-    },
-    {
-      icon: "🤝",
-      title: "Fair Trade",
-      description:
-        "Ensuring farmers receive fair prices for their produce while consumers get quality products at great value.",
-    },
-    {
-      icon: "💚",
-      title: "Community First",
-      description:
-        "Building strong connections between farmers and consumers across all 16 regions of Ghana.",
-    },
-    {
-      icon: "✨",
-      title: "Quality Assured",
-      description:
-        "Every product is verified for freshness and quality before reaching your doorstep.",
-    },
-  ];
-
-  const team = [
-    {
-      name: "Kwame Asante",
-      role: "Founder & CEO",
-      image: "👨🏿‍💼",
-      bio: "Agricultural economist passionate about connecting farmers to markets.",
-    },
-    {
-      name: "Ama Osei",
-      role: "Head of Operations",
-      image: "👩🏿‍💼",
-      bio: "Logistics expert ensuring fresh products reach customers on time.",
-    },
-    {
-      name: "Kofi Mensah",
-      role: "Farmer Relations",
-      image: "👨🏿‍🌾",
-      bio: "Former farmer helping others succeed in the digital marketplace.",
-    },
-  ];
-
   return (
-    <div>
-      <div className="about-page">
-        {/* Hero Section */}
-        <section className="about-hero">
-          <div className="about-hero-bg">
-            <div className="hero-orb orb-1"></div>
-            <div className="hero-orb orb-2"></div>
+    <div className="about-page">
+      {/* Hero */}
+      <section className="about-hero">
+        <div className="about-hero-bg">
+          <div className="hero-orb orb-1" />
+          <div className="hero-orb orb-2" />
+        </div>
+        <div className="about-hero-content">
+          <div className="hero-badge">
+            <i className="fas fa-leaf" />
+            <span>About the Project</span>
           </div>
-          <div className="about-hero-content">
-            <div className="hero-badge">
-              <i className="fas fa-leaf"></i>
-              <span>About Smart Farming 360</span>
-            </div>
-            <h1>
-              Connecting Ghana's Farmers
-              <br />
-              to Your Table
-            </h1>
+          <h1>Smart Farming 360</h1>
+          <p>
+            A full-stack agricultural platform connecting Ghana's farmers, consumers,
+            and agricultural officers — empowering local communities through technology.
+          </p>
+        </div>
+      </section>
+
+      {/* What it is */}
+      <section className="about-section">
+        <div className="about-container">
+          <div className="about-card about-what">
+            <div className="about-section-tag">The Platform</div>
+            <h2>What is Smart Farming 360?</h2>
             <p>
-              We're revolutionizing agriculture in Ghana by creating a direct
-              link between farmers across all 16 regions and consumers
-              nationwide. Fresh, fair, and sustainable.
+              Smart Farming 360 is a modern agri-tech platform designed specifically for Ghana's agricultural sector.
+              It bridges the gap between smallholder farmers and consumers by eliminating middlemen, providing accurate
+              localized weather data, and connecting farmers with certified agricultural extension officers.
+            </p>
+            <p>
+              The platform covers all <strong>16 administrative regions of Ghana</strong> and delivers tailored features for
+              four core roles: <strong>Farmers</strong>, <strong>Consumers</strong>,{" "}
+              <strong>Agricultural Extension Officers</strong>, and <strong>Platform Administrators</strong>.
             </p>
           </div>
-        </section>
 
-        {/* Stats Section */}
-        <section className="stats-section">
-          <div className="container">
-            <div className="stats-grid">
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="stat-card"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="stat-icon">{stat.icon}</div>
-                  <div className="stat-value">{stat.value}</div>
-                  <div className="stat-label">{stat.label}</div>
+          {/* Features */}
+          <div className="about-features-grid">
+            {features.map((f, i) => (
+              <div className="about-feature-pill" key={i}>
+                <span className="pill-icon">{f.icon}</span>
+                <span>{f.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership Team */}
+      <section className="about-section about-section-alt">
+        <div className="about-container">
+          <div className="about-section-tag center">Leadership</div>
+          <h2 className="center-heading">Our Team</h2>
+          <p className="team-intro">
+            Meet the leadership team driving innovation, operations, technology, and commercial growth.
+          </p>
+          <div className="team-grid">
+            {teamMembers.map((m, i) => (
+              <div className="team-card" key={i}>
+                <div className="team-avatar-wrap">
+                  <div className="team-avatar" style={{ background: m.avatarBg }}>
+                    {m.initials}
+                  </div>
+                  <div className="team-role-icon" title={m.role}>
+                    <i className={`fas ${m.icon}`} />
+                  </div>
                 </div>
-              ))}
-            </div>
+                <h3 className="team-name">{m.name}</h3>
+                <div className="team-role-badge">{m.role}</div>
+                <p className="team-bio">{m.bio}</p>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Story Section */}
-        <section className="story-section">
-          <div className="container">
-            <div className="story-content">
-              <div className="story-image">
-                <img src="/images/about-farm.jpg" alt="Ghana Farm" />
-                <div className="image-badge">
-                  <i className="fas fa-heart"></i>
-                  <span>Made in Ghana</span>
+      {/* Tech Stack */}
+      <section className="about-section">
+        <div className="about-container">
+          <div className="about-section-tag center">Architecture</div>
+          <h2 className="center-heading">Technology Stack</h2>
+          <p className="team-intro">
+            Engineered with modern, production-grade tools for speed, security, and scalability.
+          </p>
+          <div className="tech-grid">
+            {techStack.map((t, i) => (
+              <div className="tech-card" key={i}>
+                <div className="tech-card-header">
+                  <span className="tech-icon">{t.icon}</span>
+                  <span className="tech-cat-badge">{t.category}</span>
                 </div>
+                <h3 className="tech-name">{t.name}</h3>
+                <p className="tech-desc">{t.desc}</p>
               </div>
-              <div className="story-text">
-                <h2>Our Story</h2>
-                <p>
-                  Smart Farming 360 was born from a simple observation: Ghana's
-                  farmers produce incredible quality products, but struggle to
-                  reach consumers directly. Meanwhile, consumers want fresh,
-                  locally-sourced produce but don't know where to find it.
-                </p>
-                <p>
-                  We bridge this gap by connecting farmers from all 16 regions
-                  of Ghana with consumers across the country. From the cocoa
-                  farms of Ashanti to the rice fields of Northern Region, from
-                  the pineapple plantations of Eastern Region to the vegetable
-                  gardens of Greater Accra - we bring Ghana's agricultural
-                  diversity to your doorstep.
-                </p>
-                <p>
-                  Our platform ensures farmers get fair prices for their hard
-                  work while consumers enjoy fresh, quality products at
-                  competitive prices. It's a win-win that's transforming Ghana's
-                  agricultural landscape.
-                </p>
-                <Link to="/shop" className="btn btn-primary">
-                  <i className="fas fa-shopping-bag"></i>
-                  Start Shopping
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Values Section */}
-        <section className="values-section">
-          <div className="container">
-            <div className="section-header">
-              <h2>Our Values</h2>
-              <p>The principles that guide everything we do</p>
-            </div>
-            <div className="values-grid">
-              {values.map((value, index) => (
-                <div
-                  key={index}
-                  className="value-card"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="value-icon">{value.icon}</div>
-                  <h3>{value.title}</h3>
-                  <p>{value.description}</p>
-                </div>
-              ))}
+      {/* CTA */}
+      <section className="about-cta">
+        <div className="about-container">
+          <div className="cta-content">
+            <h2>Ready to transform your agricultural journey?</h2>
+            <p>Explore the marketplace, consult with an agricultural officer, or register your farm today.</p>
+            <div className="cta-buttons">
+              <Link to="/shop" className="btn btn-primary btn-large">
+                <i className="fas fa-shopping-bag" /> Browse Marketplace
+              </Link>
+              <Link to="/register" className="btn btn-secondary btn-large">
+                <i className="fas fa-user-plus" /> Join the Community
+              </Link>
             </div>
           </div>
-        </section>
-
-        {/* Team Section */}
-        <section className="team-section">
-          <div className="container">
-            <div className="section-header">
-              <h2>Meet Our Team</h2>
-              <p>The people making it all happen</p>
-            </div>
-            <div className="team-grid">
-              {team.map((member, index) => (
-                <div
-                  key={index}
-                  className="team-card"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="team-avatar">{member.image}</div>
-                  <h3>{member.name}</h3>
-                  <p className="team-role">{member.role}</p>
-                  <p className="team-bio">{member.bio}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Impact Section */}
-        <section className="impact-section">
-          <div className="container">
-            <div className="section-header">
-              <h2>Our Impact</h2>
-              <p>Making a difference across Ghana</p>
-            </div>
-            <div className="impact-grid">
-              <div className="impact-card">
-                <div className="impact-icon">🌾</div>
-                <h3>Supporting Farmers</h3>
-                <p>
-                  Over 1,250 farmers across Ghana now have direct access to
-                  customers, earning 30% more than traditional market prices.
-                </p>
-              </div>
-              <div className="impact-card">
-                <div className="impact-icon">🚚</div>
-                <h3>Fast Delivery</h3>
-                <p>
-                  Same-day delivery in major cities ensures products reach
-                  consumers at peak freshness, reducing waste by 40%.
-                </p>
-              </div>
-              <div className="impact-card">
-                <div className="impact-icon">🌍</div>
-                <h3>Environmental Care</h3>
-                <p>
-                  Promoting sustainable farming practices and reducing carbon
-                  footprint through efficient logistics and local sourcing.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="about-cta">
-          <div className="container">
-            <div className="cta-content">
-              <h2>Join the Movement</h2>
-              <p>
-                Whether you're a farmer or a consumer, there's a place for you
-                in our community
-              </p>
-              <div className="cta-buttons">
-                <Link to="/register" className="btn btn-primary btn-large">
-                  <i className="fas fa-user-plus"></i>
-                  Become a Farmer
-                </Link>
-                <Link to="/shop" className="btn btn-secondary btn-large">
-                  <i className="fas fa-shopping-bag"></i>
-                  Start Shopping
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 };

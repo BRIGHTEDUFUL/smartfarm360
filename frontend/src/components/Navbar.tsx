@@ -18,7 +18,11 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [exploreMenuOpen, setExploreMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const exploreMenuRef = useRef<HTMLDivElement>(null);
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const [unreadMessages, setUnreadMessages] = useState(0);
@@ -36,6 +40,28 @@ const Navbar = () => {
     return () => clearInterval(interval);
   }, [user]);
 
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+      if (exploreMenuRef.current && !exploreMenuRef.current.contains(e.target as Node)) {
+        setExploreMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close menus on route change
+  useEffect(() => {
+    setUserMenuOpen(false);
+    setExploreMenuOpen(false);
+    setSearchOpen(false);
+    setSearchQuery("");
+  }, [location.pathname]);
+
   // Detect scroll for shadow
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -50,22 +76,19 @@ const Navbar = () => {
     }
   }, [searchOpen]);
 
-  // Close search on route change
-  useEffect(() => {
-    setSearchOpen(false);
-    setSearchQuery("");
-  }, [location.pathname]);
-
   const handleLogout = async () => {
+    setUserMenuOpen(false);
     await logout();
     navigate("/login");
   };
 
   const isActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
-    return (
-      location.pathname === path || location.pathname.startsWith(path + "/")
-    );
+    return location.pathname === path || location.pathname.startsWith(path + "/");
+  };
+
+  const isExploreActive = () => {
+    return ["/about", "/contact", "/officers"].some(p => location.pathname.startsWith(p));
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -88,6 +111,30 @@ const Navbar = () => {
     await installApp();
   };
 
+  const getDashboardPath = () => {
+    if (!user) return "/login";
+    if (user.role === "Farmer") return "/farmer";
+    if (user.role === "Admin") return "/admin";
+    if (user.role === "AgriculturalOfficer") return "/community";
+    return "/orders";
+  };
+
+  const getDashboardLabel = () => {
+    if (!user) return "Account";
+    if (user.role === "Farmer") return "Farmer Dashboard";
+    if (user.role === "Admin") return "Admin Panel";
+    if (user.role === "AgriculturalOfficer") return "Officer Hub";
+    return "My Orders";
+  };
+
+  const getDashboardIcon = () => {
+    if (!user) return "fa-user";
+    if (user.role === "Farmer") return "fa-tractor";
+    if (user.role === "Admin") return "fa-shield-alt";
+    if (user.role === "AgriculturalOfficer") return "fa-user-tie";
+    return "fa-box";
+  };
+
   return (
     <>
       <nav className={`topnav${scrolled ? " scrolled" : ""}`}>
@@ -108,57 +155,52 @@ const Navbar = () => {
 
           {/* ── Desktop nav links ─────────────────────────────── */}
           <div className="nav-links" role="navigation" aria-label="Site pages">
-            <Link
-              to="/"
-              className={`nav-link${isActive("/") ? " active" : ""}`}
-            >
+            <Link to="/" className={`nav-link${isActive("/") ? " active" : ""}`}>
               Home
             </Link>
-            <Link
-              to="/shop"
-              className={`nav-link${isActive("/shop") ? " active" : ""}`}
-            >
+            <Link to="/shop" className={`nav-link${isActive("/shop") ? " active" : ""}`}>
               Shop
             </Link>
-            <Link
-              to="/ai-advisor"
-              className={`nav-link${isActive("/ai-advisor") ? " active" : ""}`}
-            >
+            <Link to="/ai-advisor" className={`nav-link${isActive("/ai-advisor") ? " active" : ""}`}>
               AI Advisor
             </Link>
-            <Link
-              to="/community"
-              className={`nav-link${isActive("/community") ? " active" : ""}`}
-            >
+            <Link to="/community" className={`nav-link${isActive("/community") ? " active" : ""}`}>
               Community
             </Link>
-            <Link
-              to="/weather"
-              className={`nav-link${isActive("/weather") ? " active" : ""}`}
-            >
+            <Link to="/weather" className={`nav-link${isActive("/weather") ? " active" : ""}`}>
               Weather
             </Link>
-            <Link
-              to="/officers"
-              className={`nav-link${isActive("/officers") ? " active" : ""}`}
-            >
-              Officers
-            </Link>
-            <Link
-              to="/about"
-              className={`nav-link${isActive("/about") ? " active" : ""}`}
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className={`nav-link${isActive("/contact") ? " active" : ""}`}
-            >
-              Contact
-            </Link>
+
+            {/* Explore Dropdown for secondary links */}
+            <div className="nav-dropdown-wrap" ref={exploreMenuRef}>
+              <button
+                type="button"
+                className={`nav-link nav-dropdown-trigger${isExploreActive() ? " active" : ""}`}
+                onClick={() => setExploreMenuOpen(v => !v)}
+                aria-expanded={exploreMenuOpen}
+              >
+                More <i className={`fas fa-chevron-${exploreMenuOpen ? 'up' : 'down'} nav-caret`} />
+              </button>
+              {exploreMenuOpen && (
+                <div className="nav-dropdown-menu">
+                  <Link to="/officers" className={`nav-dropdown-item${isActive("/officers") ? " active" : ""}`}>
+                    <i className="fas fa-user-tie" />
+                    <span>Agric Officers</span>
+                  </Link>
+                  <Link to="/about" className={`nav-dropdown-item${isActive("/about") ? " active" : ""}`}>
+                    <i className="fas fa-leaf" />
+                    <span>About Us</span>
+                  </Link>
+                  <Link to="/contact" className={`nav-dropdown-item${isActive("/contact") ? " active" : ""}`}>
+                    <i className="fas fa-envelope" />
+                    <span>Contact &amp; Support</span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* ── Desktop search bar — only shown on shop-related pages ── */}
+          {/* ── Desktop search bar ─────────────────────────────── */}
           {!PAGES_WITH_OWN_SEARCH.some(p => location.pathname.startsWith(p)) && (
             <form
               className="nav-search"
@@ -168,7 +210,7 @@ const Navbar = () => {
               <i className="fas fa-search nav-search-icon" aria-hidden="true" />
               <input
                 type="search"
-                placeholder="Search fresh products…"
+                placeholder="Search products…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 aria-label="Search products"
@@ -184,73 +226,36 @@ const Navbar = () => {
                 className="nav-btn nav-btn-install"
                 onClick={handleInstallClick}
                 disabled={isInstalling}
+                title="Install Smart Farming 360 app"
               >
                 <i className="fas fa-download" aria-hidden="true" />
-                {isInstalling ? "Installing..." : "Install App"}
+                <span className="install-text">App</span>
               </button>
             )}
 
             {user ? (
               <>
-                <div className="nav-user-chip" title={user.email}>
-                  <i className="fas fa-user-circle" aria-hidden="true" />
-                  <span className="chip-name">{user.first_name}</span>
-                  <span className="chip-role">{user.role}</span>
-                </div>
-
-                {user.role === "Farmer" && (
-                  <Link to="/farmer" className="nav-btn nav-btn-outline">
-                    <i className="fas fa-tractor" aria-hidden="true" />
-                    Dashboard
-                  </Link>
-                )}
-
-                {user.role === "Admin" && (
-                  <Link to="/admin" className="nav-btn nav-btn-outline">
-                    <i className="fas fa-shield-alt" aria-hidden="true" />
-                    Admin
-                  </Link>
-                )}
-
-                {user.role === "AgriculturalOfficer" && (
-                  <Link to="/community" className="nav-btn nav-btn-outline">
-                    <i className="fas fa-user-tie" aria-hidden="true" />
-                    Officer Hub
-                  </Link>
-                )}
-
-                {user.role === "Consumer" && (
-                  <Link to="/orders" className="nav-btn nav-btn-outline">
-                    <i className="fas fa-box" aria-hidden="true" />
-                    Orders
-                  </Link>
-                )}
-
-                {user && (
-                  <Link to="/messages" className="nav-btn nav-btn-outline" style={{ position: 'relative' }}>
-                    <i className="fas fa-envelope" aria-hidden="true" />
-                    Messages
-                    {unreadMessages > 0 && (
-                      <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#ef4444', color: '#fff', borderRadius: '10px', fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.35rem', minWidth: '16px', textAlign: 'center', lineHeight: '16px' }}>
-                        {unreadMessages > 9 ? '9+' : unreadMessages}
-                      </span>
-                    )}
-                  </Link>
-                )}
-
-                <button
-                  onClick={handleLogout}
-                  className="nav-btn nav-btn-outline"
-                  type="button"
+                {/* Messages shortcut with badge */}
+                <Link
+                  to="/messages"
+                  className="nav-icon-link"
+                  title="Messages"
+                  aria-label="Messages"
                 >
-                  <i className="fas fa-sign-out-alt" aria-hidden="true" />
-                  Logout
-                </button>
+                  <i className="fas fa-envelope" />
+                  {unreadMessages > 0 && (
+                    <span className="nav-icon-badge">
+                      {unreadMessages > 9 ? "9+" : unreadMessages}
+                    </span>
+                  )}
+                </Link>
 
+                {/* Cart icon */}
                 <Link
                   to="/cart"
                   className="cart-btn"
                   aria-label={`Cart, ${cartCount} item${cartCount !== 1 ? "s" : ""}`}
+                  title="Shopping Cart"
                 >
                   <i className="fas fa-shopping-cart" aria-hidden="true" />
                   {cartCount > 0 && (
@@ -259,6 +264,72 @@ const Navbar = () => {
                     </span>
                   )}
                 </Link>
+
+                {/* User Profile Dropdown Menu */}
+                <div className="nav-user-menu-wrap" ref={userMenuRef}>
+                  <button
+                    type="button"
+                    className="nav-user-chip"
+                    onClick={() => setUserMenuOpen(v => !v)}
+                    aria-expanded={userMenuOpen}
+                    title="Open user menu"
+                  >
+                    <div className="nav-user-avatar">
+                      {user.first_name?.[0]?.toUpperCase() || 'U'}
+                    </div>
+                    <span className="chip-name">{user.first_name}</span>
+                    <span className="chip-role">{user.role}</span>
+                    <i className={`fas fa-chevron-${userMenuOpen ? 'up' : 'down'} nav-chip-caret`} />
+                  </button>
+
+                  {userMenuOpen && (
+                    <div className="nav-user-dropdown">
+                      <div className="nav-user-dropdown-header">
+                        <strong>{user.first_name} {user.last_name}</strong>
+                        <small>{user.email}</small>
+                        <span className="nav-user-role-badge">{user.role}</span>
+                      </div>
+
+                      <div className="nav-user-dropdown-body">
+                        <Link to={getDashboardPath()} className="nav-dropdown-item">
+                          <i className={`fas ${getDashboardIcon()}`} />
+                          <span>{getDashboardLabel()}</span>
+                        </Link>
+
+                        {user.role === "Farmer" && (
+                          <Link to="/irrigation" className="nav-dropdown-item">
+                            <i className="fas fa-tint" />
+                            <span>Irrigation Manager</span>
+                          </Link>
+                        )}
+
+                        <Link to="/messages" className="nav-dropdown-item">
+                          <i className="fas fa-envelope" />
+                          <span>Messages</span>
+                          {unreadMessages > 0 && (
+                            <span className="nav-dropdown-badge">{unreadMessages}</span>
+                          )}
+                        </Link>
+
+                        <Link to="/ai-advisor" className="nav-dropdown-item">
+                          <i className="fas fa-brain" />
+                          <span>AI Advisor</span>
+                        </Link>
+
+                        <div className="nav-dropdown-divider" />
+
+                        <button
+                          type="button"
+                          className="nav-dropdown-item nav-dropdown-logout"
+                          onClick={handleLogout}
+                        >
+                          <i className="fas fa-sign-out-alt" />
+                          <span>Sign Out</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <>
@@ -308,7 +379,7 @@ const Navbar = () => {
               />
             </button>
 
-            {/* Cart shortcut — only shown when logged in as Consumer */}
+            {/* Cart shortcut */}
             {user?.role === "Consumer" && (
               <Link
                 to="/cart"
@@ -323,38 +394,64 @@ const Navbar = () => {
                 )}
               </Link>
             )}
+
+            {/* Mobile quick sign out / sign in button */}
+            {user ? (
+              <button
+                className="nav-icon-btn"
+                onClick={handleLogout}
+                aria-label="Sign Out"
+                title="Sign Out"
+                type="button"
+                style={{ color: '#dc2626', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '50%' }}
+              >
+                <i className="fas fa-sign-out-alt" aria-hidden="true" />
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="nav-icon-btn"
+                aria-label="Sign in"
+                title="Sign In"
+                style={{ color: '#0d5415' }}
+              >
+                <i className="fas fa-user-circle" aria-hidden="true" />
+              </Link>
+            )}
           </div>
         </div>
 
         {/* ── Mobile expanding search bar ───────────────────── */}
-        <div
-          className={`nav-mobile-search${searchOpen ? " open" : ""}`}
-          aria-hidden={!searchOpen}
-        >
-          <form onSubmit={handleSearchSubmit} role="search">
-            <i className="fas fa-search" aria-hidden="true" />
-            <input
-              ref={searchInputRef}
-              type="search"
-              placeholder="Search tomatoes, eggs, rice…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearchKeyDown}
-              tabIndex={searchOpen ? 0 : -1}
-              aria-label="Search products"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                className="search-clear"
-                onClick={() => setSearchQuery("")}
-                aria-label="Clear search"
-              >
-                <i className="fas fa-times" aria-hidden="true" />
-              </button>
-            )}
-          </form>
-        </div>
+        {searchOpen && (
+          <div
+            className="nav-mobile-search open"
+            aria-hidden={!searchOpen}
+          >
+            <form onSubmit={handleSearchSubmit} role="search">
+              <i className="fas fa-search" aria-hidden="true" />
+              <input
+                ref={searchInputRef}
+                type="search"
+                placeholder="Search tomatoes, eggs, rice…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                tabIndex={0}
+                aria-label="Search products"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="search-clear"
+                  onClick={() => setSearchQuery("")}
+                  aria-label="Clear search"
+                >
+                  <i className="fas fa-times" aria-hidden="true" />
+                </button>
+              )}
+            </form>
+          </div>
+        )}
       </nav>
     </>
   );

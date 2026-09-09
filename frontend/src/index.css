@@ -1546,24 +1546,102 @@ a:not(.btn)::after {
     display: none !important;
 }
 
-/* ── Navbar white text override ─────────────────────────── */
-/* The global `p, span { color: #2d3748 !important }` rule   */
-/* was bleeding into the green navbar — override it here.    */
-.topnav span,
-.topnav p,
-.topnav a,
-.topnav button,
+/* ── Navbar top-level text styling ──────────────────────── */
 .nav-logo,
 .nav-logo-text,
 .nav-link,
-.nav-btn,
+.nav-btn-outline,
+.nav-btn-install,
+.nav-icon-link,
+.nav-icon-btn,
 .nav-user-chip,
 .chip-name {
     color: #ffffff !important;
 }
 
 .chip-role {
+    color: #1a3c1f !important;
+    background: rgba(251, 191, 36, 0.95) !important;
+}
+
+/* ── Dropdown menus (More/About menu and User menu) ─────── */
+/* Must NEVER inherit white navbar text — always crisp dark text */
+.nav-dropdown-menu,
+.nav-user-dropdown {
+    background-color: #ffffff !important;
+    color: #1f2937 !important;
+}
+
+.nav-dropdown-menu *,
+.nav-user-dropdown * {
+    color: #1f2937 !important;
+}
+
+.nav-dropdown-menu a,
+.nav-dropdown-menu button,
+.nav-dropdown-menu span,
+.nav-dropdown-menu div,
+.nav-user-dropdown a,
+.nav-user-dropdown button,
+.nav-user-dropdown span,
+.nav-user-dropdown div {
+    color: #1f2937 !important;
+}
+
+.nav-dropdown-item {
+    color: #1f2937 !important;
+}
+
+.nav-dropdown-item i {
+    color: #166534 !important;
+}
+
+.nav-dropdown-item:hover,
+.nav-dropdown-item:hover span {
+    color: #166534 !important;
+    background-color: #f0fdf4 !important;
+}
+
+.nav-dropdown-item.active,
+.nav-dropdown-item.active span {
+    color: #166534 !important;
+    background-color: #dcfce7 !important;
+}
+
+.nav-user-dropdown-header strong {
+    color: #166534 !important;
+}
+
+.nav-user-dropdown-header small {
+    color: #4b5563 !important;
+}
+
+.nav-user-role-badge {
+    background-color: #166534 !important;
     color: #ffffff !important;
+}
+
+.nav-dropdown-badge {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+.nav-dropdown-logout,
+.nav-dropdown-logout span,
+.nav-dropdown-logout i {
+    color: #dc2626 !important;
+}
+
+.nav-dropdown-logout:hover {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+}
+
+/* Ensure all HTML select elements and option elements have dark readable text */
+select,
+select option {
+    color: #1f2937;
+    background-color: #ffffff;
 }
 
 /* Bottom tab bar text must use its own colors */

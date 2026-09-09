@@ -13,19 +13,40 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const getRoleRedirect = (role: string): string => {
+    const r = String(role || '').toLowerCase();
+    if (r === 'farmer') return '/farmer';
+    if (r === 'admin') return '/admin';
+    if (r === 'agriculturalofficer') return '/officers';
+    return '/shop';
+  };
 
+  const executeLogin = async (targetEmail: string, targetPass: string) => {
+    setLoading(true);
     try {
-      await login(email, password);
-      toast.success('Login successful!');
-      navigate('/shop');
+      const loggedUser = await login(targetEmail, targetPass);
+      const role = loggedUser?.role || 'Consumer';
+      const name = loggedUser?.first_name || 'there';
+      toast.success(`Welcome back, ${name}! Redirecting…`);
+      const path = getRoleRedirect(role);
+      navigate(path, { replace: true });
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Login failed');
+      toast.error(error?.response?.data?.error?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password || loading) return;
+    executeLogin(email, password);
+  };
+
+  const handleQuickLogin = (demoEmail: string, demoPass: string) => {
+    setEmail(demoEmail);
+    setPassword(demoPass);
+    executeLogin(demoEmail, demoPass);
   };
 
   return (
@@ -53,7 +74,7 @@ const LoginPage = () => {
             <div className="auth-features">
               <div className="auth-feature">
                 <i className="fas fa-check-circle"></i>
-                <span>100% Fresh & Organic</span>
+                <span>100% Fresh &amp; Organic</span>
               </div>
               <div className="auth-feature">
                 <i className="fas fa-check-circle"></i>
@@ -92,40 +113,44 @@ const LoginPage = () => {
                 <img src="/icons/icon-base.svg" alt="Smart Farming 360" />
               </div>
               <h1>Welcome Back</h1>
-              <p>Sign in to continue shopping and managing your orders</p>
+              <p>Sign in to continue shopping and managing your farm</p>
             </div>
 
-                        {/* Quick Demo Login Accounts */}
+            {/* 1-Click Instant Demo Login Accounts */}
             <div style={{ margin: '1.25rem 0', padding: '1rem', background: '#f0fdf4', borderRadius: '12px', border: '1.5px solid #bbf7d0' }}>
               <p style={{ margin: '0 0 0.6rem', fontSize: '0.8rem', fontWeight: 700, color: '#166534', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                ⚡ Quick Demo Accounts (Click to Fill)
+                ⚡ 1-Click Instant Demo Login
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                 <button
                   type="button"
-                  onClick={() => { setEmail('farmer@smartfarm360.com'); setPassword('Password123!'); }}
-                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                  disabled={loading}
+                  onClick={() => handleQuickLogin('farmer@smartfarm360.com', 'Password123!')}
+                  style={{ padding: '0.55rem 0.6rem', borderRadius: '8px', border: '1.5px solid #86efac', background: '#ffffff', fontSize: '0.82rem', fontWeight: 700, color: '#166534', cursor: 'pointer', textAlign: 'center', transition: 'all 0.2s' }}
                 >
                   👨‍🌾 Farmer
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setEmail('consumer@smartfarm360.com'); setPassword('Password123!'); }}
-                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                  disabled={loading}
+                  onClick={() => handleQuickLogin('consumer@smartfarm360.com', 'Password123!')}
+                  style={{ padding: '0.55rem 0.6rem', borderRadius: '8px', border: '1.5px solid #86efac', background: '#ffffff', fontSize: '0.82rem', fontWeight: 700, color: '#166534', cursor: 'pointer', textAlign: 'center', transition: 'all 0.2s' }}
                 >
                   🛒 Consumer
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setEmail('officer@smartfarm360.com'); setPassword('Password123!'); }}
-                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                  disabled={loading}
+                  onClick={() => handleQuickLogin('officer@smartfarm360.com', 'Password123!')}
+                  style={{ padding: '0.55rem 0.6rem', borderRadius: '8px', border: '1.5px solid #86efac', background: '#ffffff', fontSize: '0.82rem', fontWeight: 700, color: '#166534', cursor: 'pointer', textAlign: 'center', transition: 'all 0.2s' }}
                 >
                   🏛️ Agric Officer
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setEmail('admin@smartfarm360.com'); setPassword('Password123!'); }}
-                  style={{ padding: '0.45rem 0.6rem', borderRadius: '8px', border: '1px solid #86efac', background: '#ffffff', fontSize: '0.78rem', fontWeight: 600, color: '#166534', cursor: 'pointer', textAlign: 'center' }}
+                  disabled={loading}
+                  onClick={() => handleQuickLogin('admin@smartfarm360.com', 'Password123!')}
+                  style={{ padding: '0.55rem 0.6rem', borderRadius: '8px', border: '1.5px solid #86efac', background: '#ffffff', fontSize: '0.82rem', fontWeight: 700, color: '#166534', cursor: 'pointer', textAlign: 'center', transition: 'all 0.2s' }}
                 >
                   🛡️ Admin
                 </button>

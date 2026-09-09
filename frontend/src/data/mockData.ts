@@ -518,6 +518,61 @@ export const MOCK_PRODUCTS: Product[] = [
   { id: 35, name: 'Prekese Spice', description: 'Aromatic medicinal prekese (Aidan fruit) pods for palm nut soup', category: 'Spices', price: 15.00, unit: 'piece', stock_quantity: 80, status: 'Active', farmer_id: 1, rating: 4.8, reviews_count: 21 },
 ];
 
+export interface MockOrderItem {
+  product_name: string;
+  quantity: number;
+  price: number;
+}
+
+export interface MockOrder {
+  id: number;
+  total_amount: number;
+  status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+  created_at: string;
+  delivery_address: string;
+  items: MockOrderItem[];
+}
+
+export const MOCK_ORDERS: MockOrder[] = [
+  {
+    id: 1042,
+    total_amount: 145.00,
+    status: 'Delivered',
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    delivery_address: '14 Independence Avenue, Airport Residential, Accra',
+    items: [
+      { product_name: 'Fresh Tomatoes (5kg)', quantity: 1, price: 75.00 },
+      { product_name: 'Sweet Corn (5 pcs)', quantity: 2, price: 40.00 },
+      { product_name: 'Fresh Pineapples', quantity: 1, price: 20.00 },
+      { product_name: 'Fresh Ginger (1kg)', quantity: 1, price: 10.00 },
+    ],
+  },
+  {
+    id: 1043,
+    total_amount: 95.00,
+    status: 'Shipped',
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    delivery_address: 'Plot 22, Ring Road Central, Kokomlemle, Accra',
+    items: [
+      { product_name: 'Free Range Eggs (Crate)', quantity: 1, price: 30.00 },
+      { product_name: 'Whole Chicken (Fresh)', quantity: 1, price: 55.00 },
+      { product_name: 'Hot Scotch Bonnet Peppers', quantity: 1, price: 10.00 },
+    ],
+  },
+  {
+    id: 1044,
+    total_amount: 180.00,
+    status: 'Processing',
+    created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
+    delivery_address: 'House No 8, East Legon Hills, Greater Accra',
+    items: [
+      { product_name: 'Premium Jasmine Rice (5kg)', quantity: 1, price: 105.00 },
+      { product_name: 'Raw Wildflower Honey (1 Jar)', quantity: 1, price: 45.00 },
+      { product_name: 'Shito Artisanal Pepper Sauce', quantity: 1, price: 30.00 },
+    ],
+  },
+];
+
 export const MOCK_DEFAULT_WEATHER = {
   location: 'Greater Accra',
   latitude: 5.6037,
@@ -564,4 +619,145 @@ export function getMockWeatherForRegion(regionName: string) {
       temperature: baseTemp,
     },
   };
+}
+
+
+export function getDynamicGhanaWeather(regionName: string, date: Date = new Date()): any {
+  const hour = date.getHours();
+  const isNorthern = ['Northern', 'Upper East', 'Upper West', 'North East', 'Savannah'].includes(regionName);
+  const isForest = ['Ashanti', 'Eastern', 'Western', 'Western North', 'Central', 'Bono', 'Bono East', 'Ahafo'].includes(regionName);
+  
+  // Base day/night temperatures by zone
+  const maxDayTemp = isNorthern ? 36.5 : isForest ? 30.8 : 30.0;
+  const minNightTemp = isNorthern ? 24.5 : isForest ? 22.0 : 23.5;
+  
+  // Sinusoidal temperature curve across 24h: coolest at 5am, warmest at 2:30pm (14:30)
+  const radians = ((hour - 5) / 24) * 2 * Math.PI;
+  const tempOffset = (Math.sin(radians - Math.PI / 2) + 1) / 2; // 0 at 5am, 1 at 2pm
+  const currentTemp = Math.round((minNightTemp + (maxDayTemp - minNightTemp) * tempOffset) * 10) / 10;
+
+  const isDay = (hour >= 6 && hour < 18) ? 1 : 0;
+  
+  // Dynamic weather code based on time of day
+  let weatherCode = 1; // Mainly clear
+  if (hour >= 12 && hour <= 16 && isForest) {
+    weatherCode = 2; // Partly cloudy
+  } else if (hour >= 20 || hour <= 5) {
+    weatherCode = 0; // Clear starry night
+  } else if (hour >= 6 && hour <= 10) {
+    weatherCode = 1; // Gentle morning sun
+  }
+
+  const windspeed = Math.round((9 + tempOffset * 8 + (isNorthern ? 4 : 2)) * 10) / 10;
+
+  // 7-day forecast starting with today
+  const dailyTime: string[] = [];
+  const dailyMax: number[] = [];
+  const dailyMin: number[] = [];
+  const dailyRainSum: number[] = [];
+  const dailyRainProb: number[] = [];
+  const dailyCodes: number[] = [];
+  const dailyWindMax: number[] = [];
+  const dailyUvMax: number[] = [];
+
+  for (let d = 0; d < 7; d++) {
+    const dayDate = new Date(date.getTime() + d * 86400000);
+    dailyTime.push(dayDate.toISOString().split('T')[0]);
+    const variance = Math.sin(d * 1.5) * 1.2;
+    dailyMax.push(Math.round((maxDayTemp + variance) * 10) / 10);
+    dailyMin.push(Math.round((minNightTemp + variance * 0.5) * 10) / 10);
+    
+    const rainProb = isForest ? Math.round(25 + Math.sin(d) * 25) : isNorthern ? Math.round(5 + Math.sin(d) * 10) : Math.round(15 + Math.sin(d) * 15);
+    dailyRainProb.push(Math.max(5, Math.min(80, rainProb)));
+    dailyRainSum.push(rainProb > 40 ? Math.round(rainProb * 0.12 * 10) / 10 : 0);
+    dailyCodes.push(rainProb > 50 ? 61 : rainProb > 30 ? 2 : 1);
+    dailyWindMax.push(Math.round((14 + Math.cos(d) * 3) * 10) / 10);
+    dailyUvMax.push(isNorthern ? 10.2 : 9.0);
+  }
+
+  // 24-hour hourly simulation
+  const todayStr = date.toISOString().split('T')[0];
+  const hourlyTime: string[] = [];
+  const hourlyHumidity: number[] = [];
+  const hourlySoilMoisture: number[] = [];
+
+  for (let h = 0; h < 24; h++) {
+    hourlyTime.push(`${todayStr}T${String(h).padStart(2, '0')}:00`);
+    const hOffset = (Math.sin(((h - 5) / 24) * 2 * Math.PI - Math.PI / 2) + 1) / 2;
+    const humidity = Math.round(88 - hOffset * (isNorthern ? 45 : 30));
+    hourlyHumidity.push(Math.max(25, Math.min(96, humidity)));
+    hourlySoilMoisture.push(Math.round((0.32 - hOffset * 0.06) * 100) / 100);
+  }
+
+  return {
+    location: regionName,
+    latitude: 5.6037,
+    longitude: -0.1870,
+    current: {
+      temperature: currentTemp,
+      weathercode: weatherCode,
+      windspeed,
+      is_day: isDay,
+    },
+    daily: {
+      time: dailyTime,
+      temperature_2m_max: dailyMax,
+      temperature_2m_min: dailyMin,
+      precipitation_sum: dailyRainSum,
+      precipitation_probability_max: dailyRainProb,
+      weathercode: dailyCodes,
+      windspeed_10m_max: dailyWindMax,
+      uv_index_max: dailyUvMax,
+    },
+    hourly: {
+      time: hourlyTime,
+      relativehumidity_2m: hourlyHumidity,
+      soil_moisture_0_to_1cm: hourlySoilMoisture,
+    },
+  };
+}
+
+export function getDynamicFarmingAlerts(regionName: string, date: Date = new Date()) {
+  const hour = date.getHours();
+  const alerts: { type: 'info' | 'warning' | 'danger'; message: string }[] = [];
+
+  if (hour >= 5 && hour < 11) {
+    alerts.push({
+      type: 'info',
+      message: '🌅 Morning Prime Irrigation: Ideal window for drip & root irrigation in ' + regionName + '. Evapotranspiration is lowest before 11:00 AM.',
+    });
+    alerts.push({
+      type: 'info',
+      message: '🌿 Foliar Health Check: Inspect underside of crop leaves for morning dew moisture and pest egg clusters.',
+    });
+  } else if (hour >= 11 && hour < 16) {
+    alerts.push({
+      type: 'warning',
+      message: '☀️ Peak Midday Solar Radiation: High UV index. Avoid overhead sprinkler watering now to prevent leaf scorch.',
+    });
+    alerts.push({
+      type: 'danger',
+      message: '🛡️ Soil Thermal Alert: Ensure mulch coverage is intact over root beds in ' + regionName + ' to keep roots cool.',
+    });
+  } else if (hour >= 16 && hour < 20) {
+    alerts.push({
+      type: 'info',
+      message: '🌇 Twilight Scouting Window: Nocturnal insect activity begins at dusk. Inspect perimeter rows.',
+    });
+    alerts.push({
+      type: 'info',
+      message: '💧 Evening Moisture Assessment: Review soil moisture. If topsoil is crusty, schedule a 30-minute top-up cycle.',
+    });
+  } else {
+    alerts.push({
+      type: 'info',
+      message: '🌙 Night Soil Infiltration: Ambient night temperatures allow maximum deep moisture penetration with near-zero evaporation.',
+    });
+    alerts.push({
+      type: 'info',
+      message: '🚜 Overnight Ventilation: Ensure greenhouse and nursery vents are balanced to regulate night humidity.',
+    });
+  }
+
+  return alerts;
 }

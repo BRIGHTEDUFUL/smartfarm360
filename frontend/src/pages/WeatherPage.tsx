@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { weatherAPI } from '../services/api';
-import { MOCK_DEFAULT_WEATHER, getMockWeatherForRegion } from '../data/mockData';
+import { getDynamicGhanaWeather, getDynamicFarmingAlerts } from '../data/mockData';
 import './WeatherPage.css';
 
 interface WeatherData {
@@ -69,9 +69,18 @@ const alertIcons: Record<string, string> = {
   danger: '🚨',
 };
 
+
+function getTimeOfDayBadge() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 11) return { label: 'Morning Outlook', icon: '🌅', color: '#16a34a', bg: '#dcfce7' };
+  if (hour >= 11 && hour < 16) return { label: 'Midday Heat Watch', icon: '☀️', color: '#d97706', bg: '#fef3c7' };
+  if (hour >= 16 && hour < 20) return { label: 'Evening Advisory', icon: '🌇', color: '#ea580c', bg: '#ffedd5' };
+  return { label: 'Night Observations', icon: '🌙', color: '#4f46e5', bg: '#e0e7ff' };
+}
+
 export default function WeatherPage() {
-  const [weather, setWeather] = useState<WeatherData | null>(MOCK_DEFAULT_WEATHER as WeatherData);
-  const [alerts, setAlerts] = useState<FarmingAlert[]>([]);
+  const [weather, setWeather] = useState<WeatherData | null>(() => getDynamicGhanaWeather('Greater Accra'));
+  const [alerts, setAlerts] = useState<FarmingAlert[]>(() => getDynamicFarmingAlerts('Greater Accra'));
   const [regions, setRegions] = useState<GhanaRegion[]>(GHANA_REGIONS);
   const [selectedRegion, setSelectedRegion] = useState('Greater Accra');
   const [loading, setLoading] = useState(false);
@@ -85,71 +94,33 @@ export default function WeatherPage() {
   }, []);
 
   const fetchWeather = useCallback(async (region: string) => {
-    setLoading(true);
+    // 1. Immediately apply dynamic time-based Ghana climate data (0ms latency, always loaded)
+    const dynamicData = getDynamicGhanaWeather(region);
+    const dynamicAlerts = getDynamicFarmingAlerts(region);
+    setWeather(dynamicData);
+    setAlerts(dynamicAlerts);
+    setLoading(false);
     setError('');
-    const reg = GHANA_REGIONS.find(r => r.name.toLowerCase() === region.toLowerCase()) || GHANA_REGIONS[0];
 
-    // Priority 1: Direct Open-Meteo API query (fast, live Ghana weather data)
+    // 2. Background live enhancement: attempt Open-Meteo or backend sync silently
+    const reg = GHANA_REGIONS.find(r => r.name.toLowerCase() === region.toLowerCase()) || GHANA_REGIONS[0];
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${reg.lat}&longitude=${reg.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,weathercode,windspeed_10m_max,uv_index_max&hourly=relativehumidity_2m,soil_moisture_0_to_1cm&current_weather=true&timezone=Africa%2FAccra&forecast_days=7`;
       const res = await fetch(url);
       const raw = await res.json();
       if (raw?.current_weather && raw?.daily) {
-        const directData: WeatherData = {
+        setWeather({
           location: reg.name,
           latitude: reg.lat,
           longitude: reg.lon,
           current: raw.current_weather,
           daily: raw.daily,
           hourly: raw.hourly,
-        };
-        setWeather(directData);
-
-        const generatedAlerts: FarmingAlert[] = [];
-        const next3Rain = (raw.daily?.precipitation_sum || []).slice(0, 3).reduce((a: number, b: number) => a + b, 0);
-        const maxRainProb = Math.max(...(raw.daily?.precipitation_probability_max || []).slice(0, 3));
-        const maxTemp = Math.max(...(raw.daily?.temperature_2m_max || []).slice(0, 3));
-
-        if (next3Rain < 2) {
-          generatedAlerts.push({ type: 'warning', message: 'No significant rain expected in next 3 days. Irrigate crops in early morning.' });
-        }
-        if (maxRainProb > 70) {
-          generatedAlerts.push({ type: 'info', message: 'Heavy rain probable this week. Hold off on excess irrigation.' });
-        }
-        if (maxTemp > 34) {
-          generatedAlerts.push({ type: 'danger', message: `High temperature expected (${Math.round(maxTemp)}°C). Mulch soil to protect roots.` });
-        }
-        if (generatedAlerts.length === 0) {
-          generatedAlerts.push({ type: 'info', message: 'Favorable farming weather conditions forecast across the district.' });
-        }
-        setAlerts(generatedAlerts);
-        return;
+        });
       }
-    } catch (openMeteoErr) {
-      console.warn('Open-Meteo direct fetch failed, trying backend API:', openMeteoErr);
+    } catch {
+      // Keep dynamicData gracefully
     }
-
-    // Priority 2: Backend API query
-    try {
-      const [wRes, aRes] = await Promise.all([
-        weatherAPI.get({ region }),
-        weatherAPI.getAlerts({ region }),
-      ]);
-      if (wRes?.data?.data?.current) {
-        setWeather(wRes.data.data);
-        setAlerts(Array.isArray(aRes?.data?.data) ? aRes.data.data : []);
-        return;
-      }
-    } catch (apiErr) {
-      console.warn('Backend weather API failed:', apiErr);
-    }
-
-    // Priority 3: Fallback regional mock weather
-    const fallback = getMockWeatherForRegion(reg.name) as WeatherData;
-    setWeather(fallback);
-    setAlerts([
-      { type: 'info', message: 'Verified seasonal climate conditions for ' + reg.name + '.' }
-    ]);
   }, []);
 
   useEffect(() => {
@@ -221,6 +192,14 @@ export default function WeatherPage() {
           {/* Current conditions */}
           <div className="current-weather-card">
             <div className="current-weather-main">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '2px 8px', borderRadius: '12px', background: getTimeOfDayBadge().bg, color: getTimeOfDayBadge().color, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  {getTimeOfDayBadge().icon} {getTimeOfDayBadge().label}
+                </span>
+                <span style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 500 }}>
+                  Updated {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
               <p className="location-name">
                 <i className="fas fa-map-marker-alt" /> {weather.location || selectedRegion}, Ghana
               </p>

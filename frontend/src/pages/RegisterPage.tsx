@@ -45,10 +45,16 @@ const RegisterPage = () => {
 
     try {
       await register(formData);
-      toast.success('Registration successful!');
-      navigate('/shop');
+      toast.success('Registration successful! Welcome to Smart Farming 360.');
+      if (formData.role === 'Farmer') {
+        navigate('/farmer');
+      } else if (formData.role === 'AgriculturalOfficer') {
+        navigate('/officers');
+      } else {
+        navigate('/shop');
+      }
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Registration failed');
+      toast.error(error.response?.data?.error?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

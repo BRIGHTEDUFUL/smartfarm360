@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { weatherAPI } from '../services/api';
+import { getDynamicGhanaWeather } from '../data/mockData';
+
 
 interface CurrentWeather {
   temperature: number;
@@ -23,37 +24,30 @@ export default function WeatherWidget({ region = 'Greater Accra' }: { region?: s
   const [current, setCurrent] = useState<CurrentWeather | null>({ temperature: 28, weathercode: 1, windspeed: 14 });
   const [rain, setRain] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setFailed(false);
-    weatherAPI.get({ region })
-      .then(res => {
-        if (cancelled) return;
-        const data = res.data.data;
-        if (data?.current) {
-          setCurrent(data.current);
-          setRain(data.daily?.precipitation_probability_max?.[0] ?? 0);
+    const dynamicData = getDynamicGhanaWeather(region);
+    if (!cancelled) {
+      setCurrent(dynamicData.current);
+      setRain(dynamicData.daily?.precipitation_probability_max?.[0] ?? 15);
+      setLoading(false);
+    }
+
+    // Optional background sync with live Open-Meteo
+    const syncLive = async () => {
+      try {
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=5.6037&longitude=-0.1870&current_weather=true&daily=precipitation_probability_max&timezone=Africa%2FAccra';
+        const res = await fetch(url);
+        const raw = await res.json();
+        if (raw?.current_weather && !cancelled) {
+          setCurrent(raw.current_weather);
+          setRain(raw.daily?.precipitation_probability_max?.[0] ?? 10);
         }
-      })
-      .catch(async () => {
-        if (cancelled) return;
-        try {
-          const url = `https://api.open-meteo.com/v1/forecast?latitude=5.6037&longitude=-0.1870&current_weather=true&daily=precipitation_probability_max&timezone=Africa%2FAccra`;
-          const raw = await (await fetch(url)).json();
-          if (raw?.current_weather) {
-            setCurrent(raw.current_weather);
-            setRain(raw.daily?.precipitation_probability_max?.[0] ?? 10);
-            return;
-          }
-          setFailed(true);
-        } catch {
-          setFailed(true);
-        }
-      })
-      .finally(() => { if (!cancelled) setLoading(false); });
+      } catch {}
+    };
+    syncLive();
+
     return () => { cancelled = true; };
   }, [region]);
 
@@ -65,7 +59,7 @@ export default function WeatherWidget({ region = 'Greater Accra' }: { region?: s
     );
   }
 
-  if (failed || !current) {
+  if (!current) {
     return (
       <div
         onClick={() => navigate('/weather')}
