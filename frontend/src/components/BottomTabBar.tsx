@@ -136,6 +136,8 @@ const BottomTabBar = () => {
         return "#0D5415";
       case "Consumer":
         return "#2563EB";
+      case "AgriculturalOfficer":
+        return "#065f46";
       default:
         return "#9CA3AF";
     }
@@ -150,6 +152,8 @@ const BottomTabBar = () => {
         return "fa-seedling";
       case "Consumer":
         return "fa-user";
+      case "AgriculturalOfficer":
+        return "fa-user-tie";
       default:
         return "fa-user";
     }
@@ -181,7 +185,23 @@ const BottomTabBar = () => {
         { path: "/", icon: "fa-home", label: "Home" },
         { path: "/shop", icon: "fa-store", label: "Shop" },
         { path: "/admin", icon: "fa-shield-alt", label: "Admin" },
-        { path: "/orders", icon: "fa-boxes", label: "Orders" },
+        { path: "/community", icon: "fa-users", label: "Community" },
+        {
+          path: "#account",
+          icon: "fa-user-circle",
+          label: "Account",
+          action: openAccountSheet,
+          isAccount: true,
+        },
+      ];
+    }
+
+    if (user.role === "AgriculturalOfficer") {
+      return [
+        { path: "/", icon: "fa-home", label: "Home" },
+        { path: "/community", icon: "fa-users", label: "Community" },
+        { path: "/messages", icon: "fa-envelope", label: "Messages" },
+        { path: "/weather", icon: "fa-cloud-sun", label: "Weather" },
         {
           path: "#account",
           icon: "fa-user-circle",
@@ -196,8 +216,8 @@ const BottomTabBar = () => {
       return [
         { path: "/", icon: "fa-home", label: "Home" },
         { path: "/shop", icon: "fa-store", label: "Shop" },
-        { path: "/farmer", icon: "fa-tractor", label: "Farm" },
-        { path: "/orders", icon: "fa-boxes", label: "Orders" },
+        { path: "/community", icon: "fa-users", label: "Community" },
+        { path: "/weather", icon: "fa-cloud-sun", label: "Weather" },
         {
           path: "#account",
           icon: "fa-user-circle",
@@ -363,6 +383,52 @@ const BottomTabBar = () => {
               </button>
             )}
 
+            {user?.role === "Farmer" && (
+              <button
+                className="btb-sheet-action-btn"
+                onClick={() => {
+                  closeAccountSheet();
+                  setTimeout(() => navigate("/irrigation"), 320);
+                }}
+                type="button"
+              >
+                <span
+                  className="btb-action-icon"
+                  style={{ background: "#0369a118", color: "#0369a1" }}
+                >
+                  <i className="fas fa-tint" />
+                </span>
+                <span className="btb-action-text">
+                  <strong>Irrigation Manager</strong>
+                  <small>Schedule & track field watering</small>
+                </span>
+                <i className="fas fa-chevron-right btb-action-arrow" />
+              </button>
+            )}
+
+            {user?.role === "Farmer" && (
+              <button
+                className="btb-sheet-action-btn"
+                onClick={() => {
+                  closeAccountSheet();
+                  setTimeout(() => navigate("/orders"), 320);
+                }}
+                type="button"
+              >
+                <span
+                  className="btb-action-icon"
+                  style={{ background: "#0D541518", color: "#0D5415" }}
+                >
+                  <i className="fas fa-boxes" />
+                </span>
+                <span className="btb-action-text">
+                  <strong>My Orders</strong>
+                  <small>Track farm produce orders</small>
+                </span>
+                <i className="fas fa-chevron-right btb-action-arrow" />
+              </button>
+            )}
+
             {user?.role === "Admin" && (
               <button
                 className="btb-sheet-action-btn"
@@ -381,6 +447,52 @@ const BottomTabBar = () => {
                 <span className="btb-action-text">
                   <strong>Admin Panel</strong>
                   <small>Manage users, products & orders</small>
+                </span>
+                <i className="fas fa-chevron-right btb-action-arrow" />
+              </button>
+            )}
+
+            {user?.role === "AgriculturalOfficer" && (
+              <button
+                className="btb-sheet-action-btn"
+                onClick={() => {
+                  closeAccountSheet();
+                  setTimeout(() => navigate("/community"), 320);
+                }}
+                type="button"
+              >
+                <span
+                  className="btb-action-icon"
+                  style={{ background: "#065f4618", color: "#065f46" }}
+                >
+                  <i className="fas fa-users" />
+                </span>
+                <span className="btb-action-text">
+                  <strong>Community</strong>
+                  <small>Post advice & connect with farmers</small>
+                </span>
+                <i className="fas fa-chevron-right btb-action-arrow" />
+              </button>
+            )}
+
+            {user?.role === "AgriculturalOfficer" && (
+              <button
+                className="btb-sheet-action-btn"
+                onClick={() => {
+                  closeAccountSheet();
+                  setTimeout(() => navigate("/messages"), 320);
+                }}
+                type="button"
+              >
+                <span
+                  className="btb-action-icon"
+                  style={{ background: "#0369a118", color: "#0369a1" }}
+                >
+                  <i className="fas fa-envelope" />
+                </span>
+                <span className="btb-action-text">
+                  <strong>Messages</strong>
+                  <small>Chat with farmers</small>
                 </span>
                 <i className="fas fa-chevron-right btb-action-arrow" />
               </button>

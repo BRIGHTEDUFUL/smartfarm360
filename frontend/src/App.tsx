@@ -23,6 +23,12 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import AIAdvisorPage from "./pages/AIAdvisorPage";
+import WeatherPage from "./pages/WeatherPage";
+import IrrigationPage from "./pages/IrrigationPage";
+import CommunityPage from "./pages/CommunityPage";
+import CommunityPostPage from "./pages/CommunityPostPage";
+import MessagesPage from "./pages/MessagesPage";
+import OfficersPage from "./pages/OfficersPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -55,6 +61,10 @@ function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/ai-advisor" element={<AIAdvisorPage />} />
+                <Route path="/weather" element={<WeatherPage />} />
+                <Route path="/community" element={<CommunityPage />} />
+                <Route path="/community/post/:id" element={<CommunityPostPage />} />
+                <Route path="/officers" element={<OfficersPage />} />
 
                 {/* Protected routes */}
                 <Route
@@ -81,6 +91,14 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/messages"
+                  element={
+                    <ProtectedRoute>
+                      <MessagesPage />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Farmer routes */}
                 <Route
@@ -88,6 +106,14 @@ function App() {
                   element={
                     <ProtectedRoute roles={["Farmer"]}>
                       <FarmerDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/irrigation"
+                  element={
+                    <ProtectedRoute roles={["Farmer"]}>
+                      <IrrigationPage />
                     </ProtectedRoute>
                   }
                 />

@@ -27,7 +27,7 @@ export class AuthController {
     body('first_name').trim().notEmpty().withMessage('First name is required'),
     body('last_name').trim().notEmpty().withMessage('Last name is required'),
     body('phone').trim().notEmpty().withMessage('Phone number is required'),
-    body('role').isIn(['Farmer', 'Consumer']).withMessage('Role must be either Farmer or Consumer'),
+    body('role').isIn(['Farmer', 'Consumer', 'AgriculturalOfficer']).withMessage('Role must be Farmer, Consumer, or Agricultural Officer'),
   ];
 
   /**

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   phone TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN ('Admin', 'Farmer', 'Consumer')),
+  role TEXT NOT NULL CHECK (role IN ('Admin', 'Farmer', 'Consumer', 'AgriculturalOfficer')),
   status TEXT NOT NULL DEFAULT 'Active' CHECK (status IN ('Active', 'Inactive')),
   profile_photo_url TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -274,6 +274,139 @@ CREATE TABLE IF NOT EXISTS inventory_history (
 );
 
 CREATE INDEX IF NOT EXISTS idx_inventory_history_product_id ON inventory_history(product_id);
+
+-- Community posts
+CREATE TABLE IF NOT EXISTS community_posts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  category TEXT NOT NULL CHECK (category IN ('General', 'Pest Control', 'Soil Health', 'Weather', 'Market Prices', 'Irrigation', 'Seeds & Planting', 'Q&A')),
+  likes_count INTEGER DEFAULT 0,
+  replies_count INTEGER DEFAULT 0,
+  is_pinned INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_community_posts_author ON community_posts(author_id);
+CREATE INDEX IF NOT EXISTS idx_community_posts_category ON community_posts(category);
+CREATE INDEX IF NOT EXISTS idx_community_posts_pinned ON community_posts(is_pinned);
+
+CREATE TRIGGER IF NOT EXISTS update_community_posts_updated_at
+AFTER UPDATE ON community_posts
+FOR EACH ROW
+BEGIN
+  UPDATE community_posts SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+-- Community replies
+CREATE TABLE IF NOT EXISTS community_replies (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  post_id INTEGER NOT NULL REFERENCES community_posts(id) ON DELETE CASCADE,
+  author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  likes_count INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_community_replies_post ON community_replies(post_id);
+CREATE INDEX IF NOT EXISTS idx_community_replies_author ON community_replies(author_id);
+
+CREATE TRIGGER IF NOT EXISTS update_community_replies_updated_at
+AFTER UPDATE ON community_replies
+FOR EACH ROW
+BEGIN
+  UPDATE community_replies SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+-- Community likes (unified for posts and replies)
+CREATE TABLE IF NOT EXISTS community_likes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  target_type TEXT NOT NULL CHECK (target_type IN ('post', 'reply')),
+  target_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, target_type, target_id)
+);
+CREATE INDEX IF NOT EXISTS idx_community_likes_user ON community_likes(user_id);
+CREATE INDEX IF NOT EXISTS idx_community_likes_target ON community_likes(target_type, target_id);
+
+-- Direct messages
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  sender_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  receiver_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  is_read INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);
+CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);
+CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(sender_id, receiver_id);
+
+-- Connections (farmer-to-farmer / farmer-to-officer follow)
+CREATE TABLE IF NOT EXISTS connections (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  requester_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  addressee_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  status TEXT DEFAULT 'Pending' CHECK (status IN ('Pending', 'Accepted', 'Declined')),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(requester_id, addressee_id)
+);
+CREATE INDEX IF NOT EXISTS idx_connections_requester ON connections(requester_id);
+CREATE INDEX IF NOT EXISTS idx_connections_addressee ON connections(addressee_id);
+
+-- Irrigation schedules
+CREATE TABLE IF NOT EXISTS irrigation_schedules (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  farmer_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  field_name TEXT NOT NULL,
+  crop_type TEXT NOT NULL,
+  area_hectares REAL,
+  irrigation_method TEXT CHECK (irrigation_method IN ('Drip', 'Sprinkler', 'Flood', 'Manual')),
+  frequency_days INTEGER NOT NULL DEFAULT 3,
+  last_watered_at DATETIME,
+  next_watering_at DATETIME,
+  notes TEXT,
+  is_active INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_irrigation_schedules_farmer ON irrigation_schedules(farmer_id);
+
+CREATE TRIGGER IF NOT EXISTS update_irrigation_schedules_updated_at
+AFTER UPDATE ON irrigation_schedules
+FOR EACH ROW
+BEGIN
+  UPDATE irrigation_schedules SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+-- Irrigation logs
+CREATE TABLE IF NOT EXISTS irrigation_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  farmer_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  schedule_id INTEGER REFERENCES irrigation_schedules(id) ON DELETE SET NULL,
+  field_name TEXT NOT NULL,
+  watered_at DATETIME NOT NULL,
+  duration_minutes INTEGER,
+  amount_liters REAL,
+  method TEXT,
+  rainfall_mm REAL DEFAULT 0,
+  notes TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_irrigation_logs_farmer ON irrigation_logs(farmer_id);
+CREATE INDEX IF NOT EXISTS idx_irrigation_logs_schedule ON irrigation_logs(schedule_id);
+
+-- Weather cache (1-hour TTL)
+CREATE TABLE IF NOT EXISTS weather_cache (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  location_key TEXT UNIQUE NOT NULL,
+  weather_data TEXT NOT NULL,
+  fetched_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_weather_cache_location ON weather_cache(location_key);
+CREATE INDEX IF NOT EXISTS idx_weather_cache_fetched ON weather_cache(fetched_at);
 `;
 
 // Check if a column exists in a table

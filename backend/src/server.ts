@@ -12,6 +12,11 @@ import cartRoutes from "./routes/cart.routes";
 import orderRoutes from "./routes/order.routes";
 import userRoutes from "./routes/user.routes";
 import auditRoutes from "./routes/audit.routes";
+import communityRoutes from "./routes/community.routes";
+import messageRoutes from "./routes/message.routes";
+import weatherRoutes from "./routes/weather.routes";
+import irrigationRoutes from "./routes/irrigation.routes";
+import connectionRoutes from "./routes/connection.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { AuthService } from "./services/auth.service";
 
@@ -81,6 +86,11 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/audit-logs", auditRoutes);
+app.use("/api/community", communityRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/weather", weatherRoutes);
+app.use("/api/irrigation", irrigationRoutes);
+app.use("/api/connections", connectionRoutes);
 
 // Health check
 app.get("/api/health", (_req, res) => {
@@ -206,6 +216,20 @@ async function seedDatabase(): Promise<void> {
       ],
     );
     console.log("✓ Consumer user created");
+
+    // Agricultural Officers
+    const officerPw = await AuthService.hashPassword("officer123");
+    await query(
+      `INSERT INTO users (email, password_hash, first_name, last_name, phone, role, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      ["officer1@test.com", officerPw, "Dr. Abena", "Boateng", "+233501234571", "AgriculturalOfficer", "Active"]
+    );
+    await query(
+      `INSERT INTO users (email, password_hash, first_name, last_name, phone, role, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      ["officer2@test.com", officerPw, "Yaw", "Darko", "+233501234572", "AgriculturalOfficer", "Active"]
+    );
+    console.log("✓ Agricultural officer users created");
 
     // Products
     const f1 = await query("SELECT id FROM users WHERE email = ?", [
@@ -355,6 +379,48 @@ async function seedDatabase(): Promise<void> {
       );
     }
     console.log("✓ Sample products created");
+
+    // Seed community posts
+    const o1 = await query("SELECT id FROM users WHERE email = ?", ["officer1@test.com"]);
+    const o2 = await query("SELECT id FROM users WHERE email = ?", ["officer2@test.com"]);
+    const oid1 = o1.rows[0]?.id;
+    const oid2 = o2.rows[0]?.id;
+
+    await query(
+      `INSERT INTO community_posts (author_id, title, content, category, is_pinned)
+       VALUES (?, ?, ?, ?, ?)`,
+      [oid1, "Welcome to the SmartFarm360 Community!",
+        "Hello farmers! I am Dr. Abena Boateng, an agricultural officer with the Ministry of Food and Agriculture. This community is a space for farmers to share experiences, ask questions, and connect with experts. Feel free to post your farming challenges and I will do my best to help!",
+        "General", 1]
+    );
+    await query(
+      `INSERT INTO community_posts (author_id, title, content, category)
+       VALUES (?, ?, ?, ?)`,
+      [id1, "Tips for growing tomatoes in the dry season",
+        "I have been farming tomatoes for 10 years in Ashanti region. The key to good yield in the dry season is consistent irrigation, mulching to retain moisture, and early morning watering. Happy to share more specific advice!",
+        "Soil Health"]
+    );
+    await query(
+      `INSERT INTO community_posts (author_id, title, content, category)
+       VALUES (?, ?, ?, ?)`,
+      [oid2, "Watch out for Fall Armyworm this season",
+        "We are seeing increased Fall Armyworm activity across the Northern and Savannah regions. Look for irregular holes in leaves and silky webbing near the whorl of maize plants. Early detection is key — contact your district agricultural office immediately if you spot this pest.",
+        "Pest Control"]
+    );
+    console.log("✓ Sample community posts created");
+
+    // Seed irrigation schedules for farmers
+    await query(
+      `INSERT INTO irrigation_schedules (farmer_id, field_name, crop_type, area_hectares, irrigation_method, frequency_days, notes)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [id1, "Main Tomato Field", "Tomatoes", 0.5, "Drip", 2, "Water early morning, check soil moisture before irrigating"]
+    );
+    await query(
+      `INSERT INTO irrigation_schedules (farmer_id, field_name, crop_type, area_hectares, irrigation_method, frequency_days, notes)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [id2, "Onion Plot A", "Onions", 0.3, "Sprinkler", 3, "Reduce irrigation 2 weeks before harvest"]
+    );
+    console.log("✓ Sample irrigation schedules created");
 
     saveDatabase();
     console.log("✓ Database seeded successfully");

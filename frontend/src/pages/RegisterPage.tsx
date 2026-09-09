@@ -151,6 +151,20 @@ const RegisterPage = () => {
                     <small>Sell your products</small>
                   </div>
                 </label>
+                <label className={`role-option ${formData.role === 'AgriculturalOfficer' ? 'active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="AgriculturalOfficer"
+                    checked={formData.role === 'AgriculturalOfficer'}
+                    onChange={handleChange}
+                  />
+                  <div className="role-content">
+                    <i className="fas fa-user-tie"></i>
+                    <span>Agric Officer</span>
+                    <small>Advise & support farmers</small>
+                  </div>
+                </label>
               </div>
 
               <div className="form-row">

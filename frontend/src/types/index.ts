@@ -2,6 +2,7 @@ export enum UserRole {
   ADMIN = 'Admin',
   FARMER = 'Farmer',
   CONSUMER = 'Consumer',
+  AGRICULTURAL_OFFICER = 'AgriculturalOfficer',
 }
 
 export enum UserStatus {

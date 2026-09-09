@@ -131,3 +131,54 @@ export const usersAPI = {
 export const auditAPI = {
   getAll: (params?: any) => api.get('/audit-logs', { params }),
 };
+
+// Community API
+export const communityAPI = {
+  getPosts: (params?: any) => api.get('/community/posts', { params }),
+  getPost: (id: number) => api.get(`/community/posts/${id}`),
+  createPost: (data: any) => api.post('/community/posts', data),
+  deletePost: (id: number) => api.delete(`/community/posts/${id}`),
+  getReplies: (postId: number) => api.get(`/community/posts/${postId}/replies`),
+  createReply: (postId: number, content: string) => api.post(`/community/posts/${postId}/replies`, { content }),
+  toggleLike: (postId: number, targetType = 'post', targetId?: number) =>
+    api.post(`/community/posts/${postId}/like`, { targetType, targetId }),
+  pinPost: (postId: number, pin = true) => api.put(`/community/posts/${postId}/pin`, { pin }),
+  getOfficers: () => api.get('/community/officers'),
+  getFarmers: () => api.get('/community/farmers'),
+};
+
+// Messages API
+export const messagesAPI = {
+  getConversations: () => api.get('/messages'),
+  getMessages: (partnerId: number, params?: any) => api.get(`/messages/${partnerId}`, { params }),
+  sendMessage: (partnerId: number, content: string) => api.post(`/messages/${partnerId}`, { content }),
+  markRead: (partnerId: number) => api.put(`/messages/${partnerId}/read`),
+  getUnreadCount: () => api.get('/messages/unread-count'),
+};
+
+// Connections API
+export const connectionsAPI = {
+  getConnections: () => api.get('/connections'),
+  getPending: () => api.get('/connections/pending'),
+  sendRequest: (userId: number) => api.post(`/connections/${userId}`),
+  respond: (connectionId: number, action: 'Accept' | 'Decline') => api.put(`/connections/${connectionId}`, { action }),
+};
+
+// Weather API
+export const weatherAPI = {
+  get: (params?: { lat?: number; lon?: number; region?: string }) => api.get('/weather', { params }),
+  getRegions: () => api.get('/weather/regions'),
+  getAlerts: (params?: { lat?: number; lon?: number; region?: string }) => api.get('/weather/alerts', { params }),
+};
+
+// Irrigation API
+export const irrigationAPI = {
+  getSchedules: () => api.get('/irrigation/schedules'),
+  createSchedule: (data: any) => api.post('/irrigation/schedules', data),
+  updateSchedule: (id: number, data: any) => api.put(`/irrigation/schedules/${id}`, data),
+  deleteSchedule: (id: number) => api.delete(`/irrigation/schedules/${id}`),
+  logWatering: (id: number | null, data: any) =>
+    id ? api.post(`/irrigation/schedules/${id}/log`, data) : api.post('/irrigation/log/manual', data),
+  getLogs: (params?: any) => api.get('/irrigation/logs', { params }),
+  getDue: () => api.get('/irrigation/due'),
+};
